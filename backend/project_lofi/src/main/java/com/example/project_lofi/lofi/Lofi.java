@@ -26,11 +26,11 @@ public class Lofi implements Serializable{
     private long lofiId;
 
     @Basic(optional = false)
-    @Column
+    @Column(unique = true)
     private String lofiLocation;
 
     @Basic(optional = false)
-    @Column
+    @Column(unique = true)
     private String lofiName;
 
     @Basic(optional = false)

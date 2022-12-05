@@ -18,7 +18,7 @@ public class LofiService {
         this.lofiRepository = lofiRepository;
     }
 
-    public Lofi getLofi(long lofiId){
+    public Lofi getLofiById(long lofiId){
         Optional<Lofi> lofiOptional = this.lofiRepository.findById(lofiId);
         if (lofiOptional.isPresent()){
             return lofiOptional.get();
@@ -44,5 +44,9 @@ public class LofiService {
         } else {
             this.lofiRepository.save(lofi);
         }
+    }
+
+    public Lofi getLofiByName(String lofiName){
+        return this.lofiRepository.findLofiByLofiName(lofiName);
     }
 }

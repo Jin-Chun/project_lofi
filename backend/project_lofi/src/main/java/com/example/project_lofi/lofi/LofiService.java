@@ -33,5 +33,16 @@ public class LofiService {
         return this.lofiRepository.findAll();
     }
 
+    public void saveLofi(Lofi lofi){
 
+        Lofi existingLofi = this.lofiRepository.findLofiByLofiName(lofi.getLofiName());
+
+        if (existingLofi != null){
+            String message = String.format("Cannot save the same Lofi name %s", lofi.getLofiName());
+            log.error(message, lofi);
+            throw new IllegalArgumentException(message);
+        } else {
+            this.lofiRepository.save(lofi);
+        }
+    }
 }

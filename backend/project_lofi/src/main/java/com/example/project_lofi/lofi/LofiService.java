@@ -34,7 +34,6 @@ public class LofiService {
     }
 
     public Lofi saveLofi(Lofi lofi){
-
         Optional<Lofi> existingLofi = this.lofiRepository.findLofiByLofiName(lofi.getLofiName());
 
         if(!existingLofi.isPresent()){
@@ -47,7 +46,6 @@ public class LofiService {
     }
 
     public Lofi updateLofi(Lofi lofi){
-
         Optional<Lofi> existingLofi = this.lofiRepository.findById(lofi.getLofiId());
 
         if(existingLofi.isPresent()){
@@ -68,6 +66,21 @@ public class LofiService {
             String message = String.format("No such a lofi name %s is found", lofiName);
             log.error(message, lofiName);
             return null;
+        }
+    }
+
+    public Lofi deleteLofiById(long lofiId){
+        Optional<Lofi> existingLofi = this.lofiRepository.findById(lofiId);
+
+        if(existingLofi.isPresent()){
+            Lofi lofiToBeDeleted = existingLofi.get();
+            this.lofiRepository.delete(lofiToBeDeleted);
+            return lofiToBeDeleted;
+        } else {
+            String message = String.format("No such a lofi info. Cannot delete the lofi, the lofi Id %d", 
+                lofiId);
+            log.error(message, lofiId);
+            throw new IllegalArgumentException(message);
         }
     }
 }

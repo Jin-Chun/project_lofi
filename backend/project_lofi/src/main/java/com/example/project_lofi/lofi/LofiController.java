@@ -27,20 +27,35 @@ public class LofiController {
     }
 
     @GetMapping("/all")
-    public List<Lofi> getAllLofies(){
-        return this.lofiService.getAllLofies();
+    public ResponseEntity<List<Lofi>> getAllLofies(){
+        List<Lofi> retrievedLofiList = this.lofiService.getAllLofies();
+        if(retrievedLofiList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(retrievedLofiList, HttpStatus.FOUND);
+        }
     }
 
     @GetMapping("/id/{lofiId}")
     @ResponseBody
-    public Lofi getLofiById(@PathVariable long lofiId){
-        return this.lofiService.getLofiById(lofiId);
+    public ResponseEntity<Lofi> getLofiById(@PathVariable long lofiId){
+        Lofi retrievedLofi = this.lofiService.getLofiById(lofiId);
+        if(retrievedLofi == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(retrievedLofi, HttpStatus.FOUND);
+        }
     }
 
     @GetMapping("/name/{lofiName}")
     @ResponseBody
-    public Lofi getLofiByName(@PathVariable String lofiName){
-        return this.lofiService.getLofiByName(lofiName);
+    public ResponseEntity<Lofi> getLofiByName(@PathVariable String lofiName){
+        Lofi retrievedLofi = this.lofiService.getLofiByName(lofiName);
+        if(retrievedLofi == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(retrievedLofi, HttpStatus.FOUND);
+        }
     }
 
     @PostMapping(
@@ -66,6 +81,19 @@ public class LofiController {
             throw new ServerException("Unexpected error occurs while updated the lofi, lofiName: " + lofi.getLofiName());
         } else {
             return new ResponseEntity<>(updatedLofi, HttpStatus.ACCEPTED);
+        }
+    }
+
+    @PostMapping(
+        path = "/delete/{lofiId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Lofi> deleteLofi(@RequestBody Lofi lofi){
+        Lofi deletedLofi = this.lofiService.deleteLofiById(lofi.getLofiId());
+        if(deletedLofi == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(deletedLofi, HttpStatus.ACCEPTED);
         }
     }
 }

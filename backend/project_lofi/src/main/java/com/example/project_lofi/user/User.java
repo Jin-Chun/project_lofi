@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.project_lofi.playlist.Playlist;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
@@ -24,7 +25,7 @@ public class User implements Serializable{
     
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-    private long userId;
+    private Long userId;
 
     @Version
     private int userVersion;
@@ -47,6 +48,7 @@ public class User implements Serializable{
     @Column
     private LocalDateTime userUpdated;
     
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "user")
     private List<Playlist> playlists;
     

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.example.project_lofi.lofi.Lofi;
 import com.example.project_lofi.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -22,13 +23,14 @@ import jakarta.persistence.Version;
 import lombok.Data;
 
 @Entity @Data
+@JsonIgnoreProperties(value = {"playlistLofies"})
 public class Playlist implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long playlistId;
+    private Long playlistId;
 
     @Version
     private int playlistVersion;
@@ -48,15 +50,15 @@ public class Playlist implements Serializable {
     @Column
     private String playlistStatus;
 
-    @Basic (optional = false)
+    @Basic(optional = false)
     @Column
     private LocalDateTime playlistCreated;
 
-    @Basic (optional = false)
+    @Basic(optional = false)
     @Column
     private LocalDateTime playlistUpdated;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "PlaylistAssignment",
         joinColumns = @JoinColumn(name = "playlistId"),

@@ -26,7 +26,8 @@ public class LofiController {
         this.lofiService = lofiService;
     }
 
-    @GetMapping("/all")
+    @GetMapping(path = "/all")
+    @ResponseBody
     public ResponseEntity<List<Lofi>> getAllLofies(){
         List<Lofi> retrievedLofiList = this.lofiService.getAllLofies();
         if(retrievedLofiList.isEmpty()){
@@ -36,7 +37,7 @@ public class LofiController {
         }
     }
 
-    @GetMapping("/id/{lofiId}")
+    @GetMapping(path = "/id/{lofiId}")
     @ResponseBody
     public ResponseEntity<Lofi> getLofiById(@PathVariable long lofiId){
         Lofi retrievedLofi = this.lofiService.getLofiById(lofiId);
@@ -47,7 +48,7 @@ public class LofiController {
         }
     }
 
-    @GetMapping("/name/{lofiName}")
+    @GetMapping(path = "/name/{lofiName}")
     @ResponseBody
     public ResponseEntity<Lofi> getLofiByName(@PathVariable String lofiName){
         Lofi retrievedLofi = this.lofiService.getLofiByName(lofiName);
@@ -62,10 +63,11 @@ public class LofiController {
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<Lofi> saveLofi(@RequestBody Lofi lofi) throws ServerException{
         Lofi savedLofi = this.lofiService.saveLofi(lofi);
         if (savedLofi == null){
-            throw new ServerException("Unexpected error occurs while adding a new Lofi, lofiName: "+lofi.getLofiName());
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
             return new ResponseEntity<>(savedLofi, HttpStatus.CREATED);
         }
@@ -75,25 +77,27 @@ public class LofiController {
         path = "/update",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<Lofi> updateLofi(@RequestBody Lofi lofi) throws ServerException{
         Lofi updatedLofi = this.lofiService.updateLofi(lofi);
         if (updatedLofi == null){
-            throw new ServerException("Unexpected error occurs while updated the lofi, lofiName: " + lofi.getLofiName());
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
             return new ResponseEntity<>(updatedLofi, HttpStatus.ACCEPTED);
         }
     }
 
     @PostMapping(
-        path = "/delete/{lofiId}",
+        path = "/delete",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<Lofi> deleteLofi(@RequestBody Lofi lofi){
         Lofi deletedLofi = this.lofiService.deleteLofiById(lofi.getLofiId());
         if(deletedLofi == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
-            return new ResponseEntity<>(deletedLofi, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
     }
 }

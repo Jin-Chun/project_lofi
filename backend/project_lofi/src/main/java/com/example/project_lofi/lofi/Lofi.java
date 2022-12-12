@@ -23,7 +23,7 @@ public class Lofi implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long lofiId;
+    private Long lofiId;
 
     @Basic(optional = false)
     @Column(unique = true)

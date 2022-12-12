@@ -18,6 +18,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public List<User> getAllUsers(){
+        return this.userRepository.findAll();
+    }
+
     public User getUserById(long userId){
         Optional<User> existingUser = this.userRepository.findById(userId);
         if (existingUser.isPresent()){
@@ -29,12 +33,19 @@ public class UserService {
         }
     }
 
-    public List<User> getAllUsers(){
-        return this.userRepository.findAll();
+    public User getUserByName(String userName){
+        Optional<User> optionalUser = this.userRepository.findUserByName(userName);
+        if (optionalUser.isPresent()){
+            return optionalUser.get();
+        } else {
+            String message = String.format("No such a user name %s is found", userName);
+            log.error(message, userName);
+            return null;
+        }
     }
 
     public User saveUser(User user){
-        Optional<User> existingUser = this.userRepository.findUserByUserName(user.getUserName());
+        Optional<User> existingUser = this.userRepository.findUserByName(user.getUserName());
 
         if(!existingUser.isPresent()){
             return this.userRepository.save(user);
@@ -51,21 +62,10 @@ public class UserService {
         if(existingUser.isPresent()){
             return this.userRepository.save(user);
         } else {
-            String message = String.format("No such a lofi info. Cannot update the lofiId %d, lofiName %s", 
+            String message = String.format("No such a lofi info. Cannot update the userId %d, userName %s", 
                 user.getUserId(), user.getUserName());
             log.error(message, user);
             throw new IllegalArgumentException(message);
-        }
-    }
-
-    public User getUserByName(String userName){
-        Optional<User> optionalUser = this.userRepository.findUserByUserName(userName);
-        if (optionalUser.isPresent()){
-            return optionalUser.get();
-        } else {
-            String message = String.format("No such a user name %s is found", userName);
-            log.error(message, userName);
-            return null;
         }
     }
 
@@ -74,7 +74,7 @@ public class UserService {
 
         if(existingUser.isPresent()){
             User userToBeDeleted = existingUser.get();
-            this.userRepository.delete(userToBeDeleted);
+            this.userRepository.delete(existingUser.get());
             return userToBeDeleted;
         } else {
             String message = String.format("No such a user info. Cannot delete the user, the userId %d", 

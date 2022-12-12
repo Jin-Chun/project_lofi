@@ -18,6 +18,10 @@ public class LofiService {
         this.lofiRepository = lofiRepository;
     }
 
+    public List<Lofi> getAllLofies(){
+        return this.lofiRepository.findAll();
+    }
+
     public Lofi getLofiById(long lofiId){
         Optional<Lofi> optionalLofi = this.lofiRepository.findById(lofiId);
         if (optionalLofi.isPresent()){
@@ -29,12 +33,19 @@ public class LofiService {
         }
     }
 
-    public List<Lofi> getAllLofies(){
-        return this.lofiRepository.findAll();
+    public Lofi getLofiByName(String lofiName){
+        Optional<Lofi> optionalLofi = this.lofiRepository.findLofiByName(lofiName);
+        if (optionalLofi.isPresent()){
+            return optionalLofi.get();
+        } else {
+            String message = String.format("No such a lofi name %s is found", lofiName);
+            log.error(message, lofiName);
+            return null;
+        }
     }
 
     public Lofi saveLofi(Lofi lofi){
-        Optional<Lofi> existingLofi = this.lofiRepository.findLofiByLofiName(lofi.getLofiName());
+        Optional<Lofi> existingLofi = this.lofiRepository.findLofiByName(lofi.getLofiName());
 
         if(!existingLofi.isPresent()){
             return this.lofiRepository.save(lofi);
@@ -58,23 +69,12 @@ public class LofiService {
         }
     }
 
-    public Lofi getLofiByName(String lofiName){
-        Optional<Lofi> optionalLofi = this.lofiRepository.findLofiByLofiName(lofiName);
-        if (optionalLofi.isPresent()){
-            return optionalLofi.get();
-        } else {
-            String message = String.format("No such a lofi name %s is found", lofiName);
-            log.error(message, lofiName);
-            return null;
-        }
-    }
-
     public Lofi deleteLofiById(long lofiId){
         Optional<Lofi> existingLofi = this.lofiRepository.findById(lofiId);
 
         if(existingLofi.isPresent()){
             Lofi lofiToBeDeleted = existingLofi.get();
-            this.lofiRepository.delete(lofiToBeDeleted);
+            this.lofiRepository.delete(existingLofi.get());
             return lofiToBeDeleted;
         } else {
             String message = String.format("No such a lofi info. Cannot delete the lofi, the lofi Id %d", 

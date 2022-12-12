@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface LofiRepository extends JpaRepository<Lofi, Long> {
  
     @Query("SELECT l FROM Lofi l WHERE l.lofiName = ?1")
-    Optional<Lofi> findLofiByLofiName(String lofiName);
+    Optional<Lofi> findLofiByName(String lofiName);
 }

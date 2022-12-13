@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/playlist")
 public class PlaylistController {
     private final PlaylistService playlistService;
+    private final PlaylistAssignmentService playlistAssignmentService;
 
     @Autowired
-    public PlaylistController(PlaylistService playlistService){
+    public PlaylistController(PlaylistService playlistService, PlaylistAssignmentService playlistAssignmentService){
         this.playlistService = playlistService;
+        this.playlistAssignmentService = playlistAssignmentService;
     }
 
     @GetMapping(path = "/all")
@@ -97,6 +99,28 @@ public class PlaylistController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+    }
+
+    @GetMapping(path = "/assign/{lofiId}/to/{playlistId}")
+    @ResponseBody
+    public ResponseEntity<Playlist> assignLofiToPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
+        Playlist playlist = this.playlistAssignmentService.assignLofiToPlaylist(lofiId, playlistId);
+        if(playlist == null){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(playlist, HttpStatus.ACCEPTED);
+        }
+    }
+
+    @GetMapping(path = "/remove/{lofiId}/from/{playlistId}")
+    @ResponseBody
+    public ResponseEntity<Playlist> removeLofiFromPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
+        Playlist playlist = this.playlistAssignmentService.removeLofiFromPlaylist(lofiId, playlistId);
+        if(playlist == null){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(playlist, HttpStatus.ACCEPTED);
         }
     }
 }

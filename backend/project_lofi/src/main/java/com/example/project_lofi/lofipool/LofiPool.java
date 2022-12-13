@@ -28,7 +28,7 @@ public class LofiPool implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long lofiPoolId;
 
-    @Basic(optional = false) @Column
+    @Basic(optional = false) @Column(unique = true)
     private String lofiPoolName;
 
     @Basic(optional = false) @Column

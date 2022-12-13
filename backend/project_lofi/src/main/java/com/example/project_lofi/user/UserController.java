@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.project_lofi.playlist.Playlist;
+
 @RestController
 @RequestMapping(path = "/api/user")
 public class UserController {
@@ -97,6 +99,36 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+    }
+
+    @PostMapping(
+        path = "create/playlist/{userId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<User> createPlaylistForUser(@RequestBody Playlist playlist, @PathVariable long userId){
+        User updatedUser = this.userService.createPlaylistForUser(playlist, userId);
+        if(updatedUser == null){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
+        }
+    }
+
+    @PostMapping(
+        path = "remove/playlist/{playlistId}/{userId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<User> removePlaylistFromUser(@PathVariable long plalistId, @PathVariable long userId){
+        User updatedUser = this.userService.removePlaylistFromUser(plalistId, userId);
+        if(updatedUser == null){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
         }
     }
 }

@@ -40,4 +40,12 @@ public abstract class AbstractService {
             throw new IllegalArgumentException(message);
         }
     }
+
+    protected void checkMinNum(int num){
+        if(num < 1){
+            String message = String.format("A given %d is less than minimum number(1)", num);
+            log.error(message);
+            throw new IllegalArgumentException(message);
+        }
+    }
 }

@@ -117,10 +117,8 @@ public class UserController {
         }
     }
 
-    @PostMapping(
-        path = "remove/playlist/{playlistId}/{userId}",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE
+    @GetMapping(
+        path = "remove/playlist/{playlistId}/from/{userId}"
     )
     @ResponseBody
     public ResponseEntity<User> removePlaylistFromUser(@PathVariable long plalistId, @PathVariable long userId){

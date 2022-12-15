@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/lofipool")
 public class LofiPoolController {
     private final LofiPoolService lofiPoolService;
+    private final LofiPoolAssignmentService lofiPoolAssignmentService;
 
     @Autowired
-    public LofiPoolController(LofiPoolService lofiPoolService){
+    public LofiPoolController(LofiPoolService lofiPoolService, LofiPoolAssignmentService lofiPoolAssignmentService){
         this.lofiPoolService = lofiPoolService;
+        this.lofiPoolAssignmentService = lofiPoolAssignmentService;
     }
 
     @GetMapping(path = "/all")
@@ -105,6 +107,34 @@ public class LofiPoolController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+    }
+
+    @GetMapping(
+        path = "/assign/{lofiId}/to/{lofiPoolId}"
+    )
+    @ResponseBody
+    public ResponseEntity<LofiPool> assignLofiToLofiPool(@PathVariable long lofiId, @PathVariable long lofiPoolId){
+        LofiPool updatedLofiPool = this.lofiPoolAssignmentService.assignLofiToLofiPool(lofiId, lofiPoolId);
+
+        if(updatedLofiPool == null){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            return new ResponseEntity<>(updatedLofiPool, HttpStatus.ACCEPTED);
+        }
+    }
+
+    @GetMapping(
+        path = "/remove/{lofiId}/from/{lofiPoolId}"
+    )
+    @ResponseBody
+    public ResponseEntity<LofiPool> removeLofiFromLofiPool(@PathVariable long lofiId, @PathVariable long lofiPoolId){
+        LofiPool updatedLofiPool = this.lofiPoolAssignmentService.removeLofiFromLofiPool(lofiId, lofiPoolId);
+
+        if(updatedLofiPool == null){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            return new ResponseEntity<>(updatedLofiPool, HttpStatus.ACCEPTED);
         }
     }
 }

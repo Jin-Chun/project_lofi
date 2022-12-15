@@ -1,5 +1,7 @@
 package com.example.project_lofi.playlist;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,28 @@ public class PlaylistAssignmentService extends AbstractService{
         Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
         log.info(String.format("A given lofi (lofiId: %d) has been assigned to the playlist(playlistId: %d)", lofiId, playlistId));
         // #4. return the playlist
+        return updatedPlaylist;
+    }
+
+    public Playlist assignLofiesToPlaylist(List<Long> lofiIds, long playlistId){
+        checkNullAndEmpty(lofiIds, "lofiIds");
+        checkId(playlistId, "playlistId");
+
+        Playlist playlist = this.playlistService.getPlaylistById(playlistId);
+        checkNull(playlist, "playlist");
+
+        for (Long lofiId : lofiIds){
+
+            try {
+                Lofi lofi = this.lofiService.getLofiById(lofiId);
+                playlist.getPlaylistLofies().add(lofi);
+                log.info(String.format("A given lofi (lofiId: %d) has been assigned to the playlist(playlistId: %d)", lofiId, playlistId));
+            } catch (Exception e){
+                log.error(String.format("While retrieving a lofi (lofiId: %d), unexpected error occurs", lofiId));
+            }
+        }
+
+        Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
         return updatedPlaylist;
     }
 

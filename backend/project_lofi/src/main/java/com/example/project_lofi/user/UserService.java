@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.project_lofi.AbstractService;
+import com.example.project_lofi.constants.PL_PlaylistStatus;
 import com.example.project_lofi.playlist.Playlist;
 import com.example.project_lofi.playlist.PlaylistService;
 
@@ -99,8 +100,9 @@ public class UserService extends AbstractService {
         
         User aUser = this.getUserById(userId);
 
+        playlist.setPlaylistStatus(PL_PlaylistStatus.ACTIVATED);
         Playlist createdPlaylist = this.playlistService.savePlaylist(playlist);
-
+        
         aUser.getPlaylists().add(createdPlaylist);
 
         aUser = this.updateUser(aUser);
@@ -123,6 +125,8 @@ public class UserService extends AbstractService {
             log.info(String.format("A given playlist (playlistId: %d) has not been added to the user(userId: %d)", playlistId, userId));
         }
 
+        retrievedPlaylist.setPlaylistStatus(PL_PlaylistStatus.DEACTIVATED);
+        this.playlistService.updatePlaylist(retrievedPlaylist);
         aUser = this.updateUser(aUser);
 
         return aUser;

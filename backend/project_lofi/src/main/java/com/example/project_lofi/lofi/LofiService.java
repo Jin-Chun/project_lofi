@@ -6,10 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.project_lofi.AbstractService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service @Slf4j
-public class LofiService {
+public class LofiService extends AbstractService{
     
     private final LofiRepository lofiRepository;
 
@@ -23,6 +25,8 @@ public class LofiService {
     }
 
     public Lofi getLofiById(long lofiId){
+        checkId(lofiId, "lofiId");
+
         Optional<Lofi> optionalLofi = this.lofiRepository.findById(lofiId);
         if (optionalLofi.isPresent()){
             return optionalLofi.get();
@@ -34,6 +38,8 @@ public class LofiService {
     }
 
     public Lofi getLofiByName(String lofiName){
+        checkNull(lofiName, "lofiName");
+
         Optional<Lofi> optionalLofi = this.lofiRepository.findLofiByName(lofiName);
         if (optionalLofi.isPresent()){
             return optionalLofi.get();
@@ -42,6 +48,30 @@ public class LofiService {
             log.error(message, lofiName);
             return null;
         }
+    }
+
+    public List<Lofi> getLofiesByType(String lofiType){
+        checkNull(lofiType, "lofiType");
+
+        List<Lofi> retrievedLofi = this.lofiRepository.findLofiesByType(lofiType);
+
+        if (retrievedLofi == null || retrievedLofi.isEmpty()){
+            log.info("There are no lofies of the type: "+lofiType);
+        }
+
+        return retrievedLofi;
+    }
+
+    public List<Lofi> getLofiesByKeyword(String keyword){
+        checkNull(keyword, "keyword");
+
+        List<Lofi> retrievedLofi = this.lofiRepository.findLofiesByKeyword(keyword);
+
+        if (retrievedLofi == null || retrievedLofi.isEmpty()){
+            log.info("There are no lofies of the keyword: "+keyword);
+        }
+
+        return retrievedLofi;
     }
 
     public Lofi saveLofi(Lofi lofi){

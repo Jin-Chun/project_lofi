@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import lombok.extern.slf4j.Slf4j;
+
+@RestController @Slf4j
 @RequestMapping(path = "/api/playlist")
 public class PlaylistController {
     private final PlaylistService playlistService;
@@ -60,17 +62,30 @@ public class PlaylistController {
         }
     }
 
+    @GetMapping(path = "/released")
+    @ResponseBody
+    public ResponseEntity<List<Playlist>> getReleasedPlaylist(){
+        List<Playlist> releasedPlaylists = this.playlistService.getReleasedPlaylists();
+
+        if (releasedPlaylists != null && !releasedPlaylists.isEmpty()){
+            return new ResponseEntity<>(releasedPlaylists, HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Playlist> savePlaylist(@RequestBody Playlist playlist) throws ServerException{
-        Playlist savedPlaylist = this.playlistService.savePlaylist(playlist);
-        if (savedPlaylist == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try {
+            Playlist savedPlaylist = this.playlistService.savePlaylist(playlist);
             return new ResponseEntity<>(savedPlaylist, HttpStatus.CREATED);
+        } catch (Exception e){
+            log.error("While saving a given playlist("+playlist.getPlaylistName()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
@@ -80,11 +95,12 @@ public class PlaylistController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Playlist> updatePlaylist(@RequestBody Playlist playlist) throws ServerException{
-        Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
-        if (updatedPlaylist == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try {
+            Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
             return new ResponseEntity<>(updatedPlaylist, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While updating a given playlist("+playlist.getPlaylistId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -94,33 +110,59 @@ public class PlaylistController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Playlist> deletePlaylist(@RequestBody Playlist playlist){
-        Playlist deletedPlaylist = this.playlistService.deletePlaylistById(playlist.getPlaylistId());
-        if(deletedPlaylist == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try {
+            this.playlistService.deletePlaylistById(playlist.getPlaylistId());
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While deleting a given playlist("+playlist.getPlaylistId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping(path = "/assign/{lofiId}/to/{playlistId}")
+    @PostMapping(
+        path = "/assign/{lofiId}/to/{playlistId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Playlist> assignLofiToPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
-        Playlist playlist = this.playlistAssignmentService.assignLofiToPlaylist(lofiId, playlistId);
-        if(playlist == null){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
+        try {
+            Playlist playlist = this.playlistAssignmentService.assignLofiToPlaylist(lofiId, playlistId);
             return new ResponseEntity<>(playlist, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While assigning a lofi("+lofiId+") to the playlist("+playlistId+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping(path = "/remove/{lofiId}/from/{playlistId}")
+    @PostMapping(
+        path = "/remove/{lofiId}/from/{playlistId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Playlist> removeLofiFromPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
-        Playlist playlist = this.playlistAssignmentService.removeLofiFromPlaylist(lofiId, playlistId);
-        if(playlist == null){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
+        try {
+            Playlist playlist = this.playlistAssignmentService.removeLofiFromPlaylist(lofiId, playlistId);
             return new ResponseEntity<>(playlist, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While removing a lofi("+lofiId+") from a playlist("+playlistId+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping(
+        path = "/release/{playlistId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<Playlist> releasePlaylist(@PathVariable long playlistId){
+        try {
+            Playlist playlist = this.playlistService.releasePlaylist(playlistId);
+            return new ResponseEntity<>(playlist, HttpStatus.ACCEPTED);
+        } catch(Exception e){
+            log.error("While releasing a given playlist("+playlistId+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
     }
 }

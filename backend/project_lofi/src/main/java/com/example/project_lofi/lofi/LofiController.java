@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import lombok.extern.slf4j.Slf4j;
+
+@RestController @Slf4j
 @RequestMapping(path = "api/lofi")
 public class LofiController {
     
@@ -59,17 +61,42 @@ public class LofiController {
         }
     }
 
+    @GetMapping(path = "/type/{lofiType}")
+    @ResponseBody
+    public ResponseEntity<List<Lofi>> getLofiesByType(@PathVariable String lofiType){
+        List<Lofi> retrievedLofies = this.lofiService.getLofiesByType(lofiType);
+
+        if(retrievedLofies != null && !retrievedLofies.isEmpty()){
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.FOUND); 
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(path = "/keyword/{lofiKeyword}")
+    @ResponseBody
+    public ResponseEntity<List<Lofi>> getLofiesByKeyword(@PathVariable String lofiKeyword){
+        List<Lofi> retrievedLofies = this.lofiService.getLofiesByKeyword(lofiKeyword);
+
+        if(retrievedLofies != null && !retrievedLofies.isEmpty()){
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.FOUND); 
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Lofi> saveLofi(@RequestBody Lofi lofi) throws ServerException{
-        Lofi savedLofi = this.lofiService.saveLofi(lofi);
-        if (savedLofi == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try{
+            Lofi savedLofi = this.lofiService.saveLofi(lofi);
             return new ResponseEntity<>(savedLofi, HttpStatus.CREATED);
+        } catch (Exception e){
+            log.error("While saving a lofi("+lofi.getLofiId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
     
@@ -79,11 +106,12 @@ public class LofiController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Lofi> updateLofi(@RequestBody Lofi lofi) throws ServerException{
-        Lofi updatedLofi = this.lofiService.updateLofi(lofi);
-        if (updatedLofi == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try{
+            Lofi updatedLofi = this.lofiService.updateLofi(lofi);
             return new ResponseEntity<>(updatedLofi, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While updating a lofi("+lofi.getLofiId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -93,11 +121,12 @@ public class LofiController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Lofi> deleteLofi(@RequestBody Lofi lofi){
-        Lofi deletedLofi = this.lofiService.deleteLofiById(lofi.getLofiId());
-        if(deletedLofi == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try{
+            this.lofiService.deleteLofiById(lofi.getLofiId());
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While deleting a lofi("+lofi.getLofiId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 }

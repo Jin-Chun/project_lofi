@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.project_lofi.AbstractService;
 import com.example.project_lofi.GeneralUtils;
+import com.example.project_lofi.constants.PL_PlaylistStatus;
 import com.example.project_lofi.lofi.Lofi;
 import com.example.project_lofi.lofipool.LofiPool;
 import com.example.project_lofi.lofipool.LofiPoolService;
@@ -90,6 +91,26 @@ public class PlaylistService extends AbstractService{
             log.error(message, playlistId);
             throw new IllegalArgumentException(message);
         }
+    }
+
+    public Playlist releasePlaylist(long playlistId){
+        checkId(playlistId, "playlistId");
+
+        Playlist retrievedPlaylist = this.getPlaylistById(playlistId);
+        checkNull(retrievedPlaylist, "retrievedPlaylist");
+
+        retrievedPlaylist.setPlaylistStatus(PL_PlaylistStatus.RELEASED);
+        return this.updatePlaylist(retrievedPlaylist);
+    }
+
+    public List<Playlist> getReleasedPlaylists(){
+        List<Playlist> releasedPlaylists = this.playlistRepository.findPlaylistsByStatus(PL_PlaylistStatus.RELEASED);
+
+        if(releasedPlaylists == null || releasedPlaylists.isEmpty()){
+            log.info("There are no released playlists");
+        }
+        
+        return releasedPlaylists;
     }
 
     public Playlist pullLofiesFromLofiPool(long lofiPoolId, int numOfLofies, long playlistId){

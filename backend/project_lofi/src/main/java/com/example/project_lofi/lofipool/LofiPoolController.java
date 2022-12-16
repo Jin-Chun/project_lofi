@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import lombok.extern.slf4j.Slf4j;
+
+@RestController @Slf4j
 @RequestMapping(path = "/api/lofipool")
 public class LofiPoolController {
     private final LofiPoolService lofiPoolService;
@@ -69,12 +71,12 @@ public class LofiPoolController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<LofiPool> saveLofiPool(@RequestBody LofiPool lofiPool) throws ServerException{
-        LofiPool savedLofiPool = this.lofiPoolService.saveLofiPool(lofiPool);
-
-        if (savedLofiPool == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try {
+            LofiPool savedLofiPool = this.lofiPoolService.saveLofiPool(lofiPool);
             return new ResponseEntity<>(savedLofiPool, HttpStatus.CREATED);
+        } catch (Exception e){
+            log.error("While saving a lofi pool("+lofiPool.getLofiPoolName()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -85,12 +87,12 @@ public class LofiPoolController {
     )
     @ResponseBody
     public ResponseEntity<LofiPool> updateLofiPool(@RequestBody LofiPool lofiPool) throws ServerException{
-        LofiPool updatedLofiPool = this.lofiPoolService.updateLofiPool(lofiPool);
-
-        if(updatedLofiPool == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try {
+            LofiPool updatedLofiPool = this.lofiPoolService.updateLofiPool(lofiPool);
             return new ResponseEntity<>(updatedLofiPool, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While updating a lofi pool("+lofiPool.getLofiPoolId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -101,40 +103,44 @@ public class LofiPoolController {
     )
     @ResponseBody
     public ResponseEntity<LofiPool> deleteLofiPool(@RequestBody LofiPool lofiPool){
-        LofiPool deletedLofiPool = this.lofiPoolService.deleteLofiPoolById(lofiPool.getLofiPoolId());
-
-        if(deletedLofiPool == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try {
+            this.lofiPoolService.deleteLofiPoolById(lofiPool.getLofiPoolId());
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While deleting a lofi pool("+lofiPool.getLofiPoolId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
-    @GetMapping(
-        path = "/assign/{lofiId}/to/{lofiPoolId}"
+    @PostMapping(
+        path = "/assign/{lofiId}/to/{lofiPoolId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
     public ResponseEntity<LofiPool> assignLofiToLofiPool(@PathVariable long lofiId, @PathVariable long lofiPoolId){
-        LofiPool updatedLofiPool = this.lofiPoolAssignmentService.assignLofiToLofiPool(lofiId, lofiPoolId);
-
-        if(updatedLofiPool == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try {
+            LofiPool updatedLofiPool = this.lofiPoolAssignmentService.assignLofiToLofiPool(lofiId, lofiPoolId);
             return new ResponseEntity<>(updatedLofiPool, HttpStatus.ACCEPTED);
-        }
+        } catch (Exception e){
+            log.error("While assigning a lofi("+lofiId+") to a lofi pool("+lofiPoolId+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }        
     }
 
-    @GetMapping(
-        path = "/remove/{lofiId}/from/{lofiPoolId}"
+    @PostMapping(
+        path = "/remove/{lofiId}/from/{lofiPoolId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
     public ResponseEntity<LofiPool> removeLofiFromLofiPool(@PathVariable long lofiId, @PathVariable long lofiPoolId){
-        LofiPool updatedLofiPool = this.lofiPoolAssignmentService.removeLofiFromLofiPool(lofiId, lofiPoolId);
-
-        if(updatedLofiPool == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try {
+            LofiPool updatedLofiPool = this.lofiPoolAssignmentService.removeLofiFromLofiPool(lofiId, lofiPoolId);
             return new ResponseEntity<>(updatedLofiPool, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While removing a lofi("+lofiId+") from a lofi pool("+lofiPoolId+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 }

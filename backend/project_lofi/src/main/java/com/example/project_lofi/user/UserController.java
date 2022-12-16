@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project_lofi.playlist.Playlist;
 
-@RestController
+import lombok.extern.slf4j.Slf4j;
+
+@RestController @Slf4j
 @RequestMapping(path = "/api/user")
 public class UserController {
     private final UserService userService;
@@ -66,11 +68,12 @@ public class UserController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<User> saveUser(@RequestBody User user) throws ServerException{
-        User savedUser = this.userService.saveUser(user);
-        if (savedUser == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try{
+            User savedUser = this.userService.saveUser(user);
             return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        } catch (Exception e){
+            log.error("While saving a user("+user.getUserName()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -80,11 +83,12 @@ public class UserController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<User> updateUser(@RequestBody User user) throws ServerException{
-        User updatedUser = this.userService.updateUser(user);
-        if (updatedUser == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try{
+            User updatedUser = this.userService.updateUser(user);
             return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While updating a user("+user.getUserId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -94,11 +98,12 @@ public class UserController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<User> deleteUser(@RequestBody User user){
-        User deletedUser = this.userService.deleteUserById(user.getUserId());
-        if(deletedUser == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try{
+            this.userService.deleteUserById(user.getUserId());
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While deleting a user("+user.getUserId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -109,24 +114,28 @@ public class UserController {
     )
     @ResponseBody
     public ResponseEntity<User> createPlaylistForUser(@RequestBody Playlist playlist, @PathVariable long userId){
-        User updatedUser = this.userService.createPlaylistForUser(playlist, userId);
-        if(updatedUser == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+        try{
+            User updatedUser = this.userService.createPlaylistForUser(playlist, userId);
             return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While creating a playlist("+playlist.getPlaylistName()+") for a user("+userId+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
-    @GetMapping(
-        path = "remove/playlist/{playlistId}/from/{userId}"
+    @PostMapping(
+        path = "remove/playlist/{playlistId}/from/{userId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public ResponseEntity<User> removePlaylistFromUser(@PathVariable long plalistId, @PathVariable long userId){
-        User updatedUser = this.userService.removePlaylistFromUser(plalistId, userId);
-        if(updatedUser == null){
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        } else {
+    public ResponseEntity<User> removePlaylistFromUser(@PathVariable long playlistId, @PathVariable long userId){
+        try{
+            User updatedUser = this.userService.removePlaylistFromUser(playlistId, userId);
             return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While removing a playlist("+playlistId+") from a user("+userId+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 }

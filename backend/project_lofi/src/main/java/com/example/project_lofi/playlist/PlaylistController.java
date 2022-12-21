@@ -62,6 +62,17 @@ public class PlaylistController {
         }
     }
 
+    @GetMapping(path = "/userid/{userId}")
+    @ResponseBody
+    public ResponseEntity<List<Playlist>> getAllPlaylistsByUserId(@PathVariable long userId){
+        List<Playlist> playlists = this.playlistAssignmentService.getAllPlaylistsByUserId(userId);
+        if (playlists != null && !playlists.isEmpty()){
+            return new ResponseEntity<>(playlists, HttpStatus.FOUND);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping(path = "/released")
     @ResponseBody
     public ResponseEntity<List<Playlist>> getReleasedPlaylist(){
@@ -121,7 +132,6 @@ public class PlaylistController {
 
     @PostMapping(
         path = "/assign/{lofiId}/to/{playlistId}",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Playlist> assignLofiToPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
@@ -136,13 +146,13 @@ public class PlaylistController {
 
     @PostMapping(
         path = "/remove/{lofiId}/from/{playlistId}",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_VALUE
+        )
     @ResponseBody
     public ResponseEntity<Playlist> removeLofiFromPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
         try {
-            Playlist playlist = this.playlistAssignmentService.removeLofiFromPlaylist(lofiId, playlistId);
-            return new ResponseEntity<>(playlist, HttpStatus.ACCEPTED);
+            Playlist updatedPlaylist = this.playlistAssignmentService.removeLofiFromPlaylist(lofiId, playlistId);
+            return new ResponseEntity<>(updatedPlaylist, HttpStatus.ACCEPTED);
         } catch (Exception e){
             log.error("While removing a lofi("+lofiId+") from a playlist("+playlistId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -151,7 +161,6 @@ public class PlaylistController {
 
     @PostMapping(
         path = "/release/{playlistId}",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody

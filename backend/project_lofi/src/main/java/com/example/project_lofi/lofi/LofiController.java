@@ -85,6 +85,28 @@ public class LofiController {
         }
     }
 
+    @GetMapping(path = "/playlistid/{playlistId}")
+    @ResponseBody
+    public ResponseEntity<List<Lofi>> getAllLofiesAssignedToPlaylist(@PathVariable long playlistId){
+        List<Lofi> retrievedLofies = this.lofiService.getAllLofiesAssignedToPlaylist(playlistId);
+        if(retrievedLofies != null && !retrievedLofies.isEmpty()){
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.FOUND); 
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(path = "/lofipoolid/{lofiPoolId}")
+    @ResponseBody
+    public ResponseEntity<List<Lofi>> getAllLofiesAssignedToLofiPool(@PathVariable long lofiPoolId){
+        List<Lofi> retrievedLofies = this.lofiService.getAllLofiesAssignedToLofiPool(lofiPoolId);
+        if(retrievedLofies != null && !retrievedLofies.isEmpty()){
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.FOUND); 
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,

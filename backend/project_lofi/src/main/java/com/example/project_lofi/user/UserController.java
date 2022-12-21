@@ -125,7 +125,6 @@ public class UserController {
 
     @PostMapping(
         path = "remove/playlist/{playlistId}/from/{userId}",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody

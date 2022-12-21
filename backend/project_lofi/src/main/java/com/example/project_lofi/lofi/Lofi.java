@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.example.project_lofi.lofipool.LofiPool;
 import com.example.project_lofi.playlist.Playlist;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -45,9 +46,11 @@ public class Lofi implements Serializable{
     @Column
     private String lofiPlaytime;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "playlistLofies")
     private List<Playlist> playlists;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "poolLofies")
     private List<LofiPool> lofiPools;
 }

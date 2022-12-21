@@ -47,7 +47,7 @@ public class User implements Serializable{
     
     @Column
     private LocalDateTime userUpdated;
-    
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "user")
     private List<Playlist> playlists;

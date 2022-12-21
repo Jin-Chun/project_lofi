@@ -1,6 +1,6 @@
 package com.example.project_lofi.constants;
 
-public class PL_LofiType {
+public class PL_LofiPoolGenre {
     public static final String ALL = "01";
     public static final String JAZZ = "02";
     public static final String HIPHOP = "03";

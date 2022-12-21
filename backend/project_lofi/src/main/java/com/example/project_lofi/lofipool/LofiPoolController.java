@@ -114,7 +114,6 @@ public class LofiPoolController {
 
     @PostMapping(
         path = "/assign/{lofiId}/to/{lofiPoolId}",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
@@ -130,7 +129,6 @@ public class LofiPoolController {
 
     @PostMapping(
         path = "/remove/{lofiId}/from/{lofiPoolId}",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody

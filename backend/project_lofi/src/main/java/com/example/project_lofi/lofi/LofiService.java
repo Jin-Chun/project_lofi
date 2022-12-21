@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.project_lofi.AbstractService;
+import com.example.project_lofi.lofipool.LofiPool;
+import com.example.project_lofi.lofipool.LofiPoolService;
+import com.example.project_lofi.playlist.Playlist;
+import com.example.project_lofi.playlist.PlaylistService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,10 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 public class LofiService extends AbstractService{
     
     private final LofiRepository lofiRepository;
+    private final PlaylistService playlistService;
+    private final LofiPoolService lofiPoolService;
 
     @Autowired
-    public LofiService(LofiRepository lofiRepository){
+    public LofiService(LofiRepository lofiRepository, PlaylistService playlistService, LofiPoolService lofiPoolService){
         this.lofiRepository = lofiRepository;
+        this.playlistService = playlistService;
+        this.lofiPoolService = lofiPoolService;
     }
 
     public List<Lofi> getAllLofies(){
@@ -72,6 +80,20 @@ public class LofiService extends AbstractService{
         }
 
         return retrievedLofi;
+    }
+
+    public List<Lofi> getAllLofiesAssignedToPlaylist(long playlistId){
+        checkId(playlistId, "playlistId");
+
+        Playlist playlist = this.playlistService.getPlaylistById(playlistId);
+        return playlist.getPlaylistLofies();
+    }
+
+    public List<Lofi> getAllLofiesAssignedToLofiPool(long lofiPoolId){
+        checkId(lofiPoolId, "lofiPoolId");
+
+        LofiPool lofiPool = this.lofiPoolService.getLofiPoolById(lofiPoolId);
+        return lofiPool.getPoolLofies();
     }
 
     public Lofi saveLofi(Lofi lofi){

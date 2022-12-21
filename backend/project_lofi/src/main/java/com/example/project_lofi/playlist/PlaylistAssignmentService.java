@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.project_lofi.AbstractService;
 import com.example.project_lofi.lofi.Lofi;
 import com.example.project_lofi.lofi.LofiService;
+import com.example.project_lofi.user.User;
+import com.example.project_lofi.user.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,11 +18,18 @@ public class PlaylistAssignmentService extends AbstractService{
     
     private final PlaylistService playlistService;
     private final LofiService lofiService;
+    private final UserService userService;
 
     @Autowired
-    public PlaylistAssignmentService(PlaylistService playlistService, LofiService lofiService){
+    public PlaylistAssignmentService(PlaylistService playlistService, LofiService lofiService, UserService userService){
         this.playlistService = playlistService;
         this.lofiService = lofiService;
+        this.userService = userService;
+    }
+
+    public List<Playlist> getAllPlaylistsByUserId(long userId){
+        User user = this.userService.getUserById(userId);
+        return user.getPlaylists();
     }
 
     public Playlist assignLofiToPlaylist(long lofiId, long playlistId){

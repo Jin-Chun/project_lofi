@@ -54,15 +54,8 @@ public class PlaylistService extends AbstractService{
     }
 
     public Playlist savePlaylist(Playlist playlist){
-        Optional<Playlist> existingPlaylist = this.playlistRepository.findPlaylistByName(playlist.getPlaylistName());
-
-        if(!existingPlaylist.isPresent()){
-            return this.playlistRepository.save(playlist);
-        } else {   
-            String message = String.format("Cannot save the same Playlist name %s", playlist.getPlaylistName());
-            log.error(message, playlist);
-            throw new IllegalArgumentException(message);
-        }
+        checkNull(playlist, "playlist");
+        return this.playlistRepository.save(playlist);
     }
 
     public Playlist updatePlaylist(Playlist playlist){

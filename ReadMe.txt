@@ -10,4 +10,4 @@ To build the application
         -> the packaging command is ~ ng build --configuration production -aot
         -> To deploy, go to dist/project_lofi and ~ ng serve --host 0.0.0.0
 
-For windows OS, login mysql by ~mysql.exe -uproject_lofi -pCjs!214413
+For windows OS, login mysql by ~mysql.exe -uproject_lofi -p

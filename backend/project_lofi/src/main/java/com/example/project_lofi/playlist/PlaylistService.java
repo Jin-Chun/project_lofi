@@ -1,6 +1,7 @@
 package com.example.project_lofi.playlist;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.project_lofi.AbstractService;
 import com.example.project_lofi.constants.PL_PlaylistStatus;
+import com.example.project_lofi.playlistassignment.PlaylistLofiAssignment;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +23,7 @@ public class PlaylistService extends AbstractService{
     }
 
     public Playlist getPlaylistById(long playlistId){
+        checkId(playlistId, "playlistId");
         Optional<Playlist> existingPlaylist = this.playlistRepository.findById(playlistId);
         if (existingPlaylist.isPresent()){
             return existingPlaylist.get();
@@ -28,6 +31,18 @@ public class PlaylistService extends AbstractService{
             String message = String.format("No such a Playlist identifier %d is found", playlistId);
             log.error(message, playlistId);
             throw new IllegalArgumentException(message);
+        }
+    }
+
+    public List<PlaylistLofiAssignment> getAllPlaylistLofiAssignments(long playlistId) {
+        checkId(playlistId, "playlistId");
+        Playlist playlist = this.getPlaylistById(playlistId);
+
+        if (playlist.getPlaylistLofies() != null && !playlist.getPlaylistLofies().isEmpty()){
+            return playlist.getPlaylistLofies();
+        } else {
+            log.info("The playlist of playlistId %d doesn't have lofies", playlistId);
+            return new ArrayList<>();
         }
     }
 
@@ -98,5 +113,6 @@ public class PlaylistService extends AbstractService{
         
         return releasedPlaylists;
     }
+
     
 }

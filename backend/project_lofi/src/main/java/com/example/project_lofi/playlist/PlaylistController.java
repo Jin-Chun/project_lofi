@@ -44,6 +44,17 @@ public class PlaylistController {
         }
     }
 
+    @GetMapping(path = "/id/{playlistId}/assignments")
+    @ResponseBody
+    public ResponseEntity<List<PlaylistLofiAssignment>> getAllPlaylistLofiAssignments(@PathVariable long playlistId){
+        List<PlaylistLofiAssignment> retrievedPlaylistLofiAssignments = this.playlistService.getAllPlaylistLofiAssignments(playlistId);
+        if(retrievedPlaylistLofiAssignments.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(retrievedPlaylistLofiAssignments, HttpStatus.FOUND);
+        }
+    }
+
     @GetMapping(path = "/id/{playlistId}")
     @ResponseBody
     public ResponseEntity<Playlist> getPlaylistById(@PathVariable long playlistId){
@@ -160,6 +171,22 @@ public class PlaylistController {
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception e){
             log.error("While removing a lofi("+lofi.getLofiId()+") from a playlist("+playlistId+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(
+        path = "/remove/lofi",
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<Playlist> removeLofiFromPlaylist(@RequestBody PlaylistLofiAssignment assignment){
+        try {
+            this.playlistAssignmentService.removeLofiFromPlaylist(assignment);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            log.error("While removing a lofi("+assignment.getLofi().getLofiId()+") from a playlist("+assignment.getPlaylist().getPlaylistId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

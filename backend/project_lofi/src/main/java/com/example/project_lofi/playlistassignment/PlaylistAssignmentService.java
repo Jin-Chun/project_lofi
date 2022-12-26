@@ -117,27 +117,63 @@ public class PlaylistAssignmentService extends AbstractService{
         checkNull(existingLofi, "lofi");
         checkNull(playlist, "playlist");
 
-        PlaylistLofiAssignment assignment = null;
+        List<PlaylistLofiAssignment> assignmentsToRemove = new ArrayList<>();
 
         List<PlaylistLofiAssignment> assignments = this.getAllPlaylistLofiAssignmentByPlaylistId(playlistId);
 
         if (assignments != null && !assignments.isEmpty()){
             for (PlaylistLofiAssignment assign : assignments){
                 if(assign.getLofi().getLofiId().equals(existingLofi.getLofiId())){
-                    assignment = assign;
+                    assignmentsToRemove.add(assign);
                 }
             }
         }
 
-        if (assignment == null) {
+        if (assignments == null || assignments.isEmpty()) {
             String message = String.format("The lofi (lofiId: %d) has not been assigned to the playlist (playlistId: %d)", lofiId, playlistId);
             log.error(message);
             throw new IllegalArgumentException(message);
         }
 
         // #2. remove the lofi from the playlistLofies
-        if (playlist.getPlaylistLofies().remove(assignment)){
+        for(PlaylistLofiAssignment assignment: assignmentsToRemove){
+            if (playlist.getPlaylistLofies().remove(assignment)){
+    
+                if (lofi.getPlaylists() != null){
+                    lofi.getPlaylists().remove(assignment);
+                }
+                log.info(String.format("A given lofi (lofiId: %d) has been removed from the playlist(playlistId: %d)", lofi.getLofiId(), playlist.getPlaylistId()));
+            } else {
+                log.info(String.format("A given lofi (lofiId: %d) has not been assigned to the playlist(playlistId: %d)", lofi.getLofiId(), playlist.getPlaylistId()));
+            }
+        }
 
+        // #3. save the playlist
+        this.playlistService.updatePlaylist(playlist);
+        this.lofiService.updateLofi(lofi);
+
+        // #4. delete the playlist-lofi assignment
+        for(PlaylistLofiAssignment assignment: assignmentsToRemove){
+            this.deletePlaylistLofiAssignment(assignment);
+        }
+    }
+
+    public void removeLofiFromPlaylist(PlaylistLofiAssignment assignment){
+        checkNull(assignment, "playlistLofiAssignment");
+        long playlistId = assignment.getPlaylist().getPlaylistId();
+        checkId(playlistId, "playlistId");
+        long lofiId = assignment.getLofi().getLofiId();
+        checkId(lofiId, "lofiId");
+
+        // #1. verify a given lofi id and playlist id exist
+        Lofi lofi = this.lofiService.getLofiById(lofiId);
+        Playlist playlist = this.playlistService.getPlaylistById(playlistId);
+        
+        checkNull(lofi, "lofi");
+        checkNull(playlist, "playlist");
+
+        if (playlist.getPlaylistLofies().remove(assignment)){
+    
             if (lofi.getPlaylists() != null){
                 lofi.getPlaylists().remove(assignment);
             }

@@ -1,5 +1,6 @@
 package com.example.project_lofi.playlist;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,19 +14,18 @@ import com.example.project_lofi.constants.PL_PlaylistStatus;
 import com.example.project_lofi.lofi.Lofi;
 import com.example.project_lofi.lofipool.LofiPool;
 import com.example.project_lofi.lofipool.LofiPoolService;
+import com.example.project_lofi.playlistassignment.PlaylistAssignmentService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service @Slf4j
 public class PlaylistService extends AbstractService{
-    private final PlaylistRepository playlistRepository;
-    private final LofiPoolService lofiPoolService;
-
     @Autowired
-    public PlaylistService(PlaylistRepository playlistRepository, LofiPoolService lofiPoolService){
-        this.playlistRepository = playlistRepository;
-        this.lofiPoolService = lofiPoolService;
-    }
+    private PlaylistRepository playlistRepository;
+    @Autowired
+    private LofiPoolService lofiPoolService;
+    @Autowired
+    private PlaylistAssignmentService playlistAssignmentService;
 
     public List<Playlist> getAllPlaylists(){
         return this.playlistRepository.findAll();
@@ -55,6 +55,9 @@ public class PlaylistService extends AbstractService{
 
     public Playlist savePlaylist(Playlist playlist){
         checkNull(playlist, "playlist");
+        playlist.setPlaylistId(null);
+        playlist.setPlaylistCreated(LocalDateTime.now());
+        playlist.setPlaylistUpdated(LocalDateTime.now());
         return this.playlistRepository.save(playlist);
     }
 
@@ -62,6 +65,7 @@ public class PlaylistService extends AbstractService{
         Optional<Playlist> existingPlaylist = this.playlistRepository.findById(playlist.getPlaylistId());
 
         if(existingPlaylist.isPresent()){
+            playlist.setPlaylistUpdated(LocalDateTime.now());
             return this.playlistRepository.save(playlist);
         } else {
             String message = String.format("No such a playlist info. Cannot update the Playlist of playlistId %d, playlistName %s", 
@@ -129,7 +133,7 @@ public class PlaylistService extends AbstractService{
         } else if (numOfLofies == retrievedLofiPool.getPoolLofies().size()){
             // if the given number is the same as the size of lofies in lofiPool, add all to playlist's lofies
             for (Lofi lofi : retrievedLofiPool.getPoolLofies()){
-                retrievedPlaylist.getPlaylistLofies().add(lofi);
+                this.playlistAssignmentService.assignLofiToPlaylist(lofi.getLofiId(), playlistId);
             }
 
         } else {
@@ -139,12 +143,11 @@ public class PlaylistService extends AbstractService{
             // retrieve and add the lofies from the lofiPool by using the random numbers as indexes
             for(int index : randomNums){
                 Lofi lofi = retrievedLofiPool.getPoolLofies().get(index);
-                retrievedPlaylist.getPlaylistLofies().add(lofi);
+                this.playlistAssignmentService.assignLofiToPlaylist(lofi.getLofiId(), playlistId);
             }
         }
 
-        // 7. return the updated playlist
-        Playlist updatedPlaylist = this.updatePlaylist(retrievedPlaylist);
-        return updatedPlaylist;
+        // 7. return the playlist
+        return this.getPlaylistById(playlistId);
     }
 }

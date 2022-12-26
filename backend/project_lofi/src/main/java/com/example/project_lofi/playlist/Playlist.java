@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.project_lofi.lofi.Lofi;
+import com.example.project_lofi.playlistassignment.PlaylistLofiAssignment;
 import com.example.project_lofi.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,10 +15,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Version;
 import lombok.Data;
 
@@ -59,11 +57,6 @@ public class Playlist implements Serializable {
     private LocalDateTime playlistUpdated;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "PlaylistAssignment",
-        joinColumns = @JoinColumn(name = "playlistId"),
-        inverseJoinColumns = @JoinColumn(name = "lofiId")
-    )
-    private List<Lofi> playlistLofies;
+    @OneToMany(mappedBy = "playlist")
+    private List<PlaylistLofiAssignment> playlistLofies;
 }

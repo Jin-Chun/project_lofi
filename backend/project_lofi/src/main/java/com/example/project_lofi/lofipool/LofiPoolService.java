@@ -11,12 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service @Slf4j
 public class LofiPoolService {
     
-    private final LofiPoolRepository lofiPoolRepository;
-
     @Autowired
-    public LofiPoolService(LofiPoolRepository lofiPoolRepository){
-        this.lofiPoolRepository = lofiPoolRepository;
-    }
+    private LofiPoolRepository lofiPoolRepository;
 
     public List<LofiPool> getAllLofiPools(){
         return this.lofiPoolRepository.findAll();
@@ -48,6 +44,7 @@ public class LofiPoolService {
         Optional<LofiPool> existingLofiPool = this.lofiPoolRepository.findLofiPoolByName(lofiPool.getLofiPoolName());
 
         if(!existingLofiPool.isPresent()){
+            lofiPool.setLofiPoolId(null);
             return this.lofiPoolRepository.save(lofiPool);
         } else {   
             String message = String.format("Cannot save the same LofiPool name %s", lofiPool.getLofiPoolName());

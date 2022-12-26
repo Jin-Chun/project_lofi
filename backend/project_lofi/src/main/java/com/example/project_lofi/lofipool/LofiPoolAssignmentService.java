@@ -11,14 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service @Slf4j
 public class LofiPoolAssignmentService extends AbstractService {
-    private final LofiPoolService lofiPoolService;
-    private final LofiService lofiService;
-    
     @Autowired
-    public LofiPoolAssignmentService(LofiPoolService lofiPoolService, LofiService lofiService){
-        this.lofiPoolService = lofiPoolService;
-        this.lofiService = lofiService;
-    }
+    private LofiPoolService lofiPoolService;
+    @Autowired
+    private LofiService lofiService;
+    
 
     public LofiPool assignLofiToLofiPool(long lofiId, long lofiPoolId){
         
@@ -50,6 +47,9 @@ public class LofiPoolAssignmentService extends AbstractService {
 
         // #2. remove the lofi from the pool lofies
         if (lofiPool.getPoolLofies().remove(lofi)){
+            if (lofi.getLofiPools() != null){
+                lofi.getLofiPools().remove(lofiPool);
+            }
             log.info(String.format("A given lofi (lofiId: %d) has been removed from the lofiPool(lofiPoolId: %d)", lofiId, lofiPoolId));
         } else {
             log.info(String.format("A given lofi (lofiId: %d) has not been assigned to the lofiPool(lofiPoolId: %d)", lofiId, lofiPoolId));

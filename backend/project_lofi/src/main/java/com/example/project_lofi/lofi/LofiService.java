@@ -1,5 +1,6 @@
 package com.example.project_lofi.lofi;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,16 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service @Slf4j
 public class LofiService extends AbstractService{
     
-    private final LofiRepository lofiRepository;
-    private final PlaylistService playlistService;
-    private final LofiPoolService lofiPoolService;
-
     @Autowired
-    public LofiService(LofiRepository lofiRepository, PlaylistService playlistService, LofiPoolService lofiPoolService){
-        this.lofiRepository = lofiRepository;
-        this.playlistService = playlistService;
-        this.lofiPoolService = lofiPoolService;
-    }
+    private LofiRepository lofiRepository;
+    @Autowired
+    private PlaylistService playlistService;
+    @Autowired
+    private LofiPoolService lofiPoolService;
 
     public List<Lofi> getAllLofies(){
         return this.lofiRepository.findAll();
@@ -86,7 +83,10 @@ public class LofiService extends AbstractService{
         checkId(playlistId, "playlistId");
 
         Playlist playlist = this.playlistService.getPlaylistById(playlistId);
-        return playlist.getPlaylistLofies();
+        List<Lofi> lofies = new ArrayList<>();
+        playlist.getPlaylistLofies().forEach(a -> lofies.add(a.getLofi()));
+        
+        return lofies;
     }
 
     public List<Lofi> getAllLofiesAssignedToLofiPool(long lofiPoolId){
@@ -100,6 +100,7 @@ public class LofiService extends AbstractService{
         Optional<Lofi> existingLofi = this.lofiRepository.findLofiByName(lofi.getLofiName());
 
         if(!existingLofi.isPresent()){
+            lofi.setLofiId(null);
             return this.lofiRepository.save(lofi);
         } else {   
             String message = String.format("Cannot save the same Lofi name %s", lofi.getLofiName());

@@ -1,5 +1,6 @@
 package com.example.project_lofi.user;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class UserService extends AbstractService {
             return existingUser.get();
         } else {
             String message = String.format("No such a User identifier %d is found", userId);
-            log.error(message, userId);
+            log.error(message);
             throw new IllegalArgumentException(message);
         }
     }
@@ -57,6 +58,9 @@ public class UserService extends AbstractService {
         Optional<User> existingUser = this.userRepository.findUserByName(user.getUserName());
 
         if(!existingUser.isPresent()){
+            user.setUserId(null);
+            user.setUserCreated(LocalDateTime.now());
+            user.setUserUpdated(LocalDateTime.now());
             return this.userRepository.save(user);
         } else {   
             String message = String.format("Cannot save the same User name %s", user.getUserName());
@@ -69,6 +73,7 @@ public class UserService extends AbstractService {
         Optional<User> existingUser = this.userRepository.findById(user.getUserId());
 
         if(existingUser.isPresent()){
+            user.setUserUpdated(LocalDateTime.now());
             return this.userRepository.save(user);
         } else {
             String message = String.format("No such a lofi info. Cannot update the userId %d, userName %s", 
@@ -120,7 +125,7 @@ public class UserService extends AbstractService {
             .stream()
             .forEach(p -> {
                 if(p.getPlaylistName().equals(playlist.getPlaylistName())){
-                    String message = String.format("User(%d) cannot have the same name(%s) of the playlist(%d)", userId, p.getPlaylistName(), p.getPlaylistId());
+                    String message = String.format("User(%d) cannot have the same name(%s) as the playlist(%d)", userId, p.getPlaylistName(), p.getPlaylistId());
                     log.error(message);
                     throw new IllegalArgumentException(message);
                 }

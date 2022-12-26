@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.project_lofi.lofi.Lofi;
+import com.example.project_lofi.playlistassignment.PlaylistAssignmentService;
+import com.example.project_lofi.playlistassignment.PlaylistLofiAssignment;
+
 import lombok.extern.slf4j.Slf4j;
 
 @RestController @Slf4j
@@ -134,10 +138,10 @@ public class PlaylistController {
         path = "/assign/{lofiId}/to/{playlistId}",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Playlist> assignLofiToPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
+    public ResponseEntity<PlaylistLofiAssignment> assignLofiToPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
         try {
-            Playlist playlist = this.playlistAssignmentService.assignLofiToPlaylist(lofiId, playlistId);
-            return new ResponseEntity<>(playlist, HttpStatus.ACCEPTED);
+            PlaylistLofiAssignment playlistLofiAssignment = this.playlistAssignmentService.assignLofiToPlaylist(lofiId, playlistId);
+            return new ResponseEntity<>(playlistLofiAssignment, HttpStatus.ACCEPTED);
         } catch (Exception e){
             log.error("While assigning a lofi("+lofiId+") to the playlist("+playlistId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -145,16 +149,17 @@ public class PlaylistController {
     }
 
     @PostMapping(
-        path = "/remove/{lofiId}/from/{playlistId}",
-        produces = MediaType.APPLICATION_JSON_VALUE
+        path = "/remove/lofi/from/{playlistId}",
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE
         )
     @ResponseBody
-    public ResponseEntity<Playlist> removeLofiFromPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
+    public ResponseEntity<Playlist> removeLofiFromPlaylist(@RequestBody Lofi lofi, @PathVariable long playlistId){
         try {
-            Playlist updatedPlaylist = this.playlistAssignmentService.removeLofiFromPlaylist(lofiId, playlistId);
-            return new ResponseEntity<>(updatedPlaylist, HttpStatus.ACCEPTED);
+            this.playlistAssignmentService.removeLofiFromPlaylist(lofi, playlistId);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception e){
-            log.error("While removing a lofi("+lofiId+") from a playlist("+playlistId+"), unexpected error occurs", e);
+            log.error("While removing a lofi("+lofi.getLofiId()+") from a playlist("+playlistId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

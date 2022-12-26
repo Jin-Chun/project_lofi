@@ -1,13 +1,10 @@
 package com.example.project_lofi.playlistassignment;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import com.example.project_lofi.lofi.Lofi;
 import com.example.project_lofi.playlist.Playlist;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -32,8 +29,4 @@ public class PlaylistLofiAssignment implements Serializable {
     @MapsId("lofiId")
     @JoinColumn(name = "lofiId")
     private Lofi lofi;
-
-    @Basic(optional = false)
-    @Column
-    private LocalDateTime playlistLofiAssignmentTime;
 }

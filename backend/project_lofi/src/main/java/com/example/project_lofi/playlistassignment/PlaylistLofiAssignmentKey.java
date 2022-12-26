@@ -1,6 +1,7 @@
 package com.example.project_lofi.playlistassignment;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -14,4 +15,7 @@ public class PlaylistLofiAssignmentKey implements Serializable{
 
     @Column
     private long lofiId;
+
+    @Column
+    private LocalDateTime playlistLofiAssignmentTime;
 }

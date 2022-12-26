@@ -177,6 +177,21 @@ public class PlaylistController {
             log.error("While releasing a given playlist("+playlistId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        
+    }
+
+    @PostMapping(
+        path = "/pull/{numOfLofies}/from/{lofiPoolId}/for/{playlistId}",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<List<PlaylistLofiAssignment>> pullLofies(@PathVariable int numOfLofies, @PathVariable long lofiPoolId, @PathVariable long playlistId){
+        try {
+            List<PlaylistLofiAssignment> assignments = this.playlistAssignmentService.pullLofiesFromLofiPool(lofiPoolId, numOfLofies, playlistId);
+            return new ResponseEntity<>(assignments, HttpStatus.ACCEPTED);
+        } catch (Exception e){
+            String message = String.format("While pulling the number(# %d) of loifes from the lofipool(%d) for the playlist (%d), unexpected error occurs", numOfLofies, lofiPoolId, playlistId);
+            log.error(message, e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 }

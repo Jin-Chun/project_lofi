@@ -1,4 +1,3 @@
-
     create table lofi (
        lofi_id bigint not null auto_increment,
         lofi_author varchar(255),
@@ -37,7 +36,7 @@
        lofi_id bigint not null,
         playlist_id bigint not null,
         playlist_lofi_assignment_time datetime(6) not null,
-        primary key (lofi_id, playlist_id)
+        primary key (lofi_id, playlist_id, playlist_lofi_assignment_time)
     ) engine=InnoDB;
 
     create table user (
@@ -77,23 +76,6 @@
        add constraint FKddxtaugjepdgf6gj8hvk8mvmk 
        foreign key (user_user_id) 
        references user (user_id);
-
-    alter table playlist_lofi_assignment 
-       add constraint FK9h7oacgvk6kfdtyltgcapk3iw 
-       foreign key (lofi_id) 
-       references lofi (lofi_id);
-
-    alter table playlist_lofi_assignment 
-       add constraint FK8yc9na81sg2rvft1f24go5l1m 
-       foreign key (playlist_id) 
-       references playlist (playlist_id);
-
-    create table playlist_lofi_assignment (
-       lofi_id bigint not null,
-        playlist_id bigint not null,
-        playlist_lofi_assignment_time datetime(6) not null,
-        primary key (lofi_id, playlist_id)
-    ) engine=InnoDB;
 
     alter table playlist_lofi_assignment 
        add constraint FK9h7oacgvk6kfdtyltgcapk3iw 

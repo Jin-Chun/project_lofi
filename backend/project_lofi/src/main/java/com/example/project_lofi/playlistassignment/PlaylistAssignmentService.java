@@ -3,12 +3,17 @@ package com.example.project_lofi.playlistassignment;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.project_lofi.AbstractService;
+import com.example.project_lofi.GeneralUtils;
 import com.example.project_lofi.lofi.Lofi;
 import com.example.project_lofi.lofi.LofiService;
+import com.example.project_lofi.lofipool.LofiPool;
+import com.example.project_lofi.lofipool.LofiPoolService;
 import com.example.project_lofi.playlist.Playlist;
 import com.example.project_lofi.playlist.PlaylistService;
 import com.example.project_lofi.user.User;
@@ -21,13 +26,14 @@ public class PlaylistAssignmentService extends AbstractService{
 
     @Autowired
     private PlaylistLofiAssignmentRepository repository;
-
     @Autowired
     private PlaylistService playlistService;
     @Autowired
     private LofiService lofiService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LofiPoolService lofiPoolService;
 
     public List<Playlist> getAllPlaylistsByUserId(long userId){
         try {
@@ -153,12 +159,55 @@ public class PlaylistAssignmentService extends AbstractService{
         PlaylistLofiAssignmentKey key = new PlaylistLofiAssignmentKey();
         key.setLofiId(lofi.getLofiId());
         key.setPlaylistId(playlist.getPlaylistId());
+        key.setPlaylistLofiAssignmentTime(LocalDateTime.now());
         assignment.setPlaylistLofiAssignmentId(key);
         assignment.setLofi(lofi);
         assignment.setPlaylist(playlist);
-        assignment.setPlaylistLofiAssignmentTime(LocalDateTime.now());
         this.savePlaylistLofiAssignment(assignment);
         
         return assignment;
+    }
+
+    public List<PlaylistLofiAssignment> pullLofiesFromLofiPool(long lofiPoolId, int numOfLofies, long playlistId){
+        checkId(lofiPoolId, "lofiPool");
+        checkId(playlistId, "playlistId");
+        checkMinNum(numOfLofies);
+
+        // 1. validate the given lofi pool
+        LofiPool retrievedLofiPool = this.lofiPoolService.getLofiPoolById(lofiPoolId);
+        checkNull(retrievedLofiPool, "retrievedLofiPool");
+
+        // 2. validate the given playlistId
+        Playlist retrievedPlaylist = this.playlistService.getPlaylistById(playlistId);
+        checkNull(retrievedPlaylist, "playlist");
+
+        List<PlaylistLofiAssignment> assignments = new ArrayList<>();
+
+        // 3. add the given number of lofies from the lofi pool into the playlist's lofies
+        if (numOfLofies > retrievedLofiPool.getPoolLofies().size()){
+            // if the given number exceeds the maximum number of lofies in the lofiPool, throws error
+            String message = String.format("The given number(numOfLofies: %d) of lofies that should be retrieved exceeds the number of lofies in the pool(lofiPoolId: %d)", numOfLofies, lofiPoolId);
+            log.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (numOfLofies == retrievedLofiPool.getPoolLofies().size()){
+            // if the given number is the same as the size of lofies in lofiPool, add all to playlist's lofies
+            for (Lofi lofi : retrievedLofiPool.getPoolLofies()){
+                assignments.add(this.assignLofiToPlaylist(lofi.getLofiId(), playlistId));
+            }
+
+        } else {
+            // generate random numbers as many as the given number in range of 0 to the size of lofies in lofiPool
+            Set<Integer> randomNums = GeneralUtils.generateUniqueRandomNumbers(numOfLofies, 0, retrievedLofiPool.getPoolLofies().size() - 1);
+
+            // retrieve and add the lofies from the lofiPool by using the random numbers as indexes
+            for(int index : randomNums){
+                Lofi lofi = retrievedLofiPool.getPoolLofies().get(index);
+                assignments.add(this.assignLofiToPlaylist(lofi.getLofiId(), playlistId)); 
+            }
+        }
+
+        // 7. return the playlist-lofi assignments
+        return assignments;
     }
 }

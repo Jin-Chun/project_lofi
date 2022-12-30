@@ -63,6 +63,20 @@ public class UserController {
     }
 
     @PostMapping(
+        path = "/login/{userName}/{password}",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<User> getUserByNameAndPassword(@PathVariable String userName, @PathVariable String password){
+        User retrievedUser = this.userService.getUserByNameAndPassword(userName, password);
+        if(retrievedUser == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(retrievedUser, HttpStatus.FOUND);
+        }  
+    }
+
+    @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)

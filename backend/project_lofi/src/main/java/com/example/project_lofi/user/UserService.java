@@ -54,6 +54,18 @@ public class UserService extends AbstractService {
         }
     }
 
+    public User getUserByNameAndPassword(String userName, String password){
+        Optional<User> optionalUser = this.userRepository.findUserByNameAndPassword(userName, password);
+        if (optionalUser.isPresent()){
+            return optionalUser.get();
+        } else {
+            String message = "User name or password is wrong!!";
+            log.error(message);
+            return null;
+        }
+    }
+
+
     public User saveUser(User user){
         Optional<User> existingUser = this.userRepository.findUserByName(user.getUserName());
 

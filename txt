@@ -1,1 +1,6 @@
-aaa
+1. Make the properties of the user object in frontend match the properties of the user object in backend
+2. Replace the fake-backend.ts with the real server side apis.
+    - account.service.ts should be implemented
+    - delete the fake-backend
+    - disable jwt.interceptor.ts
+    - Test all account features

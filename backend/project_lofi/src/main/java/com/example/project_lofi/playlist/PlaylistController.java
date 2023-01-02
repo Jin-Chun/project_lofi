@@ -40,7 +40,7 @@ public class PlaylistController {
         if(retrievedPlaylistList.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(retrievedPlaylistList, HttpStatus.FOUND);
+            return new ResponseEntity<>(retrievedPlaylistList, HttpStatus.OK);
         }
     }
 
@@ -51,7 +51,7 @@ public class PlaylistController {
         if(retrievedPlaylistLofiAssignments.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(retrievedPlaylistLofiAssignments, HttpStatus.FOUND);
+            return new ResponseEntity<>(retrievedPlaylistLofiAssignments, HttpStatus.OK);
         }
     }
 
@@ -62,7 +62,7 @@ public class PlaylistController {
         if(retrievedPlaylist == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(retrievedPlaylist, HttpStatus.FOUND);
+            return new ResponseEntity<>(retrievedPlaylist, HttpStatus.OK);
         }
     }
 
@@ -73,7 +73,7 @@ public class PlaylistController {
         if(retrievedPlaylist == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(retrievedPlaylist, HttpStatus.FOUND);
+            return new ResponseEntity<>(retrievedPlaylist, HttpStatus.OK);
         }
     }
 
@@ -82,7 +82,7 @@ public class PlaylistController {
     public ResponseEntity<List<Playlist>> getAllPlaylistsByUserId(@PathVariable long userId){
         List<Playlist> playlists = this.playlistAssignmentService.getAllPlaylistsByUserId(userId);
         if (playlists != null && !playlists.isEmpty()){
-            return new ResponseEntity<>(playlists, HttpStatus.FOUND);
+            return new ResponseEntity<>(playlists, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -94,7 +94,7 @@ public class PlaylistController {
         List<Playlist> releasedPlaylists = this.playlistService.getReleasedPlaylists();
 
         if (releasedPlaylists != null && !releasedPlaylists.isEmpty()){
-            return new ResponseEntity<>(releasedPlaylists, HttpStatus.FOUND);
+            return new ResponseEntity<>(releasedPlaylists, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -123,7 +123,7 @@ public class PlaylistController {
     public ResponseEntity<Playlist> updatePlaylist(@RequestBody Playlist playlist) throws ServerException{
         try {
             Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
-            return new ResponseEntity<>(updatedPlaylist, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(updatedPlaylist, HttpStatus.OK);
         } catch (Exception e){
             log.error("While updating a given playlist("+playlist.getPlaylistId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -138,7 +138,7 @@ public class PlaylistController {
     public ResponseEntity<Playlist> deletePlaylist(@RequestBody Playlist playlist){
         try {
             this.playlistService.deletePlaylistById(playlist.getPlaylistId());
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
             log.error("While deleting a given playlist("+playlist.getPlaylistId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -152,7 +152,7 @@ public class PlaylistController {
     public ResponseEntity<PlaylistLofiAssignment> assignLofiToPlaylist(@PathVariable long lofiId, @PathVariable long playlistId){
         try {
             PlaylistLofiAssignment playlistLofiAssignment = this.playlistAssignmentService.assignLofiToPlaylist(lofiId, playlistId);
-            return new ResponseEntity<>(playlistLofiAssignment, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(playlistLofiAssignment, HttpStatus.OK);
         } catch (Exception e){
             log.error("While assigning a lofi("+lofiId+") to the playlist("+playlistId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -168,7 +168,7 @@ public class PlaylistController {
     public ResponseEntity<Playlist> removeLofiFromPlaylist(@RequestBody Lofi lofi, @PathVariable long playlistId){
         try {
             this.playlistAssignmentService.removeLofiFromPlaylist(lofi, playlistId);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
             log.error("While removing a lofi("+lofi.getLofiId()+") from a playlist("+playlistId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -184,7 +184,7 @@ public class PlaylistController {
     public ResponseEntity<Playlist> removeLofiFromPlaylist(@RequestBody PlaylistLofiAssignment assignment){
         try {
             this.playlistAssignmentService.removeLofiFromPlaylist(assignment);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
             log.error("While removing a lofi("+assignment.getLofi().getLofiId()+") from a playlist("+assignment.getPlaylist().getPlaylistId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -199,7 +199,7 @@ public class PlaylistController {
     public ResponseEntity<Playlist> releasePlaylist(@PathVariable long playlistId){
         try {
             Playlist playlist = this.playlistService.releasePlaylist(playlistId);
-            return new ResponseEntity<>(playlist, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(playlist, HttpStatus.OK);
         } catch(Exception e){
             log.error("While releasing a given playlist("+playlistId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -214,7 +214,7 @@ public class PlaylistController {
     public ResponseEntity<List<PlaylistLofiAssignment>> pullLofies(@PathVariable int numOfLofies, @PathVariable long lofiPoolId, @PathVariable long playlistId){
         try {
             List<PlaylistLofiAssignment> assignments = this.playlistAssignmentService.pullLofiesFromLofiPool(lofiPoolId, numOfLofies, playlistId);
-            return new ResponseEntity<>(assignments, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(assignments, HttpStatus.OK);
         } catch (Exception e){
             String message = String.format("While pulling the number(# %d) of loifes from the lofipool(%d) for the playlist (%d), unexpected error occurs", numOfLofies, lofiPoolId, playlistId);
             log.error(message, e);

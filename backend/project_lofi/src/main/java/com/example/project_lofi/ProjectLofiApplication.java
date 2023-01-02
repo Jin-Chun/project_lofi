@@ -9,4 +9,5 @@ public class ProjectLofiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectLofiApplication.class, args);
 	}
+	
 }

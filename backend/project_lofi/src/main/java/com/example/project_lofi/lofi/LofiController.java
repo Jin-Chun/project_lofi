@@ -35,7 +35,7 @@ public class LofiController {
         if(retrievedLofiList.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(retrievedLofiList, HttpStatus.FOUND);
+            return new ResponseEntity<>(retrievedLofiList, HttpStatus.OK);
         }
     }
 
@@ -46,7 +46,7 @@ public class LofiController {
         if(retrievedLofi == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(retrievedLofi, HttpStatus.FOUND);
+            return new ResponseEntity<>(retrievedLofi, HttpStatus.OK);
         }
     }
 
@@ -57,7 +57,7 @@ public class LofiController {
         if(retrievedLofi == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(retrievedLofi, HttpStatus.FOUND);
+            return new ResponseEntity<>(retrievedLofi, HttpStatus.OK);
         }
     }
 
@@ -67,7 +67,7 @@ public class LofiController {
         List<Lofi> retrievedLofies = this.lofiService.getLofiesByType(lofiType);
 
         if(retrievedLofies != null && !retrievedLofies.isEmpty()){
-            return new ResponseEntity<>(retrievedLofies, HttpStatus.FOUND); 
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.OK); 
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -79,7 +79,7 @@ public class LofiController {
         List<Lofi> retrievedLofies = this.lofiService.getLofiesByKeyword(lofiKeyword);
 
         if(retrievedLofies != null && !retrievedLofies.isEmpty()){
-            return new ResponseEntity<>(retrievedLofies, HttpStatus.FOUND); 
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.OK); 
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -90,7 +90,7 @@ public class LofiController {
     public ResponseEntity<List<Lofi>> getAllLofiesAssignedToPlaylist(@PathVariable long playlistId){
         List<Lofi> retrievedLofies = this.lofiService.getAllLofiesAssignedToPlaylist(playlistId);
         if(retrievedLofies != null && !retrievedLofies.isEmpty()){
-            return new ResponseEntity<>(retrievedLofies, HttpStatus.FOUND); 
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.OK); 
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -101,7 +101,7 @@ public class LofiController {
     public ResponseEntity<List<Lofi>> getAllLofiesAssignedToLofiPool(@PathVariable long lofiPoolId){
         List<Lofi> retrievedLofies = this.lofiService.getAllLofiesAssignedToLofiPool(lofiPoolId);
         if(retrievedLofies != null && !retrievedLofies.isEmpty()){
-            return new ResponseEntity<>(retrievedLofies, HttpStatus.FOUND); 
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.OK); 
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -130,7 +130,7 @@ public class LofiController {
     public ResponseEntity<Lofi> updateLofi(@RequestBody Lofi lofi) throws ServerException{
         try{
             Lofi updatedLofi = this.lofiService.updateLofi(lofi);
-            return new ResponseEntity<>(updatedLofi, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(updatedLofi, HttpStatus.OK);
         } catch (Exception e){
             log.error("While updating a lofi("+lofi.getLofiId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -145,7 +145,7 @@ public class LofiController {
     public ResponseEntity<Lofi> deleteLofi(@RequestBody Lofi lofi){
         try{
             this.lofiService.deleteLofiById(lofi.getLofiId());
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
             log.error("While deleting a lofi("+lofi.getLofiId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

@@ -24,8 +24,8 @@ export class AccountService {
         return this.userSubject.value;
     }
 
-    login(username: string, password: string) {
-        return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, { username, password })
+    login(userName: string, userPassword: string) {
+        return this.http.post<User>(`${environment.apiUrl}/user/login/${userName}/${userPassword}`, null)
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
@@ -42,24 +42,23 @@ export class AccountService {
     }
 
     register(user: User) {
-        return this.http.post(`${environment.apiUrl}/users/register`, user);
+        return this.http.post(`${environment.apiUrl}/user/add`, user);
     }
 
     getAll() {
-        return this.http.get<User[]>(`${environment.apiUrl}/users`);
+        return this.http.get<User[]>(`${environment.apiUrl}/user/all`);
     }
 
-    getById(id: string) {
-        return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+    getById(id: number) {
+        return this.http.get<User>(`${environment.apiUrl}/user/id/${id}`);
     }
 
-    update(id: string, params: any) {
-        return this.http.put(`${environment.apiUrl}/users/${id}`, params)
+    update(user: User) {
+        return this.http.put(`${environment.apiUrl}/user/update`, user)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
-                if (id == this.userValue?.id) {
+                if (user.userId == this.userValue?.userId) {
                     // update local storage
-                    const user = { ...this.userValue, ...params };
                     localStorage.setItem('user', JSON.stringify(user));
 
                     // publish updated user to subscribers
@@ -69,11 +68,11 @@ export class AccountService {
             }));
     }
 
-    delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/users/${id}`)
+    delete(user: User) {
+        return this.http.delete(`${environment.apiUrl}/user/delete`)
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
-                if (id == this.userValue?.id) {
+                if (user.userId == this.userValue?.userId) {
                     this.logout();
                 }
                 return x;

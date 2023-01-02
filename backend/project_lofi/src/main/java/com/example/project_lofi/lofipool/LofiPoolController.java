@@ -37,7 +37,7 @@ public class LofiPoolController {
         if(lofiPools.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(lofiPools, HttpStatus.FOUND);
+            return new ResponseEntity<>(lofiPools, HttpStatus.OK);
         }
     }
 
@@ -49,7 +49,7 @@ public class LofiPoolController {
         if(lofiPool == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(lofiPool, HttpStatus.FOUND);
+            return new ResponseEntity<>(lofiPool, HttpStatus.OK);
         }
     }
 
@@ -61,7 +61,7 @@ public class LofiPoolController {
         if(lofiPool == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(lofiPool, HttpStatus.FOUND);
+            return new ResponseEntity<>(lofiPool, HttpStatus.OK);
         }
     }
 
@@ -89,7 +89,7 @@ public class LofiPoolController {
     public ResponseEntity<LofiPool> updateLofiPool(@RequestBody LofiPool lofiPool) throws ServerException{
         try {
             LofiPool updatedLofiPool = this.lofiPoolService.updateLofiPool(lofiPool);
-            return new ResponseEntity<>(updatedLofiPool, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(updatedLofiPool, HttpStatus.OK);
         } catch (Exception e){
             log.error("While updating a lofi pool("+lofiPool.getLofiPoolId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -105,7 +105,7 @@ public class LofiPoolController {
     public ResponseEntity<LofiPool> deleteLofiPool(@RequestBody LofiPool lofiPool){
         try {
             this.lofiPoolService.deleteLofiPoolById(lofiPool.getLofiPoolId());
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
             log.error("While deleting a lofi pool("+lofiPool.getLofiPoolId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -120,7 +120,7 @@ public class LofiPoolController {
     public ResponseEntity<LofiPool> assignLofiToLofiPool(@PathVariable long lofiId, @PathVariable long lofiPoolId){
         try {
             LofiPool updatedLofiPool = this.lofiPoolAssignmentService.assignLofiToLofiPool(lofiId, lofiPoolId);
-            return new ResponseEntity<>(updatedLofiPool, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(updatedLofiPool, HttpStatus.OK);
         } catch (Exception e){
             log.error("While assigning a lofi("+lofiId+") to a lofi pool("+lofiPoolId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -135,7 +135,7 @@ public class LofiPoolController {
     public ResponseEntity<LofiPool> removeLofiFromLofiPool(@PathVariable long lofiId, @PathVariable long lofiPoolId){
         try {
             LofiPool updatedLofiPool = this.lofiPoolAssignmentService.removeLofiFromLofiPool(lofiId, lofiPoolId);
-            return new ResponseEntity<>(updatedLofiPool, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(updatedLofiPool, HttpStatus.OK);
         } catch (Exception e){
             log.error("While removing a lofi("+lofiId+") from a lofi pool("+lofiPoolId+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

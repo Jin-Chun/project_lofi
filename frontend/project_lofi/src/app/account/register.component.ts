@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService } from '../_services/account.service';
 import { AlertService } from '../_services/alert.service';
+import { User } from '@app/_models/user';
+import { UserType } from '@app/_constants/user.constants';
 
 @Component({ templateUrl: 'register.component.html' })
 export class RegisterComponent implements OnInit {
+    @ViewChild("adminCheck") adminCheck!: ElementRef;
     form!: FormGroup;
     loading = false;
     submitted = false;
+    isAdmin = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -22,10 +26,9 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit() {
         this.form = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
             username: ['', Validators.required],
-            password: ['', [Validators.required, Validators.minLength(6)]]
+            password: ['', [Validators.required, Validators.minLength(6)]],
+            isAdmin: [false]
         });
     }
 
@@ -43,8 +46,12 @@ export class RegisterComponent implements OnInit {
             return;
         }
 
+        let user = new User();
+        user.userName = String(this.f['username'].value);
+        user.userPassword = String(this.f['password'].value);
+        user.userType = this.f['isAdmin'].value? UserType.ADMIN: UserType.GUEST;
         this.loading = true;
-        this.accountService.register(this.form.value)
+        this.accountService.register(user)
             .pipe(first())
             .subscribe({
                 next: () => {
@@ -56,5 +63,14 @@ export class RegisterComponent implements OnInit {
                     this.loading = false;
                 }
             });
+    }
+
+    isAdminChecked(){
+        this.isAdmin = !this.isAdmin;
+        if(this.isAdmin){
+            this.adminCheck.nativeElement.checked;
+        } else {
+            this.adminCheck.nativeElement.unchecked;
+        }
     }
 }

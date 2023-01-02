@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AlertService } from '@app/_services/alert.service';
 import { AccountService } from '@app/_services/account.service';
+import { User } from '@app/_models/user';
 
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent implements OnInit {
@@ -28,11 +29,9 @@ export class AddEditComponent implements OnInit {
 
         // form with validation rules
         this.form = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            username: ['', Validators.required],
+            userName: ['', Validators.required],
             // password only required in add mode
-            password: ['', [Validators.minLength(6), ...(!this.id ? [Validators.required] : [])]]
+            userPassword: ['', [Validators.minLength(6), ...(!this.id ? [Validators.required] : [])]]
         });
 
         this.title = 'Add User';
@@ -40,7 +39,7 @@ export class AddEditComponent implements OnInit {
             // edit mode
             this.title = 'Edit User';
             this.loading = true;
-            this.accountService.getById(this.id)
+            this.accountService.getById(Number(this.id))
                 .pipe(first())
                 .subscribe(x => {
                     this.form.patchValue(x);
@@ -81,7 +80,7 @@ export class AddEditComponent implements OnInit {
     private saveUser() {
         // create or update user based on id param
         return this.id
-            ? this.accountService.update(this.id!, this.form.value)
+            ? this.accountService.update(this.form.value)
             : this.accountService.register(this.form.value);
     }
 }

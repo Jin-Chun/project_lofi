@@ -69,7 +69,7 @@ export class AccountService {
     }
 
     delete(user: User) {
-        return this.http.delete(`${environment.apiUrl}/user/delete`)
+        return this.http.post(`${environment.apiUrl}/user/delete`, user)
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
                 if (user.userId == this.userValue?.userId) {

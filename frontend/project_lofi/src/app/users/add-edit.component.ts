@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -6,15 +6,18 @@ import { first } from 'rxjs/operators';
 import { AlertService } from '@app/_services/alert.service';
 import { AccountService } from '@app/_services/account.service';
 import { User } from '@app/_models/user';
+import { UserType } from '@app/_constants/user.constants';
 
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent implements OnInit {
+    @ViewChild("adminCheck") adminCheck!: ElementRef;
     form!: FormGroup;
     id?: string;
     title!: string;
     loading = false;
     submitting = false;
     submitted = false;
+    isAdmin = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -25,15 +28,15 @@ export class AddEditComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.id = this.route.snapshot.params['id'];
-
         // form with validation rules
         this.form = this.formBuilder.group({
-            userName: ['', Validators.required],
+            username: ['', Validators.required],
             // password only required in add mode
-            userPassword: ['', [Validators.minLength(6), ...(!this.id ? [Validators.required] : [])]]
+            password: ['', [Validators.minLength(6), ...(!this.id ? [Validators.required] : [])]],
+            isAdmin: [false]
         });
-
+        
+        this.id = this.route.snapshot.params['id'];
         this.title = 'Add User';
         if (this.id) {
             // edit mode
@@ -62,8 +65,14 @@ export class AddEditComponent implements OnInit {
             return;
         }
 
+        let user = new User();
+        user.userName = String(this.f['username'].value);
+        user.userPassword = String(this.f['password'].value);
+        user.userType = this.f['isAdmin'].value? UserType.ADMIN: UserType.GUEST;
+        
         this.submitting = true;
-        this.saveUser()
+        
+        this.saveUser(user)
             .pipe(first())
             .subscribe({
                 next: () => {
@@ -77,10 +86,19 @@ export class AddEditComponent implements OnInit {
             })
     }
 
-    private saveUser() {
+    private saveUser(user: User) {
         // create or update user based on id param
         return this.id
-            ? this.accountService.update(this.form.value)
-            : this.accountService.register(this.form.value);
+            ? this.accountService.update(user)
+            : this.accountService.register(user);
+    }
+
+    isAdminChecked(){
+        this.isAdmin = !this.isAdmin;
+        if(this.isAdmin){
+            this.adminCheck.nativeElement.checked;
+        } else {
+            this.adminCheck.nativeElement.unchecked;
+        }
     }
 }

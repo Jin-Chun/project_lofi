@@ -1,8 +1,8 @@
-- Make add-edit.component work
-- User update/delete
-
-
-
+- Add the left nagivation bar to the "Home" web page
+    - Create the playlist object in _models
+    - Create the playlist service class in _service folder
+    - Create and place the left nav-bar in the Home component and implement playlist service APIs
+    - Create a new component to display the lofies in playlist / router / reference is user list and user table
 
 ---------------------------------------------Future works--------------------------------------
 - JWT implementation

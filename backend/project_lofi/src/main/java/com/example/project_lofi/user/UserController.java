@@ -86,7 +86,7 @@ public class UserController {
     public ResponseEntity<User> saveUser(@RequestBody User user) throws ServerException{
         try{
             User savedUser = this.userService.saveUser(user);
-            return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+            return new ResponseEntity<>(savedUser, HttpStatus.OK);
         } catch (Exception e){
             log.error("While saving a user("+user.getUserName()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -108,7 +108,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(
+    @PostMapping(
         path = "/delete",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -116,7 +116,7 @@ public class UserController {
     public ResponseEntity<User> deleteUser(@RequestBody User user){
         try{
             this.userService.deleteUserById(user.getUserId());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e){
             log.error("While deleting a user("+user.getUserId()+"), unexpected error occurs", e);
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

@@ -1,6 +1,5 @@
-- Add the side bar to the page home.
-    - Create and place the left nav-bar in the Home component and implement playlist service APIs
-    - Create a new component to display the lofies in playlist / router / reference is user list and user table
+- Make Mat-content fill with info of lofies as a table.
+- When clicking a row of the lofies table, redirect to details page.
 
 ---------------------------------------------Future works--------------------------------------
 - JWT implementation

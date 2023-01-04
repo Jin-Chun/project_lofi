@@ -44,8 +44,9 @@ export class HomeComponent {
     }
 
     selectPlaylist(playlistId: number): void{
+        
         this.selected = true;
         this.selectedPlaylist = this.playlists!.find(p => p.playlistId === playlistId);
-        console.log(this.selectedPlaylist);
+        
     }
 }

@@ -66,6 +66,7 @@ export class AddEditComponent implements OnInit {
         }
 
         let user = new User();
+        user.userId = Number(this.id);
         user.userName = String(this.f['username'].value);
         user.userPassword = String(this.f['password'].value);
         user.userType = this.f['isAdmin'].value? UserType.ADMIN: UserType.GUEST;

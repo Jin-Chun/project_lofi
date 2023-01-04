@@ -88,7 +88,7 @@ public class UserService extends AbstractService {
             user.setUserUpdated(LocalDateTime.now());
             return this.userRepository.save(user);
         } else {
-            String message = String.format("No such a lofi info. Cannot update the userId %d, userName %s", 
+            String message = String.format("No such a user info. Cannot update the userId %d, userName %s", 
                 user.getUserId(), user.getUserName());
             log.error(message, user);
             throw new IllegalArgumentException(message);

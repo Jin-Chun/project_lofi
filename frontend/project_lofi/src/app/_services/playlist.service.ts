@@ -32,7 +32,16 @@ export class PlaylistService {
     }
 
     getPlaylistById(playlistId: number){
-        return this.http.get<Playlist>(`${environment.apiUrl}/playlist/id/${playlistId}`);
+        return this.http.get<Playlist>(`${environment.apiUrl}/playlist/id/${playlistId}`)
+            .pipe(map(x => {
+                if (playlistId != this.playlistValue?.playlistId){
+                    // update local storage
+                    localStorage.setItem('playlist', JSON.stringify(x));
+                    // publish updated playlist to subscribers
+                    this.playlistSubject.next(x);
+                }
+                return x;
+            }));
     }
 
     getPlaylistByName(playlistName: string){

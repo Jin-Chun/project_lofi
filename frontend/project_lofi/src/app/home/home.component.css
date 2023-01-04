@@ -1,5 +1,5 @@
 .lofi-container {
-    height: 500px;
+    height: 80%;
     border: 1px solid rgba(0, 0, 0, 0.5);
 }
 .lofi-app-name{
@@ -31,7 +31,9 @@
     transform: scaleY(0);
     transform-origin: top;
     padding-left: 30px;
+    display: none;
 }
 .submenu.expanded {
     transform: scaleY(1);
+    display: block;
 }

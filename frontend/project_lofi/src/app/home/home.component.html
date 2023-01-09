@@ -1,44 +1,94 @@
-<mat-toolbar color="primary" class="lofi-toolbar">
+<mat-toolbar color="primary" class="home-toolbar">
+	
 	<button mat-icon-button (click)="isExpanded = !isExpanded"><mat-icon>menu</mat-icon></button>
-	<h1 class="lofi-app-name">Hi {{user?.userName}}, welcome to Lofi Project</h1>
+	
+	<button mat-button [matMenuTriggerFor]="menu">Menu</button>
+	<mat-menu #menu="matMenu">
+	  <button mat-menu-item>Search</button>
+	  <button mat-menu-item (click)="startPlaylistDialog()">Playlist</button>
+	  <button mat-menu-item>Pull Lofi</button>
+	</mat-menu>
+
+	<h2 class="lofi-app-name">Hi {{user?.userName}}, welcome to Lofi Project</h2>
+
 </mat-toolbar>
 <mat-sidenav-container class="lofi-container" autosize>
 	<mat-sidenav #sidenav class="lofi-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
 		<mat-nav-list>
 			<mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+				<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">add</mat-icon>
+				<mat-icon class="menu-button" *ngIf="isExpanded || isShowing">folder_open</mat-icon>
 				<span class="full-width" *ngIf="isExpanded || isShowing">Lofi Project</span>
-				<mat-icon mat-list-icon>library_music</mat-icon>
-				<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 			</mat-list-item>
 			<div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+				<mat-list-item class="playlist" (click)="selectIntegratedPlaylists()">
+					<mat-icon mat-list-icon>subdirectory_arrow_right</mat-icon>
+					<span class="full-width" *ngIf="isExpanded || isShowing">Integrated playlists</span>
+				</mat-list-item>
+
 				<mat-list-item (click)="showSubSubMenu = !showSubSubMenu" class="parent">
+					<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu}" *ngIf="isExpanded || isShowing">add</mat-icon>
+					<mat-icon mat-list-icon>folder_open</mat-icon>
 					<span class="full-width" *ngIf="isExpanded || isShowing">Lofi-Jazz</span>
-					<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
 				</mat-list-item>
 				<div class="submenu" [ngClass]="{'expanded' : showSubSubMenu}" *ngIf="isShowing || isExpanded">
 					<div *ngFor="let playlist of playlists">
-						<mat-list-item class="playlist" (click)="selectPlaylist(playlist.playlistId)">{{playlist.playlistName}}</mat-list-item>
+						<mat-list-item class="playlist" (click)="selectPlaylist(playlist.playlistId)">
+							<mat-icon mat-list-icon>subdirectory_arrow_right</mat-icon>
+							<span class="full-width" *ngIf="isExpanded || isShowing">{{playlist.playlistName}}</span>
+						</mat-list-item>
 					</div>
 				</div>
+
 				<mat-list-item (click)="showSubSubMenu_2 = !showSubSubMenu_2" class="parent">
+					<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu_2}" *ngIf="isExpanded || isShowing">add</mat-icon>
+					<mat-icon mat-list-icon>folder_open</mat-icon>
 					<span class="full-width" *ngIf="isExpanded || isShowing">Lofi-Hiphop</span>
-					<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu_2}" *ngIf="isExpanded || isShowing">expand_more</mat-icon>
-				</mat-list-item>
-				<div class="submenu" [ngClass]="{'expanded' : showSubSubMenu_2}" *ngIf="isShowing || isExpanded">
-					
-				</div>
+				</mat-list-item>				
 			</div>
+		</mat-nav-list>
+		<mat-nav-list>
+			<mat-list-item class="parent" (click)="showReferences()">
+				<mat-icon class="menu-button" *ngIf="isExpanded || isShowing">add</mat-icon>
+				<mat-icon class="menu-button" *ngIf="isExpanded || isShowing">folder_open</mat-icon>
+				<span class="full-width" *ngIf="isExpanded || isShowing">Reference</span>
+			</mat-list-item>
 		</mat-nav-list>
 	</mat-sidenav>
 
 	<mat-sidenav-content>
-		<div class="lofi-table" *ngIf="selected && selectedPlaylist">
-			{{selectedPlaylist.playlistName}}
-			<tr>
-				<td>{{selectedPlaylist.playlistName}}</td>
-			</tr>
-		</div> 
-
+		<div class="lofi-table" *ngIf="selectedPlaylist && lofies">
+			<p class="lofi-table-title">{{selectedPlaylist.playlistName}}</p>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th style="width: 10%">
+							Lofi Name
+						</th>
+						<th style="width: 10%">
+							Lofi Author
+						</th>
+						<th style="width: 10%">
+							Lofi Type
+						</th>
+						<th style="width: 10%">
+							Lofi Location
+						</th>
+						<th style="width: 10%">
+							Lofi Playtime
+						</th>
+					</tr>
+				</thead>
+				<tbody *ngFor="let lofi of lofies">
+					<tr (click)="clickLofiRow(lofi, selectedPlaylist.playlistId)">
+						<td>{{lofi.lofiName}}</td>
+						<td>{{lofi.lofiAuthor}}</td>
+						<td>{{lofi.lofiType}}</td>
+						<td>{{lofi.lofiLocation}}</td>
+						<td>{{lofi.lofiPlaytime}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</mat-sidenav-content>
-
 </mat-sidenav-container>

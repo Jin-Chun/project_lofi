@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.project_lofi.AbstractService;
 import com.example.project_lofi.constants.PL_PlaylistStatus;
 import com.example.project_lofi.playlistassignment.PlaylistLofiAssignment;
+import com.example.project_lofi.user.User;
+import com.example.project_lofi.user.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 public class PlaylistService extends AbstractService{
     @Autowired
     private PlaylistRepository playlistRepository;
+
+    @Autowired
+    private UserService userService;
 
     public List<Playlist> getAllPlaylists(){
         return this.playlistRepository.findAll();
@@ -62,9 +69,10 @@ public class PlaylistService extends AbstractService{
         playlist.setPlaylistId(null);
         playlist.setPlaylistCreated(LocalDateTime.now());
         playlist.setPlaylistUpdated(LocalDateTime.now());
-        return this.playlistRepository.save(playlist);
+        return this.playlistRepository.saveAndFlush(playlist);
     }
 
+    @Transactional
     public Playlist updatePlaylist(Playlist playlist){
         Optional<Playlist> existingPlaylist = this.playlistRepository.findById(playlist.getPlaylistId());
 
@@ -77,6 +85,33 @@ public class PlaylistService extends AbstractService{
             log.error(message, playlist);
             throw new IllegalArgumentException(message);
         }
+    }
+
+    @Transactional
+    public Playlist updatePlaylistForUser(Playlist playlist, long userId){
+        checkId(userId, "userId");
+        checkId(playlist.getPlaylistId(), "playlistId");
+
+        Playlist p = null;
+
+        Optional<Playlist> existingPlaylist = this.playlistRepository.findById(playlist.getPlaylistId());
+        User existingUser = this.userService.getUserById(userId);
+
+        if(existingPlaylist.isPresent() && existingUser != null){
+            
+            p = existingPlaylist.get();
+            p.setPlaylistGenre(playlist.getPlaylistGenre());
+            p.setPlaylistName(playlist.getPlaylistName());
+            p.setPlaylistStatus(playlist.getPlaylistStatus());
+            p.setPlaylistUpdated(LocalDateTime.now());
+            
+        } else {
+            String message = String.format("No such a playlist info. Cannot update the Playlist of playlistId %d, playlistName %s", 
+            playlist.getPlaylistId(), playlist.getPlaylistName());
+            log.error(message, playlist);
+            throw new IllegalArgumentException(message);
+        }
+        return p;
     }
 
     public Playlist deletePlaylistById(long playlistId){

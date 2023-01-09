@@ -16,6 +16,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatChipsModule } from '@angular/material/chips'
 import { MatMenuModule } from '@angular/material/menu'
 import { MatInputModule } from '@angular/material/input'
+import { MatSelectModule } from '@angular/material/select'
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field'
 
 // used to create fake backend
 // import { fakeBackendProvider } from './_helpers/fake-backend';
@@ -25,6 +28,7 @@ import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { AppComponent } from './app.component';
 import { AlertComponent } from './_components/alert.component';
 import { HomeComponent } from './home/home.component';
+import { PlaylistDialogComponent } from './home/playlist-dialog/playlist-dialog.component';
 
 @NgModule({
     imports: [
@@ -46,12 +50,16 @@ import { HomeComponent } from './home/home.component';
         MatChipsModule,
         MatInputModule,
         MatListModule,
-        MatMenuModule
+        MatMenuModule,
+        MatSelectModule,
+        MatDialogModule,
+        MatFormFieldModule
     ],
     declarations: [
         AppComponent,
         AlertComponent,
-        HomeComponent
+        HomeComponent,
+        PlaylistDialogComponent
     ],
     providers: [
         // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

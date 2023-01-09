@@ -12,6 +12,7 @@ import com.example.project_lofi.lofipool.LofiPool;
 import com.example.project_lofi.lofipool.LofiPoolService;
 import com.example.project_lofi.playlist.Playlist;
 import com.example.project_lofi.playlist.PlaylistService;
+import com.example.project_lofi.playlistassignment.PlaylistAssignmentService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +23,8 @@ public class LofiService extends AbstractService{
     private LofiRepository lofiRepository;
     @Autowired
     private PlaylistService playlistService;
+    @Autowired
+    private PlaylistAssignmentService plAssignmentService;
     @Autowired
     private LofiPoolService lofiPoolService;
 
@@ -86,6 +89,23 @@ public class LofiService extends AbstractService{
         List<Lofi> lofies = new ArrayList<>();
         playlist.getPlaylistLofies().forEach(a -> lofies.add(a.getLofi()));
         
+        return lofies;
+    }
+
+    public List<Lofi> getAllLofiesByUserId(long userId){
+        checkId(userId, "userId");
+
+        List<Playlist> playlists = this.plAssignmentService.getAllPlaylistsByUserId(userId);
+        List<Lofi> lofies = new ArrayList<>();
+        
+        if (playlists != null && !playlists.isEmpty()){
+            playlists.forEach(p -> p.getPlaylistLofies().forEach(a -> {
+                if (!lofies.contains(a.getLofi())){
+                    lofies.add(a.getLofi());
+                } 
+            }));
+        }
+
         return lofies;
     }
 

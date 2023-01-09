@@ -36,7 +36,7 @@ export class AddEditComponent implements OnInit {
             isAdmin: [false]
         });
         
-        this.id = this.route.snapshot.params['id'];
+        this.id = this.route.snapshot.params['userid'];
         this.title = 'Add User';
         if (this.id) {
             // edit mode

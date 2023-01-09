@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '../_models/user';
+import { Playlist } from '@app/_models/playlist';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -77,5 +78,13 @@ export class AccountService {
                 }
                 return x;
             }));
+    }
+
+    createPlaylistForUser(playlist: Playlist, userId: number){
+        return this.http.post(`${environment.apiUrl}/user/create/playlist/${userId}`, playlist);
+    }
+
+    removePlaylistFromUser(playlistId: number, userId: number){
+        return this.http.post(`${environment.apiUrl}/user/remove/playlist/${playlistId}/from/${userId}`, null);
     }
 }

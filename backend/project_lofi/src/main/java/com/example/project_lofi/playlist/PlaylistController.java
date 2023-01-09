@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -121,6 +122,21 @@ public class PlaylistController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Playlist> updatePlaylist(@RequestBody Playlist playlist) throws ServerException{
+        try {
+            Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
+            return new ResponseEntity<>(updatedPlaylist, HttpStatus.OK);
+        } catch (Exception e){
+            log.error("While updating a given playlist("+playlist.getPlaylistId()+"), unexpected error occurs", e);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @PostMapping(
+        path = "/update/for/{userId}",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Playlist> updatePlaylistForUser(@RequestBody Playlist playlist, @PathVariable long userId) throws ServerException{
         try {
             Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
             return new ResponseEntity<>(updatedPlaylist, HttpStatus.OK);

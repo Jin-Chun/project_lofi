@@ -1,7 +1,11 @@
-- Make Mat-content fill with info of lofies as a table.
+- Dialog for create/delete/modify playlists -> 8th Jan
+- Dialog for pull lofies (playlist selection (table) / number / genre)
+- Search component (redirection)
 - When clicking a row of the lofies table, redirect to details page.
+- Remove / assign dialog
 
 ---------------------------------------------Future works--------------------------------------
+- Player component and audio service
 - JWT implementation
     - Spring boot Security - JWT
     - Enable jwt.interceptor.ts

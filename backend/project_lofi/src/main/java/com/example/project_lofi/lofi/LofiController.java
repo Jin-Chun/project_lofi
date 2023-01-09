@@ -1,6 +1,7 @@
 package com.example.project_lofi.lofi;
 
 import java.rmi.ServerException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,17 @@ public class LofiController {
     @ResponseBody
     public ResponseEntity<List<Lofi>> getAllLofiesAssignedToPlaylist(@PathVariable long playlistId){
         List<Lofi> retrievedLofies = this.lofiService.getAllLofiesAssignedToPlaylist(playlistId);
+        if(retrievedLofies != null && !retrievedLofies.isEmpty()){
+            return new ResponseEntity<>(retrievedLofies, HttpStatus.OK); 
+        } else {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        }
+    }
+
+    @GetMapping(path = "/userid/{userId}")
+    @ResponseBody
+    public ResponseEntity<List<Lofi>> getAllLofiesByUserId(@PathVariable long userId){
+        List<Lofi> retrievedLofies = this.lofiService.getAllLofiesByUserId(userId);
         if(retrievedLofies != null && !retrievedLofies.isEmpty()){
             return new ResponseEntity<>(retrievedLofies, HttpStatus.OK); 
         } else {

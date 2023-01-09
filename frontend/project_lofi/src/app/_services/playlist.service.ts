@@ -37,7 +37,7 @@ export class PlaylistService {
                 if (playlistId != this.playlistValue?.playlistId){
                     // update local storage
                     localStorage.setItem('playlist', JSON.stringify(x));
-                    // publish updated playlist to subscribers
+                    // publish current playlist to subscribers
                     this.playlistSubject.next(x);
                 }
                 return x;
@@ -52,8 +52,8 @@ export class PlaylistService {
         return this.http.post<Playlist>(`${environment.apiUrl}/playlist/add`, playlist);
     }
 
-    updatePlaylist(playlist: Playlist){
-        return this.http.put<Playlist>(`${environment.apiUrl}/playlist/update`, playlist)
+    updatePlaylistForUser(playlist: Playlist, userId: number){
+        return this.http.post<Playlist>(`${environment.apiUrl}/playlist/update/for/${userId}`, playlist)
             .pipe(map(x => {
                 // update stored playlist if the current playlist is updated
                 if(playlist.playlistId == this.playlistValue?.playlistId){

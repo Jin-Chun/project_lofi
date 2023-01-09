@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.project_lofi.AbstractService;
@@ -129,6 +128,7 @@ public class PlaylistService extends AbstractService{
         }
     }
 
+    @Transactional
     public Playlist releasePlaylist(long playlistId){
         checkId(playlistId, "playlistId");
 

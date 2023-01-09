@@ -7,9 +7,14 @@ insert into lofi values(1, "Author1", "/resource/lofi/jazz/1", "sample1", "4:01"
 insert into lofi values(2, "Author1", "/resource/lofi/jazz/2", "sample2", "4:02", "01");
 insert into lofi values(3, "Author1", "/resource/lofi/jazz/3", "sample3", "4:03", "01");
 insert into lofi values(4, "Author1", "/resource/lofi/jazz/4", "sample4", "4:04", "01");
+insert into lofi values(5, "Author1", "/resource/lofi/jazz/5", "sample5", "4:05", "01");
+insert into lofi values(6, "Author1", "/resource/lofi/jazz/6", "sample6", "4:06", "01");
+insert into lofi values(7, "Author1", "/resource/lofi/jazz/7", "sample7", "4:07", "01");
 
 -- insert lofi pool data (lofi_pool_id, lofi_pool_genre, lofi_pool_name)
 insert into lofi_pool values(1, "02", "sample_lofi_pool1");
+insert into lofi_pool values(2, "01", "sample_lofi_pool2");
+insert into lofi_pool values(3, "03", "sample_lofi_pool3");
 
 -- insert playlist data (playlist_id, playlist_created, playlist_genre, playlist_name, playlist_status, playlist_updated, playlist_version, user_user_id)
 insert into playlist values(1, CURRENT_TIMESTAMP(), "02", "Sample_playlist1", "01", CURRENT_TIMESTAMP(), 1, 1);
@@ -31,3 +36,8 @@ insert into lofi_pool_assignment values(1, 1);
 insert into lofi_pool_assignment values(1, 2);
 insert into lofi_pool_assignment values(1, 3);
 insert into lofi_pool_assignment values(1, 4);
+insert into lofi_pool_assignment values(2, 5);
+insert into lofi_pool_assignment values(2, 6);
+insert into lofi_pool_assignment values(2, 7);
+insert into lofi_pool_assignment values(3, 1);
+insert into lofi_pool_assignment values(3, 7);

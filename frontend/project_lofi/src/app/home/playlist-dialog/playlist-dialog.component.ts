@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { MplaylistGenres, MplaylistStatus, PlaylistStatus } from "@app/_constants/playlist.constants";
+import { MplaylistGenres, MplaylistStatus } from "@app/_constants/playlist.constants";
 import { Playlist } from "@app/_models/playlist";
 import { AlertService } from "@app/_services/alert.service";
 import { PlaylistService } from "@app/_services/playlist.service";

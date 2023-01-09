@@ -77,6 +77,10 @@ export class PlaylistService {
             }))
     }
 
+    pullLofiesFromLofiPool(lofiPoolId: number, numOfLofies: number, playlistId: number){
+        return this.http.post<any[]>(`${environment.apiUrl}/playlist/pull/${numOfLofies}/from/${lofiPoolId}/for/${playlistId}`, null);
+    }
+
     redirectToHome(){
         localStorage.removeItem('playlist');
         this.playlistSubject.next(null);

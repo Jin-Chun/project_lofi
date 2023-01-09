@@ -29,6 +29,7 @@ import { AppComponent } from './app.component';
 import { AlertComponent } from './_components/alert.component';
 import { HomeComponent } from './home/home.component';
 import { PlaylistDialogComponent } from './home/playlist-dialog/playlist-dialog.component';
+import { PullDialogComponent } from './home/pull-dialog/pull-dialog.component';
 
 @NgModule({
     imports: [
@@ -59,7 +60,8 @@ import { PlaylistDialogComponent } from './home/playlist-dialog/playlist-dialog.
         AppComponent,
         AlertComponent,
         HomeComponent,
-        PlaylistDialogComponent
+        PlaylistDialogComponent,
+        PullDialogComponent
     ],
     providers: [
         // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

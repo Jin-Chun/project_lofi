@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { StreamState } from '@app/_interfaces/stream.state';
 import { MatDialog } from '@angular/material/dialog';
 import { PlaylistDialogComponent } from './playlist-dialog/playlist-dialog.component';
+import { PullDialogComponent } from './pull-dialog/pull-dialog.component';
 
 @Component({ templateUrl: 'home.component.html', styleUrls: ['home.component.css']})
 export class HomeComponent implements OnInit{
@@ -40,12 +41,14 @@ export class HomeComponent implements OnInit{
         ) {
             this.user = this.accountService.userValue;
             this.selectedPlaylist = null;
+            this.selectIntegratedPlaylists();
         }
 
     ngOnInit() {
+        this.playlists = [];
         this.playlistService.getAllPlaylistByUserId(this.user!.userId!)
             .pipe(first())
-            .subscribe(playlists => this.playlists = playlists);
+            .subscribe(playlists => this.playlists = playlists);        
     }
 
     mouseenter() {
@@ -67,6 +70,11 @@ export class HomeComponent implements OnInit{
     }
 
     selectIntegratedPlaylists(){
+
+        if(this.lofies){
+            this.lofies = [];
+        }
+
         const integratedPlaylist = new Playlist();
         integratedPlaylist.playlistName = "Integrated Playlist"
         this.selectedPlaylist = integratedPlaylist;
@@ -78,7 +86,7 @@ export class HomeComponent implements OnInit{
         }
     }
 
-    showReferences(){
+    showRefers(){
         const reference = new Playlist();
         reference.playlistName = "Reference";
         this.selectedPlaylist = reference;
@@ -95,14 +103,24 @@ export class HomeComponent implements OnInit{
         this.router.navigateByUrl(`/lofi/id/${lofi.lofiId}`);
     }
 
-    startPlaylistDialog(){
-        
+    startPlaylistDialog(){        
         let playlistDialogRef = this.dialog.open(PlaylistDialogComponent, {
-            width: '400px',
-            data: {user: this.user, playlists : this.playlists}
+            width: '500px',
+            data: {user: this.user, playlists: this.playlists}
         });
 
         playlistDialogRef.afterClosed().subscribe(() => {
+            this.ngOnInit();
+        })
+    }
+
+    startPullDialog(){
+        let pullDialogRef = this.dialog.open(PullDialogComponent, {
+            width: '500px',
+            data: {user: this.user, playlists: this.playlists}
+        });
+
+        pullDialogRef.afterClosed().subscribe(() => {
             this.ngOnInit();
         })
     }

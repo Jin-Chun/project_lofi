@@ -6,7 +6,7 @@
 	<mat-menu #menu="matMenu">
 	  <button mat-menu-item>Search</button>
 	  <button mat-menu-item (click)="startPlaylistDialog()">Playlist</button>
-	  <button mat-menu-item>Pull Lofi</button>
+	  <button mat-menu-item (click)="startPullDialog()">Pull Lofi</button>
 	</mat-menu>
 
 	<h2 class="lofi-app-name">Hi {{user?.userName}}, welcome to Lofi Project</h2>
@@ -48,10 +48,9 @@
 			</div>
 		</mat-nav-list>
 		<mat-nav-list>
-			<mat-list-item class="parent" (click)="showReferences()">
-				<mat-icon class="menu-button" *ngIf="isExpanded || isShowing">add</mat-icon>
-				<mat-icon class="menu-button" *ngIf="isExpanded || isShowing">folder_open</mat-icon>
-				<span class="full-width" *ngIf="isExpanded || isShowing">Reference</span>
+			<mat-list-item class="parent" (click)="showRefers()">
+				<mat-icon class="menu-button" *ngIf="isExpanded || isShowing">subdirectory_arrow_right</mat-icon>
+				<span class="full-width" *ngIf="isExpanded || isShowing">Referral list</span>
 			</mat-list-item>
 		</mat-nav-list>
 	</mat-sidenav>

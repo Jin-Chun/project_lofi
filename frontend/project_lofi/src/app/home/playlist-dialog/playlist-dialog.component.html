@@ -43,7 +43,7 @@
         <div>
             <button [disabled]="loading" class="btn btn-primary">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                Submit
+                Create
             </button>
         </div>
     </form>
@@ -63,23 +63,37 @@
             </div>
         </div>
         <div *ngIf="selectedPlaylist">
-          <div class="mb-3">
-            <div class="card-body">
-              Playlist Id: {{selectedPlaylist.playlistId}} <br>
-              Playlist Genre: {{selectedPlaylist.playlistGenre}} <br>
-              Playlist Status: {{selectedPlaylist.playlistStatus}} <br>
-              <div *ngIf="selectedPlaylistLofies">
-                Number of assigned lofies: {{selectedPlaylistLofies.length}}<br>
-              </div>
-            </div>
+          <div>
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th style="width: 10%">
+                              Name
+                          </th>
+                          <th style="width: 10%">
+                              Genre
+                          </th>
+                          <th style="width: 10%">
+                              Status
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>{{selectedPlaylist.playlistName}}</td>
+                          <td>{{selectedPlaylist.playlistGenre}}</td>
+                          <td>{{selectedPlaylist.playlistStatus}}</td>
+                      </tr>
+                  </tbody>
+              </table>
           </div>
           <div>
-              <button [disabled]="loading" class="btn btn-primary">
+              <button [disabled]="loading" class="btn btn-danger">
                   <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                  Submit
+                  Delete
               </button>
           </div>
-        </div>
+      </div>
     </form>
   </div>
 </div>

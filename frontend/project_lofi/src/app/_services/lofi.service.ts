@@ -32,6 +32,10 @@ export class LofiService{
     getAllLofiesByPlaylistId(playlistId: number){
         return this.http.get<Lofi[]>(`${environment.apiUrl}/lofi/playlistid/${playlistId}`);
     }
+    
+    getAllLofiesByLofiPoolId(lofiPoolId: number){
+        return this.http.get<Lofi[]>(`${environment.apiUrl}/lofi/lofipoolid/${lofiPoolId}`);
+    }
 
     getAllLofiesByUserId(userId: number){
         return this.http.get<Lofi[]>(`${environment.apiUrl}/lofi/userid/${userId}`);

@@ -1,0 +1,109 @@
+<h1 mat-dialog-title>Pull lofies</h1>
+<div mat-dialog-content>
+
+    <div class="card-body">
+        <form [formGroup]="submitForm" (ngSubmit)="submitChange()">
+            <div class="mb-3">
+                <label class="form-label">Select your playlist to assign lofies</label>
+                <mat-select formControlName="playlist">
+                <mat-option *ngFor="let p of data.playlists" [value] = "p" (click) = "selectPlaylistToUpdate(p)">
+                    {{p.playlistName}}
+                </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && submitF['playlist'].errors" class="invalid-feedback">
+                    <div *ngIf="submitF['playlist'].errors['required']">Select playlist to assign lofies</div>
+                </div>
+            </div>
+            <div *ngIf="selectedPlaylist">
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">
+                                    Name
+                                </th>
+                                <th style="width: 10%">
+                                    Genre
+                                </th>
+                                <th style="width: 10%">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{selectedPlaylist.playlistName}}</td>
+                                <td>{{selectedPlaylist.playlistGenre}}</td>
+                                <td>{{selectedPlaylist.playlistStatus}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="selectedLofiPools">
+                    <div class="mb-3">
+                        <label class="form-label">Select your lofi pool to get lofies</label>
+                        <mat-select formControlName="lofiPool">
+                        <mat-option *ngFor="let lp of selectedLofiPools" [value] = "lp" (click) = "selectLofiPool(lp)">
+                            {{lp.lofiPoolName}}
+                        </mat-option>
+                        </mat-select>
+                        <div *ngIf="submitted && submitF['lofiPool'].errors" class="invalid-feedback">
+                            <div *ngIf="submitF['lofiPool'].errors['required']">Select lofi Pool to get lofies</div>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedLofies">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%">
+                                        Name
+                                    </th>
+                                    <th style="width: 10%">
+                                        Author
+                                    </th>
+                                    <th style="width: 10%">
+                                        Type
+                                    </th>
+                                    <th style="width: 10%">
+                                        Playtime
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let l of selectedLofies">
+                                <tr>
+                                    <td>{{l.lofiName}}</td>
+                                    <td>{{l.lofiAuthor}}</td>
+                                    <td>{{l.lofiType}}</td>
+                                    <td>{{l.lofiPlaytime}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <div class="mb-3">
+                                <label class="form-label">Select number of lofies to pool</label>
+                                <mat-select formControlName="numberOfLofies">
+                                <mat-option *ngFor="let n of selectedLofies; let i = index" [value] = "i+1" (click)="isLastStep=true">
+                                    {{i+1}}
+                                </mat-option>
+                                </mat-select>
+                                <div *ngIf="submitted && submitF['numberOfLofies'].errors" class="invalid-feedback">
+                                    <div *ngIf="submitF['numberOfLofies'].errors['required']">Select a number</div>
+                                </div>
+                            </div>
+                            <div *ngIf="isLastStep">
+                                <button [disabled]="loading" class="btn btn-primary">
+                                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                                    Pull
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="clickCancel()">Cancel</button>
+</div>

@@ -63,6 +63,14 @@ export class HomeComponent implements OnInit{
         }
     }
 
+    refresh(){
+        if(this.selectedPlaylist && this.selectedPlaylist.playlistId){
+            this.selectPlaylist(this.selectedPlaylist.playlistId);
+        } else {
+            this.selectIntegratedPlaylists();
+        }
+    }
+
     selectPlaylist(playlistId: number){
         this.selectedPlaylist = this.playlists!.find(p => p.playlistId === playlistId);
         this.lofiService.getAllLofiesByPlaylistId(playlistId)
@@ -121,8 +129,11 @@ export class HomeComponent implements OnInit{
         });
 
         pullDialogRef.afterClosed().subscribe(() => {
-            this.ngOnInit();
+            this.refresh()
         })
     }
 
+    goToSearch(){
+        this.router.navigate(['/search']);
+    }
 }

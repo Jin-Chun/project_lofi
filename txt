@@ -1,6 +1,6 @@
-- Search component (redirection) -> Search lofies by keyword / genre
 - When clicking a row of the lofies table, redirect to details page.
-- Remove from playlists(tables) / Assign to playlists(table) / lofiPools(table) dialog
+    new folder under app "lofi"
+    Remove from playlists(tables) / Assign to playlists(table) / lofiPools(table) dialog
 
 ---------------------------------------------Future works--------------------------------------
 - Player component and audio service

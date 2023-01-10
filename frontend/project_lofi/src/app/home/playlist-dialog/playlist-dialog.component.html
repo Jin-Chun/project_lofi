@@ -1,13 +1,15 @@
 <h1 mat-dialog-title>Playlist</h1>
 <div mat-dialog-content>
-  <ul>
-    <li>
-      <button mat-button (click)="selectCreate()" cdkFocusInitial>Create playlist</button>
-    </li>
-    <li>
-      <button mat-button (click)="selectDelete()">Delete playlist</button>
-    </li>
-  </ul>
+  <form>
+    <div>
+      <input type="radio" name="createPlaylist" (change)="selectCreate()" [checked]="isCreate" cdkFocusInitial>
+       Create a playlist
+    </div>
+    <div>
+      <input type="radio" name="deletePlaylist" [checked]="isDelete" (change)="selectDelete()">
+       Delete a playlist
+    </div>
+  </form>
 
   <div class="card-body" *ngIf="isCreate">
     <form [formGroup]="createForm" (ngSubmit)="submitChange()">

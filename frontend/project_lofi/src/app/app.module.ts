@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatSidenavModule } from  '@angular/material/sidenav';
@@ -30,6 +31,7 @@ import { AlertComponent } from './_components/alert.component';
 import { HomeComponent } from './home/home.component';
 import { PlaylistDialogComponent } from './home/playlist-dialog/playlist-dialog.component';
 import { PullDialogComponent } from './home/pull-dialog/pull-dialog.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
     imports: [
@@ -39,6 +41,7 @@ import { PullDialogComponent } from './home/pull-dialog/pull-dialog.component';
         AppRoutingModule,
         MatSidenavModule,
         BrowserAnimationsModule,
+        FormsModule,
 
         MatToolbarModule,
         MatButtonModule,
@@ -61,7 +64,8 @@ import { PullDialogComponent } from './home/pull-dialog/pull-dialog.component';
         AlertComponent,
         HomeComponent,
         PlaylistDialogComponent,
-        PullDialogComponent
+        PullDialogComponent,
+        SearchComponent,
     ],
     providers: [
         // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

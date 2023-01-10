@@ -1,0 +1,60 @@
+<div class="p-4">
+    <div class="container">
+        <div class="row">
+            <div class="mb-3 col">
+                <input type="text" name="lofiKeyword" [(ngModel)]="lofiKeyword" placeholder="Enter lofi name"> &nbsp;
+                <button [disabled]="isLoading" (click)="search()" class="btn btn-outline-success">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+                    Search
+                </button>
+            </div>
+            <div class="mb-3 col"  style="text-align:right">
+                <button [disabled]="isLoading" (click)="toHome()" class="btn btn-outline-secondary">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+                    Cancel
+                </button>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="search-result">
+                <div class="lofi-table" >
+                    <p class="lofi-table-title" style="text-align:right" *ngIf="lofiResults">Number of searched lofies: {{lofiResults.length}}</p>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%">
+                                    Lofi Name
+                                </th>
+                                <th style="width: 10%">
+                                    Lofi Author
+                                </th>
+                                <th style="width: 10%">
+                                    Lofi Type
+                                </th>
+                                <th style="width: 10%">
+                                    Lofi Location
+                                </th>
+                                <th style="width: 10%">
+                                    Lofi Playtime
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let lofi of lofiResults">
+                            <tr (click)="clickLofiRow(lofi)">
+                                <td>{{lofi.lofiName}}</td>
+                                <td>{{lofi.lofiAuthor}}</td>
+                                <td>{{lofi.lofiType}}</td>
+                                <td>{{lofi.lofiLocation}}</td>
+                                <td>{{lofi.lofiPlaytime}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isLoading" class="text-center m-5">
+        <span class="spinner-border spinner-border-lg align-center"></span>
+    </div>
+</div>

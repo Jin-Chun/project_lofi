@@ -32,6 +32,7 @@ import { HomeComponent } from './home/home.component';
 import { PlaylistDialogComponent } from './home/playlist-dialog/playlist-dialog.component';
 import { PullDialogComponent } from './home/pull-dialog/pull-dialog.component';
 import { SearchComponent } from './search/search.component';
+import { LofiComponent } from './lofi/lofi.component';
 
 @NgModule({
     imports: [
@@ -66,6 +67,7 @@ import { SearchComponent } from './search/search.component';
         PlaylistDialogComponent,
         PullDialogComponent,
         SearchComponent,
+        LofiComponent,
     ],
     providers: [
         // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

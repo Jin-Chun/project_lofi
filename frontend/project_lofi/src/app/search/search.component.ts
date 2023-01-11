@@ -33,7 +33,9 @@ export class SearchComponent{
         this.router.navigate(['/home']);
     }
 
-    clickLofiRow(lofi: any){
-        console.log(lofi.lofiId);
+    clickLofiRow(lofi: Lofi){
+        if(lofi && lofi.lofiId){
+            this.router.navigate(['/lofi', {lofiId: lofi.lofiId}]);
+        }
     }
 }

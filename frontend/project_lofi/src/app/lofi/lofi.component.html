@@ -1,0 +1,60 @@
+<mat-toolbar color="primary" class="home-toolbar">	
+
+    <button mat-icon-button (click)="isExpanded = !isExpanded"><mat-icon>menu</mat-icon></button>
+
+    <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+	<mat-menu #menu="matMenu">
+	  <button mat-menu-item (click)="assignLofi()">Assign lofi</button>
+	  <button mat-menu-item (click)="removeLofi()">Remove lofi</button>
+	</mat-menu>
+
+    <h2 class="lofi-app-name" *ngIf="user">
+        Hi {{user.userName}}, this is Lofi View
+    </h2>    
+
+</mat-toolbar>
+
+<mat-sidenav-container class="lofi-container" autosize>
+	<mat-sidenav #sidenav class="lofi-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
+		<mat-nav-list>
+			<mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+				<mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">add</mat-icon>
+				<mat-icon class="menu-button" *ngIf="isExpanded || isShowing">folder_open</mat-icon>
+				<span class="full-width" *ngIf="isExpanded || isShowing">Lofi - {{selectedLofi?.lofiName}}</span>
+			</mat-list-item>
+			<div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+				<mat-list-item class="playlist">
+					<mat-icon mat-list-icon>subdirectory_arrow_right</mat-icon>
+					<span class="full-width" (click)="isSummary=!isSummary" *ngIf="isExpanded || isShowing">Lofi summary</span>
+				</mat-list-item>
+			</div>
+		</mat-nav-list>
+	</mat-sidenav>
+
+    <mat-sidenav-content>
+		<div *ngIf="isSummary">
+            <mat-card class="lofi-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="lofi-header-image"></div>
+                    <mat-card-title>{{selectedLofi?.lofiName}}</mat-card-title>
+                    <mat-card-subtitle>{{lofiType}}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p> This lofi {{selectedLofi?.lofiName}} is kind of {{lofiType}} </p>
+                    <p> {{selectedLofi?.lofiName}} has been created by {{selectedLofi?.lofiAuthor}} and having {{selectedLofi?.lofiPlaytime}} playtime.</p>  
+                    <p> This is currently stored in {{selectedLofi?.lofiLocation}}.</p>
+                    <br>
+                </mat-card-content>
+                <mat-card-actions>
+                    <audio #audio [src]="selectedLofi?.lofiLocation" (ended)="onEnded()"></audio>
+                    <button class="audio-button" mat-raised-button (click)="play()">
+                        Play <mat-icon>play_arrow</mat-icon>
+                    </button>
+                    <button class="audio-button" mat-raised-button (click)="pause()">
+                        Pause <mat-icon>pause</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+	</mat-sidenav-content>
+</mat-sidenav-container>

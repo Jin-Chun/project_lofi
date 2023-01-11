@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
+import { LofiComponent } from './lofi/lofi.component';
 import { SearchComponent } from './search/search.component';
 import { AuthGuard } from './_helpers/auth.guard';
 
@@ -13,6 +14,7 @@ const routes: Routes = [
     { path: 'users', loadChildren: usersModule, canActivate: [AuthGuard] },
     { path: 'account', loadChildren: accountModule },
     { path: 'search', component: SearchComponent, canActivate: [AuthGuard]},
+    { path: 'lofi', component: LofiComponent, canActivate: [AuthGuard] },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

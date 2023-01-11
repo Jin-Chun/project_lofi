@@ -1,6 +1,6 @@
-- When clicking a row of the lofies table, redirect to details page.
-    new folder under app "lofi"
-    Remove from playlists(tables) / Assign to playlists(table) / lofiPools(table) dialog
+- Remove from the user's playlists(tables) -> dialog
+
+- Assign to me / assign to user / assign to lofi pool (tables) -> dialog
 
 ---------------------------------------------Future works--------------------------------------
 - Player component and audio service

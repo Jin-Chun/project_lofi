@@ -1,0 +1,61 @@
+.lofi-container {
+    height: 80%;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+.lofi-app-name{
+    margin: auto;
+    text-align: left;
+}
+.lofi-sidenav-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.lofi-sidenav {
+    user-select: none;
+}
+.full-width {
+    width: 100%;
+    margin: auto;
+    padding: auto;
+    text-align: center;
+    vertical-align: text-bottom;
+}
+.menu-button {
+    transition: 300ms ease-in-out;
+    transform: rotate(0deg);
+}
+.menu-button.rotated {
+    transform: rotate(180deg);
+}
+.submenu {
+    overflow-y: hidden;
+    transition: transform 300ms ease;
+    transform: scaleY(0);
+    transform-origin: top;
+    padding-left: 40px;
+    display: none;
+}
+.submenu.expanded {
+    transform: scaleY(1);
+    display: block;
+}
+
+.lofi-card{
+
+    margin: auto;
+    margin-top: 5%;
+    max-width: 60%;
+}
+
+.lofi-header-image{
+    background-image: url('/assets/image/cat_profile.jpg');
+    background-size: cover;
+}
+
+.audio-button{
+    padding-left:2%;
+    padding-right:2%;
+    margin-right: 5px;
+}

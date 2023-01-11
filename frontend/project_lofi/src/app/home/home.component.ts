@@ -102,13 +102,10 @@ export class HomeComponent implements OnInit{
         this.lofiService.getAllLofies().pipe(first()).subscribe(lofies=> this.lofies = lofies);
     }
 
-    clickLofiRow(lofi: Lofi, playlistId?: number){
-        if(playlistId){
-            console.log(lofi.lofiName + ":" +playlistId);    
-        } else {
-            console.log(lofi.lofiName);
+    clickLofiRow(lofi: Lofi){
+        if(lofi && lofi.lofiId){
+            this.router.navigate(['/lofi', {lofiId: lofi.lofiId}]);
         }
-        this.router.navigateByUrl(`/lofi/id/${lofi.lofiId}`);
     }
 
     startPlaylistDialog(){        

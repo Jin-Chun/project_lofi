@@ -79,7 +79,7 @@
 					</tr>
 				</thead>
 				<tbody *ngFor="let lofi of lofies">
-					<tr (click)="clickLofiRow(lofi, selectedPlaylist.playlistId)">
+					<tr (click)="clickLofiRow(lofi)">
 						<td>{{lofi.lofiName}}</td>
 						<td>{{lofi.lofiAuthor}}</td>
 						<td>{{lofi.lofiType}}</td>

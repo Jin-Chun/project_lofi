@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit{
     lofies?: any[];
     state?: StreamState;
     selectedLofi?: Lofi;
+    audio = new Audio();
     
     isExpanded = true;
     showSubmenu: boolean = false;
@@ -31,6 +32,7 @@ export class HomeComponent implements OnInit{
     showSubSubMenu: boolean = false;
     showSubSubMenu_2: boolean = false;
     showOption: boolean = false;
+    isPlaying: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -78,7 +80,6 @@ export class HomeComponent implements OnInit{
     }
 
     selectIntegratedPlaylists(){
-
         if(this.lofies){
             this.lofies = [];
         }
@@ -102,9 +103,36 @@ export class HomeComponent implements OnInit{
         this.lofiService.getAllLofies().pipe(first()).subscribe(lofies=> this.lofies = lofies);
     }
 
-    clickLofiRow(lofi: Lofi){
+    dbClickLofiRow(lofi: Lofi){
+        this.audio.pause();
         if(lofi && lofi.lofiId){
-            this.router.navigate(['/lofi', {lofiId: lofi.lofiId}]);
+            this.router.navigate(['/lofi', {lofiId: lofi.lofiId, previous: "home"}]);
+        }
+    }
+
+    clickLofiRow(lofi: Lofi){
+        if(this.lofies){
+            for(let l of this.lofies){
+                if(l.lofiId != lofi.lofiId && l.isSelected){
+                    l.isSelected = false;
+                }
+            }
+        }
+        lofi.isSelected = !lofi.isSelected;
+
+        this.play(lofi);
+    }
+
+    play(lofi: Lofi){
+        if(this.isPlaying){
+            this.audio.pause();
+        } else {
+            this.isPlaying = !this.isPlaying;
+        }
+        if(lofi && lofi.lofiLocation && lofi.isSelected){
+            console.log(lofi.lofiLocation);
+            this.audio.src = lofi.lofiLocation;
+            this.audio.play();
         }
     }
 
@@ -131,6 +159,7 @@ export class HomeComponent implements OnInit{
     }
 
     goToSearch(){
+        this.audio.pause();
         this.router.navigate(['/search']);
     }
 }

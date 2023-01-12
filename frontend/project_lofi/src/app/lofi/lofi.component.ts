@@ -13,6 +13,7 @@ export class LofiComponent{
     showSubmenu: boolean = false;
     isShowing = false;
     isSummary: boolean = true;
+    previous?: string; 
 
     user: User | null;
     lofiId!: number;
@@ -33,6 +34,8 @@ export class LofiComponent{
 
     ngOnInit(){
         this.lofiId = Number(this.route.snapshot.paramMap.get('lofiId'));
+        this.previous = String(this.route.snapshot.paramMap.get('previous'));
+        console.log(this.previous);
 
         this.lofiService.getLofiById(this.lofiId).subscribe(
             next => {
@@ -71,6 +74,14 @@ export class LofiComponent{
 
     removeLofi(){
 
+    }
+
+    backToPrevious(){
+        if(this.previous){
+            this.router.navigateByUrl(this.previous);
+        } else {
+            this.router.navigateByUrl('home');
+        }
     }
 
     play() {

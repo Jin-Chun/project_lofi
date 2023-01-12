@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" class="home-toolbar">	
 
     <button mat-icon-button (click)="isExpanded = !isExpanded"><mat-icon>menu</mat-icon></button>
-
+    <button mat-button (click)="backToPrevious()">Previous</button>
     <button mat-button [matMenuTriggerFor]="menu">Menu</button>
 	<mat-menu #menu="matMenu">
 	  <button mat-menu-item (click)="assignLofi()">Assign lofi</button>

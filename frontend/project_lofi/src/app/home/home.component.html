@@ -58,33 +58,33 @@
 	<mat-sidenav-content>
 		<div class="lofi-table" *ngIf="selectedPlaylist && lofies">
 			<p class="lofi-table-title">{{selectedPlaylist.playlistName}}</p>
-			<table class="table table-striped">
+			<table mat-table class="table table-striped">
 				<thead>
 					<tr>
-						<th style="width: 10%">
+						<th mat-header-cell style="width: 10%">
 							Lofi Name
 						</th>
-						<th style="width: 10%">
+						<th mat-header-cell style="width: 10%">
 							Lofi Author
 						</th>
-						<th style="width: 10%">
+						<th mat-header-cell style="width: 10%">
 							Lofi Type
 						</th>
-						<th style="width: 10%">
+						<th mat-header-cell style="width: 10%">
 							Lofi Location
 						</th>
-						<th style="width: 10%">
+						<th mat-header-cell style="width: 10%">
 							Lofi Playtime
 						</th>
 					</tr>
 				</thead>
 				<tbody *ngFor="let lofi of lofies">
-					<tr (click)="clickLofiRow(lofi)">
-						<td>{{lofi.lofiName}}</td>
-						<td>{{lofi.lofiAuthor}}</td>
-						<td>{{lofi.lofiType}}</td>
-						<td>{{lofi.lofiLocation}}</td>
-						<td>{{lofi.lofiPlaytime}}</td>
+					<tr [class.highlight]="lofi.isSelected" mat-row (click)="clickLofiRow(lofi)" (dblclick)="dbClickLofiRow(lofi)">
+						<td mat-cell>{{lofi.lofiName}}</td>
+						<td mat-cell>{{lofi.lofiAuthor}}</td>
+						<td mat-cell>{{lofi.lofiType}}</td>
+						<td mat-cell>{{lofi.lofiLocation}}</td>
+						<td mat-cell>{{lofi.lofiPlaytime}}</td>
 					</tr>
 				</tbody>
 			</table>

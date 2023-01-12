@@ -41,7 +41,7 @@
                             </tr>
                         </thead>
                         <tbody *ngFor="let lofi of lofiResults">
-                            <tr (click)="clickLofiRow(lofi)">
+                            <tr [class.highlight]="lofi.isSelected" (click)="clickLofiRow(lofi)" (dblclick)="dbClickLofiRow(lofi)">
                                 <td>{{lofi.lofiName}}</td>
                                 <td>{{lofi.lofiAuthor}}</td>
                                 <td>{{lofi.lofiType}}</td>

@@ -5,4 +5,5 @@ export class Lofi{
     lofiType?: string;
     lofiAuthor?: string;
     lofiPlaytime?: string;
+    isSelected: boolean = false;
 }

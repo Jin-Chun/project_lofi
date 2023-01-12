@@ -1,3 +1,4 @@
+use project_lofi;
     create table lofi (
        lofi_id bigint not null auto_increment,
         lofi_author varchar(255),

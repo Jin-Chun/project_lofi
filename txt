@@ -3,7 +3,7 @@
 - Assign to me / assign to user / assign to lofi pool (tables) -> dialog
 
 ---------------------------------------------Future works--------------------------------------
-- Player component and audio service
+- Audio service on the playlist in Home component
 - JWT implementation
     - Spring boot Security - JWT
     - Enable jwt.interceptor.ts

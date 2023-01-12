@@ -42,7 +42,6 @@ export class LofiComponent{
                         this.lofiType = key;
                     }
                 }
-                this.selectedLofi.lofiLocation = "/assets/lofi/3-coffee_shop-soundroll-249.mp3"
             },
             error => {
                 this.alertService.error("Unexpected error occurs while retrieving lofi data");

@@ -6,4 +6,5 @@ export class Playlist{
     playlistStatus?: string;
     playlistCreated?: string;
     playlistUpdated?: string;
+    isSelected?: boolean;
 }

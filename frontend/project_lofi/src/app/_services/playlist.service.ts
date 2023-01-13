@@ -7,6 +7,8 @@ import { map } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 
 import { Playlist } from '@app/_models/playlist';
+import { PlaylistLofiAssignment } from '@app/_models/playlistLofiAssignment';
+import { Lofi } from '@app/_models/lofi';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistService {
@@ -44,6 +46,10 @@ export class PlaylistService {
             }));
     }
 
+    getAllPlaylistLofiAssignmentsByPlaylistId(playlistId: number){
+        return this.http.get<PlaylistLofiAssignment[]>(`${environment.apiUrl}/playlist/assignment/${playlistId}`);
+    }
+
     getPlaylistByName(playlistName: string){
         return this.http.get<Playlist[]>(`${environment.apiUrl}/playlist/name/${playlistName}`);
     }
@@ -79,6 +85,14 @@ export class PlaylistService {
 
     pullLofiesFromLofiPool(lofiPoolId: number, numOfLofies: number, playlistId: number){
         return this.http.post<any[]>(`${environment.apiUrl}/playlist/pull/${numOfLofies}/from/${lofiPoolId}/for/${playlistId}`, null);
+    }
+
+    removeLofiFromPlaylist(lofi: Lofi, playlistId: number){
+        return this.http.post<any>(`${environment.apiUrl}/playlist/remove/lofi/from/${playlistId}`, lofi);
+    }
+
+    assignLofiToPlaylist(lofiId: number, playlistId: number){
+        return this.http.post<any>(`${environment.apiUrl}/playlist/assign/${lofiId}/to/${playlistId}`, null);
     }
 
     redirectToHome(){

@@ -1,0 +1,207 @@
+<h1 mat-dialog-title>Assign Lofi</h1>
+<div mat-dialog-content>
+  <form>
+    <div>
+      <input type="radio" name="assignToMe" (change)="selectAssignToMe()" [checked]="isAssignToMe" cdkFocusInitial>
+       Assign to my playlist
+    </div>
+    <div>
+      <input type="radio" name="assignToUser" [checked]="isAssignToUser" (change)="selectAssignToUser()">
+       Assign to another user's playlist
+    </div>
+    <div>
+      <input type="radio" name="assignToLofiPool" [checked]="isAssignToLofiPool" (change)="selectAssignToLofiPool()">
+       Assign to a lofi pool
+    </div>
+  </form>
+
+  <div class="card-body" *ngIf="isAssignToMe">
+    <div *ngIf="playlists">
+      <p class="playlist-table-title">Assign to</p>
+      <table mat-table class="table table-striped">
+          <thead>
+              <tr>
+                  <th mat-header-cell style="width: 10%">
+                      Name
+                  </th>
+                  <th mat-header-cell style="width: 10%">
+                      Genre
+                  </th>
+                  <th mat-header-cell style="width: 10%">
+                      Status
+                  </th>
+              </tr>
+          </thead>
+          <tbody *ngFor="let p of playlists">
+              <tr [class.highlight]="p.isSelected" mat-row (click)="clickPlaylistRow(p)">
+                  <td mat-cell>{{p.playlistName}}</td>
+                  <td mat-cell>{{p.playlistGenre}}</td>
+                  <td mat-cell>{{p.playlistStatus}}</td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+
+    <form [formGroup]="assignToMeForm" *ngIf="selectedPlaylist" (ngSubmit)="submitChange()">
+      <div class="mb-3">
+        <label class="form-label">Select a reason</label>
+        <mat-select formControlName="reason">
+        <mat-option *ngFor="let r of reasonForMe" [value] = "r">
+            {{r.name}}
+        </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && assignToMeF['reason'].errors" class="invalid-feedback">
+            <div *ngIf="assignToMeF['reason'].errors['required']">Select a reason to assign</div>
+        </div>
+      </div>
+      <div>
+          <mat-form-field appearance="fill" class="fill-container">
+              <textarea matInput 
+              formControlName="note" 
+              placeholder="Enter note"></textarea>
+          </mat-form-field>
+      </div>
+      <div *ngIf="submitted && assignToMeF['note'].errors" class="invalid-feedback">
+          <div *ngIf="assignToMeF['note'].errors['required']">Input something!</div>
+      </div>
+      <div class="mb-3">
+          <button [disabled]="loading" class="btn btn-primary">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+              Assign To {{selectedPlaylist.playlistName}}
+          </button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="card-body" *ngIf="isAssignToUser">
+    <div class="mb-3">
+      <input type="text" name="userNameToAssign" [(ngModel)]="userNameToAssign" placeholder="Enter user name"> &nbsp;
+      <button [disabled]="loading" (click)="clickToGetUserPlaylist()" class="btn btn-outline-success">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+          Search
+      </button>
+      <div *ngIf="isWrongUserName">
+        <h3 style="color:brown">Please input correct user name</h3>
+      </div>
+    </div>
+
+    <div *ngIf="playlists">
+      <p class="playlist-table-title">Assign to</p>
+      <table mat-table class="table table-striped">
+          <thead>
+              <tr>
+                  <th mat-header-cell style="width: 10%">
+                      Name
+                  </th>
+                  <th mat-header-cell style="width: 10%">
+                      Genre
+                  </th>
+                  <th mat-header-cell style="width: 10%">
+                      Status
+                  </th>
+              </tr>
+          </thead>
+          <tbody *ngFor="let p of playlists">
+              <tr [class.highlight]="p.isSelected" mat-row (click)="clickPlaylistRow(p)">
+                  <td mat-cell>{{p.playlistName}}</td>
+                  <td mat-cell>{{p.playlistGenre}}</td>
+                  <td mat-cell>{{p.playlistStatus}}</td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+
+    <form [formGroup]="assignToUserForm" *ngIf="selectedPlaylist" (ngSubmit)="submitChange()">
+      <div class="mb-3">
+        <label class="form-label">Select a reason</label>
+        <mat-select formControlName="reason">
+        <mat-option *ngFor="let r of reasonForUser" [value] = "r">
+            {{r.name}}
+        </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && assignToUserF['reason'].errors" class="invalid-feedback">
+            <div *ngIf="assignToUserF['reason'].errors['required']">Select a reason to assign</div>
+        </div>
+      </div>
+      <div>
+          <mat-form-field appearance="fill" class="fill-container">
+              <textarea matInput 
+              formControlName="note" 
+              placeholder="Enter note"></textarea>
+          </mat-form-field>
+      </div>
+      <div *ngIf="submitted && assignToUserF['note'].errors" class="invalid-feedback">
+          <div *ngIf="assignToUserF['note'].errors['required']">Input something!</div>
+      </div>
+      <div class="mb-3">
+          <button [disabled]="loading" class="btn btn-primary">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+              Assign To {{selectedPlaylist.playlistName}}
+          </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card-body" *ngIf="isAssignToLofiPool">
+    <div *ngIf="lofiPools">
+      <p class="playlist-table-title">Assign to</p>
+      <table mat-table class="table table-striped">
+          <thead>
+              <tr>
+                  <th mat-header-cell style="width: 10%">
+                      Id
+                  </th>
+                  <th mat-header-cell style="width: 10%">
+                      Name
+                  </th>
+                  <th mat-header-cell style="width: 10%">
+                      Genre
+                  </th>
+              </tr>
+          </thead>
+          <tbody *ngFor="let l of lofiPools">
+              <tr [class.highlight]="l.isSelected" mat-row (click)="clickLofiPoolRow(l)">
+                  <td mat-cell>{{l.lofiPoolId}}</td>
+                  <td mat-cell>{{l.lofiPoolName}}</td>
+                  <td mat-cell>{{l.lofiPoolGenre}}</td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+
+    <form [formGroup]="assignToLofiPoolForm" *ngIf="selectedLofiPool" (ngSubmit)="submitChange()">
+      <div class="mb-3">
+        <label class="form-label">Select a reason</label>
+        <mat-select formControlName="reason">
+        <mat-option *ngFor="let r of reasonForLofiPool" [value] = "r">
+            {{r.name}}
+        </mat-option>
+        </mat-select>
+        <div *ngIf="submitted && assignToLofiPoolF['reason'].errors" class="invalid-feedback">
+            <div *ngIf="assignToLofiPoolF['reason'].errors['required']">Select a reason to assign</div>
+        </div>
+      </div>
+      <div>
+          <mat-form-field appearance="fill" class="fill-container">
+              <textarea matInput 
+              formControlName="note" 
+              placeholder="Enter note"></textarea>
+          </mat-form-field>
+      </div>
+      <div *ngIf="submitted && assignToLofiPoolF['note'].errors" class="invalid-feedback">
+          <div *ngIf="assignToLofiPoolF['note'].errors['required']">Input something!</div>
+      </div>
+      <div class="mb-3">
+          <button [disabled]="loading" class="btn btn-primary">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+              Assign To {{selectedLofiPool.lofiPoolName}}
+          </button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="clickCancel()">Cancel</button>
+</div>

@@ -106,7 +106,7 @@ export class HomeComponent implements OnInit{
     dbClickLofiRow(lofi: Lofi){
         this.audio.pause();
         if(lofi && lofi.lofiId){
-            this.router.navigate(['/lofi', {lofiId: lofi.lofiId, previous: "home"}]);
+            this.router.navigate(['/lofi', {lofiId: lofi.lofiId, previous: "home", playlistId: this.selectedPlaylist?.playlistId}]);
         }
     }
 
@@ -138,7 +138,7 @@ export class HomeComponent implements OnInit{
 
     startPlaylistDialog(){        
         let playlistDialogRef = this.dialog.open(PlaylistDialogComponent, {
-            width: '500px',
+            width: '40%',
             data: {user: this.user, playlists: this.playlists}
         });
 
@@ -149,7 +149,7 @@ export class HomeComponent implements OnInit{
 
     startPullDialog(){
         let pullDialogRef = this.dialog.open(PullDialogComponent, {
-            width: '500px',
+            width: '40%',
             data: {user: this.user, playlists: this.playlists}
         });
 

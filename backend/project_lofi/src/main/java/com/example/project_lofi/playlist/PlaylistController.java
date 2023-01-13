@@ -100,6 +100,17 @@ public class PlaylistController {
         }
     }
 
+    @GetMapping(path = "/assignment/{playlistId}")
+    @ResponseBody
+    public ResponseEntity<List<PlaylistLofiAssignment>> getAllPlaylistLofiAssignmentByPlaylistId(@PathVariable long playlistId){
+        List<PlaylistLofiAssignment> assignments = this.playlistAssignmentService.getAllPlaylistLofiAssignmentByPlaylistId(playlistId);
+        if (assignments != null && !assignments.isEmpty()){
+            return new ResponseEntity<>(assignments, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,

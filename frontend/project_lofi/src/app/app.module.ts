@@ -33,6 +33,8 @@ import { PlaylistDialogComponent } from './home/playlist-dialog/playlist-dialog.
 import { PullDialogComponent } from './home/pull-dialog/pull-dialog.component';
 import { SearchComponent } from './search/search.component';
 import { LofiComponent } from './lofi/lofi.component';
+import { RemoveLofiComponenet } from './lofi/remove-dialog/remove.component';
+import { AssignLofiComponent } from './lofi/assign-dialog/assign.component';
 
 @NgModule({
     imports: [
@@ -68,6 +70,8 @@ import { LofiComponent } from './lofi/lofi.component';
         PullDialogComponent,
         SearchComponent,
         LofiComponent,
+        RemoveLofiComponenet,
+        AssignLofiComponent
     ],
     providers: [
         // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

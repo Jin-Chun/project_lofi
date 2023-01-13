@@ -54,6 +54,10 @@ export class AccountService {
         return this.http.get<User>(`${environment.apiUrl}/user/id/${id}`);
     }
 
+    getByUserName(userName: string){
+        return this.http.get<User>(`${environment.apiUrl}/user/name/${userName}`);
+    }
+
     update(user: User) {
         return this.http.put(`${environment.apiUrl}/user/update`, user)
             .pipe(map(x => {

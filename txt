@@ -1,5 +1,3 @@
-- Remove from the user's playlists(tables) -> dialog
-
 - Assign to me / assign to user / assign to lofi pool (tables) -> dialog
 
 ---------------------------------------------Future works--------------------------------------

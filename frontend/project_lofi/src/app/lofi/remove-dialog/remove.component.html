@@ -1,0 +1,66 @@
+<h1 mat-dialog-title>Remove Lofi</h1>
+<div mat-dialog-content>
+    <div class="mb-3">
+        <div class="playlist-table" *ngIf="lofi && selectedPlaylist">
+            <p class="playlist-table-title">Removed from</p>
+            <table mat-table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th mat-header-cell style="width: 10%">
+                            Name
+                        </th>
+                        <th mat-header-cell style="width: 10%">
+                            Genre
+                        </th>
+                        <th mat-header-cell style="width: 10%">
+                            Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr mat-row>
+                        <td mat-cell>{{selectedPlaylist.playlistName}}</td>
+                        <td mat-cell>{{selectedPlaylist.playlistGenre}}</td>
+                        <td mat-cell>{{selectedPlaylist.playlistStatus}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="removeForm" *ngIf="removeForm" (ngSubmit)="submitRemove()">
+            <div class="mb-3">
+                <label class="form-label">Select a reason</label>
+                <mat-select formControlName="selectedReason">
+                <mat-option *ngFor="let r of reasons" [value] = "r">
+                    {{r.name}}
+                </mat-option>
+                </mat-select>
+                <div *ngIf="submitted && removeF['selectedReason'].errors" class="invalid-feedback">
+                    <div *ngIf="removeF['selectedReason'].errors['required']">Select a reason to remove</div>
+                </div>
+            </div>
+            <div>
+                <mat-form-field appearance="fill" class="fill-container">
+                    <textarea matInput 
+                    formControlName="note" 
+                    placeholder="Enter note"></textarea>
+                </mat-form-field>
+            </div>
+            <div *ngIf="submitted && removeF['note'].errors" class="invalid-feedback">
+                <div *ngIf="removeF['note'].errors['required']">Input something!</div>
+            </div>
+            <div class="mb-3">
+                <button [disabled]="loading" class="btn btn-danger">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                    Remove
+                </button>
+            </div>
+          
+        </form>
+    </div>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="clickCancel()">Cancel</button>
+</div>

@@ -4,8 +4,8 @@
     <button mat-button (click)="backToPrevious()">Previous</button>
     <button mat-button [matMenuTriggerFor]="menu">Menu</button>
 	<mat-menu #menu="matMenu">
-	  <button mat-menu-item (click)="assignLofi()">Assign lofi</button>
-	  <button mat-menu-item (click)="removeLofi()">Remove lofi</button>
+	  <button mat-menu-item (click)="startAssignLofi()">Assign lofi</button>
+	  <button mat-menu-item *ngIf="selectedPlaylistId" (click)="startRemoveLofi()">Remove lofi</button>
 	</mat-menu>
 
     <h2 class="lofi-app-name" *ngIf="user">

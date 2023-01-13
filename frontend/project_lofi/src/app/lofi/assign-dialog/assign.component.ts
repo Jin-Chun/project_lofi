@@ -123,7 +123,7 @@ export class AssignLofiComponent{
     clickPlaylistRow(playlist: Playlist){
         if(this.playlists){
             for(let p of this.playlists){
-                if(p.isSelected != playlist.playlistId && playlist.isSelected){
+                if(p.playlistId != playlist.playlistId){
                     p.isSelected = false;
                 }
             }
@@ -132,6 +132,7 @@ export class AssignLofiComponent{
 
         if(playlist.isSelected){
             this.selectedPlaylist = playlist;
+            console.log(this.selectedPlaylist.playlistName, "is selected");
         } else {
             this.selectedPlaylist = undefined;
         }
@@ -140,7 +141,7 @@ export class AssignLofiComponent{
     clickLofiPoolRow(lofiPool: LofiPool) {
         if(this.lofiPools){
             for(let l of this.lofiPools){
-                if(l.isSelected != lofiPool.lofiPoolId && lofiPool.isSelected){
+                if(l.lofiPoolId != lofiPool.lofiPoolId){
                     l.isSelected = false;
                 }
             }
@@ -149,6 +150,7 @@ export class AssignLofiComponent{
 
         if(lofiPool.isSelected){
             this.selectedLofiPool = lofiPool;
+            console.log(this.selectedLofiPool.lofiPoolName, "is selected");
         } else {
             this.selectedLofiPool = undefined;
         }

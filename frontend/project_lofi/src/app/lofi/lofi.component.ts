@@ -1,9 +1,8 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MLofiType } from '@app/_constants/lofi.constants';
 import { Lofi } from '@app/_models/lofi';
-import { Playlist } from '@app/_models/playlist';
 import { User } from '@app/_models/user';
 import { AccountService } from '@app/_services/account.service';
 import { AlertService } from '@app/_services/alert.service';
@@ -78,7 +77,7 @@ export class LofiComponent{
 
     startAssignLofi(){
         let assignLofiDialog = this.dialog.open(AssignLofiComponent, {
-            width: '40%',
+            width: '35%',
             data: {lofi: this.selectedLofi}
         });
 
@@ -87,7 +86,7 @@ export class LofiComponent{
 
     startRemoveLofi(){
         let removeLofiDialog = this.dialog.open(RemoveLofiComponenet, {
-            width: '40%',
+            width: '30%',
             data: {lofi: this.selectedLofi, playlistId: this.selectedPlaylistId}
         });
 
@@ -100,6 +99,13 @@ export class LofiComponent{
         } else {
             this.router.navigateByUrl('home');
         }
+    }
+
+    goToSearch(){
+        if(this.audio){
+            this.audio.nativeElement.pause();
+        }
+        this.router.navigate(['/search', {lofiId: this.lofiId, previous: 'lofi'}]);
     }
 
     play() {
@@ -117,5 +123,22 @@ export class LofiComponent{
     onEnded() {
         console.log('Audio has ended', 'replay again');
         this.play();
+    }
+
+    @HostListener('window:keydown.control.a', ['$event'])
+    keyboardShortcutAssign(event: KeyboardEvent){
+        event.preventDefault();
+        this.startAssignLofi();
+    }
+
+    @HostListener('window:keydown.control.r', ['$event'])
+    keyboardShortcutRemove(event: KeyboardEvent){
+        event.preventDefault();
+
+        if (!this.selectedPlaylistId){
+            return ;
+        }
+
+        this.startRemoveLofi();
     }
 }

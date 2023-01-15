@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, HostListener } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Lofi } from '@app/_models/lofi';
 import { Playlist } from '@app/_models/playlist';
@@ -8,7 +8,6 @@ import { first } from 'rxjs';
 import { User } from '../_models/user';
 import { AccountService } from '../_services/account.service';
 import { Router } from '@angular/router';
-import { StreamState } from '@app/_interfaces/stream.state';
 import { MatDialog } from '@angular/material/dialog';
 import { PlaylistDialogComponent } from './playlist-dialog/playlist-dialog.component';
 import { PullDialogComponent } from './pull-dialog/pull-dialog.component';
@@ -22,7 +21,6 @@ export class HomeComponent implements OnInit{
     selectedPlaylist: Playlist | null;
     playlists?: any[];
     lofies?: any[];
-    state?: StreamState;
     selectedLofi?: Lofi;
     audio = new Audio();
     
@@ -130,7 +128,7 @@ export class HomeComponent implements OnInit{
             this.isPlaying = !this.isPlaying;
         }
         if(lofi && lofi.lofiLocation && lofi.isSelected){
-            console.log(lofi.lofiLocation);
+            
             this.audio.src = lofi.lofiLocation;
             this.audio.play();
         }
@@ -138,7 +136,7 @@ export class HomeComponent implements OnInit{
 
     startPlaylistDialog(){        
         let playlistDialogRef = this.dialog.open(PlaylistDialogComponent, {
-            width: '40%',
+            width: '35%',
             data: {user: this.user, playlists: this.playlists}
         });
 
@@ -149,7 +147,7 @@ export class HomeComponent implements OnInit{
 
     startPullDialog(){
         let pullDialogRef = this.dialog.open(PullDialogComponent, {
-            width: '40%',
+            width: '35%',
             data: {user: this.user, playlists: this.playlists}
         });
 
@@ -160,6 +158,25 @@ export class HomeComponent implements OnInit{
 
     goToSearch(){
         this.audio.pause();
-        this.router.navigate(['/search']);
+        this.router.navigate(['/search', {previous: 'home'}]);
+    }
+
+    @HostListener('window:keydown.control.s', ['$event'])
+    keyboardShortcutSearch(event: KeyboardEvent){
+        event.preventDefault();
+        this.goToSearch();
+    }
+
+    // ctrl + p -> tap to select option -> space to open option -> tab to select fields -> space to decide -> enter to trigger the button
+    @HostListener('window:keydown.control.p', ['$event'])
+    keyboardShortcutPlaylist(event: KeyboardEvent){
+        event.preventDefault();
+        this.startPlaylistDialog();
+    }
+
+    @HostListener('window:keydown.control.u', ['$event'])
+    keyboardShortcutPull(event: KeyboardEvent){
+        event.preventDefault();
+        this.startPullDialog();
     }
 }

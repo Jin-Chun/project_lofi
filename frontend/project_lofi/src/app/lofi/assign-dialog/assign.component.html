@@ -17,7 +17,7 @@
 
   <div class="card-body" *ngIf="isAssignToMe">
     <div *ngIf="playlists">
-      <p class="playlist-table-title">Assign to</p>
+      <p class="playlist-table-title">* Assign to</p>
       <table mat-table class="table table-striped">
           <thead>
               <tr>
@@ -44,7 +44,7 @@
 
     <form [formGroup]="assignToMeForm" *ngIf="selectedPlaylist" (ngSubmit)="submitChange()">
       <div class="mb-3">
-        <label class="form-label">Select a reason</label>
+        <label class="form-label">* Select a reason</label>
         <mat-select formControlName="reason">
         <mat-option *ngFor="let r of reasonForMe" [value] = "r">
             {{r.name}}
@@ -55,11 +55,12 @@
         </div>
       </div>
       <div>
-          <mat-form-field appearance="fill" class="fill-container">
-              <textarea matInput 
-              formControlName="note" 
-              placeholder="Enter note"></textarea>
-          </mat-form-field>
+            <label class="form-label">* Note</label>
+            <mat-form-field appearance="fill" class="fill-container">
+                <textarea matInput 
+                formControlName="note" 
+                placeholder="Enter note"></textarea>
+            </mat-form-field>
       </div>
       <div *ngIf="submitted && assignToMeF['note'].errors" class="invalid-feedback">
           <div *ngIf="assignToMeF['note'].errors['required']">Input something!</div>
@@ -81,12 +82,12 @@
           Search
       </button>
       <div *ngIf="isWrongUserName">
-        <h3 style="color:brown">Please input correct user name</h3>
+        <h3 style="color:brown">* Please input correct user name</h3>
       </div>
     </div>
 
     <div *ngIf="playlists">
-      <p class="playlist-table-title">Assign to</p>
+      <p class="playlist-table-title">* Assign to</p>
       <table mat-table class="table table-striped">
           <thead>
               <tr>
@@ -113,7 +114,7 @@
 
     <form [formGroup]="assignToUserForm" *ngIf="selectedPlaylist" (ngSubmit)="submitChange()">
       <div class="mb-3">
-        <label class="form-label">Select a reason</label>
+        <label class="form-label">* Select a reason</label>
         <mat-select formControlName="reason">
         <mat-option *ngFor="let r of reasonForUser" [value] = "r">
             {{r.name}}
@@ -124,11 +125,12 @@
         </div>
       </div>
       <div>
-          <mat-form-field appearance="fill" class="fill-container">
-              <textarea matInput 
-              formControlName="note" 
-              placeholder="Enter note"></textarea>
-          </mat-form-field>
+            <label class="form-label">* Note</label>
+            <mat-form-field appearance="fill" class="fill-container">
+                <textarea matInput 
+                formControlName="note" 
+                placeholder="Enter note"></textarea>
+            </mat-form-field>
       </div>
       <div *ngIf="submitted && assignToUserF['note'].errors" class="invalid-feedback">
           <div *ngIf="assignToUserF['note'].errors['required']">Input something!</div>
@@ -144,7 +146,7 @@
 
   <div class="card-body" *ngIf="isAssignToLofiPool">
     <div *ngIf="lofiPools">
-      <p class="playlist-table-title">Assign to</p>
+      <p class="playlist-table-title">* Assign to</p>
       <table mat-table class="table table-striped">
           <thead>
               <tr>
@@ -171,7 +173,7 @@
 
     <form [formGroup]="assignToLofiPoolForm" *ngIf="selectedLofiPool" (ngSubmit)="submitChange()">
       <div class="mb-3">
-        <label class="form-label">Select a reason</label>
+        <label class="form-label">* Select a reason</label>
         <mat-select formControlName="reason">
         <mat-option *ngFor="let r of reasonForLofiPool" [value] = "r">
             {{r.name}}
@@ -182,11 +184,12 @@
         </div>
       </div>
       <div>
-          <mat-form-field appearance="fill" class="fill-container">
-              <textarea matInput 
-              formControlName="note" 
-              placeholder="Enter note"></textarea>
-          </mat-form-field>
+            <label class="form-label">* Note</label>
+            <mat-form-field appearance="fill" class="fill-container">
+                <textarea matInput 
+                formControlName="note" 
+                placeholder="Enter note"></textarea>
+            </mat-form-field>
       </div>
       <div *ngIf="submitted && assignToLofiPoolF['note'].errors" class="invalid-feedback">
           <div *ngIf="assignToLofiPoolF['note'].errors['required']">Input something!</div>
@@ -202,6 +205,6 @@
 
 </div>
 
-<div mat-dialog-actions>
+<div mat-dialog-actions style="float: right;">
   <button mat-button (click)="clickCancel()">Cancel</button>
 </div>

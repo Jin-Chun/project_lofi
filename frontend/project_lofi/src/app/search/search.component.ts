@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Lofi } from "@app/_models/lofi";
 import { AlertService } from "@app/_services/alert.service";
 import { LofiService } from "@app/_services/lofi.service";
@@ -13,7 +13,8 @@ export class SearchComponent{
     audio = new Audio();
 
     constructor(
-        private router: Router, 
+        private router: Router,
+        private route: ActivatedRoute, 
         private lofiService:LofiService,
         private alertService:AlertService,
         ){}
@@ -32,9 +33,13 @@ export class SearchComponent{
         }
     }
 
-    toHome(){
+    cancel(){
         this.audio.pause();
-        this.router.navigate(['/home']);
+        
+        let previous = String(this.route.snapshot.paramMap.get('previous'));
+        let lofiId = String(this.route.snapshot.paramMap.get('lofiId'));
+        
+        this.router.navigate([previous, {lofiId: lofiId}]);
     }
 
     clickLofiRow(lofi: Lofi){

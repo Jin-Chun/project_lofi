@@ -4,7 +4,7 @@
     <div class="card-body">
         <form [formGroup]="submitForm" (ngSubmit)="submitChange()">
             <div class="mb-3">
-                <label class="form-label">Select your playlist to assign lofies</label>
+                <label class="form-label">* Select your playlist to assign lofies</label>
                 <mat-select formControlName="playlist">
                 <mat-option *ngFor="let p of data.playlists" [value] = "p" (click) = "selectPlaylistToUpdate(p)">
                     {{p.playlistName}}
@@ -41,7 +41,7 @@
                 </div>
                 <div *ngIf="selectedLofiPools">
                     <div class="mb-3">
-                        <label class="form-label">Select your lofi pool to get lofies</label>
+                        <label class="form-label">* Select your lofi pool to get lofies</label>
                         <mat-select formControlName="lofiPool">
                         <mat-option *ngFor="let lp of selectedLofiPools" [value] = "lp" (click) = "selectLofiPool(lp)">
                             {{lp.lofiPoolName}}
@@ -80,7 +80,7 @@
                         </table>
                         <div>
                             <div class="mb-3">
-                                <label class="form-label">Select number of lofies to pool</label>
+                                <label class="form-label">* Select number of lofies to pool</label>
                                 <mat-select formControlName="numberOfLofies">
                                 <mat-option *ngFor="let n of selectedLofies; let i = index" [value] = "i+1" (click)="isLastStep=true">
                                     {{i+1}}
@@ -104,6 +104,6 @@
     </div>
 </div>
 
-<div mat-dialog-actions>
+<div mat-dialog-actions style="float: right;">
     <button mat-button (click)="clickCancel()">Cancel</button>
 </div>

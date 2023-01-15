@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="mb-3 col"  style="text-align:right">
-                <button [disabled]="isLoading" (click)="toHome()" class="btn btn-outline-secondary">
+                <button [disabled]="isLoading" (click)="cancel()" class="btn btn-outline-secondary">
                     <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
                     Cancel
                 </button>

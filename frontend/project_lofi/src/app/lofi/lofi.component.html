@@ -4,8 +4,9 @@
     <button mat-button (click)="backToPrevious()">Previous</button>
     <button mat-button [matMenuTriggerFor]="menu">Menu</button>
 	<mat-menu #menu="matMenu">
-	  <button mat-menu-item (click)="startAssignLofi()">Assign lofi</button>
-	  <button mat-menu-item *ngIf="selectedPlaylistId" (click)="startRemoveLofi()">Remove lofi</button>
+        <button mat-menu-item (click)="goToSearch()">Search</button>  
+	    <button mat-menu-item (click)="startAssignLofi()">Assign lofi</button>
+	    <button mat-menu-item *ngIf="selectedPlaylistId" (click)="startRemoveLofi()">Remove lofi</button>
 	</mat-menu>
 
     <h2 class="lofi-app-name" *ngIf="user">
@@ -24,7 +25,7 @@
 			</mat-list-item>
 			<div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
 				<mat-list-item class="playlist">
-					<mat-icon mat-list-icon>subdirectory_arrow_right</mat-icon>
+					<img class="custom-icon" src="/assets/image/icon_sub_directory.png" alt="icon">
 					<span class="full-width" (click)="isSummary=!isSummary" *ngIf="isExpanded || isShowing">Lofi summary</span>
 				</mat-list-item>
 			</div>

@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MplaylistGenres, MplaylistStatus } from "@app/_constants/playlist.constants";
 import { Playlist } from "@app/_models/playlist";
 import { AlertService } from "@app/_services/alert.service";
@@ -10,6 +10,7 @@ import { AccountService } from "@app/_services/account.service";
 import { Lofi } from "@app/_models/lofi";
 import { LofiService } from "@app/_services/lofi.service";
 import { first } from "rxjs";
+import { ValidationComponent } from "@app/_components/validation/validation.component";
 
 @Component({ templateUrl: 'playlist-dialog.component.html' })
 export class PlaylistDialogComponent {
@@ -31,7 +32,8 @@ export class PlaylistDialogComponent {
         private playlistService: PlaylistService,
         private accountService: AccountService,
         private alertService: AlertService,
-        private lofiService: LofiService
+        private lofiService: LofiService,
+        public dialog: MatDialog
         ){}
     
     ngOnInit() {
@@ -70,6 +72,8 @@ export class PlaylistDialogComponent {
 
 
     submitChange(){
+
+        this.alertService.clear();
         this.submitted = true;
 
         if(this.isCreate){
@@ -80,11 +84,16 @@ export class PlaylistDialogComponent {
     }
 
     deletePlaylist(){
-        this.alertService.clear();
 
         if (this.deleteForm.invalid){
+            this.dialog.open(ValidationComponent,
+                {
+                    width: '35%',
+                    data: {message: "Please fill out all the mandatory fields"}
+                });
             return ;
         }
+
         let playlistToDelete = this.deleteF['playlist'].value;
 
         this.accountService.removePlaylistFromUser(playlistToDelete.playlistId, this.data.user.userId).pipe().subscribe(() => {
@@ -93,9 +102,13 @@ export class PlaylistDialogComponent {
     }
 
     createPlaylist(){
-        this.alertService.clear();
 
         if (this.createForm.invalid){
+            this.dialog.open(ValidationComponent,
+                {
+                    width: '25%',
+                    data: {message: "Please fill out all the mandatory fields"}
+                });
             return ;
         }
 

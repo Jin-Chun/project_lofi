@@ -1,6 +1,8 @@
 import { Component, Inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { ValidationComponent } from "@app/_components/validation/validation.component";
+import { MGenresPlaylist, MStatusPlaylist } from "@app/_constants/playlist.constants";
 import { Lofi } from "@app/_models/lofi";
 import { Playlist } from "@app/_models/playlist";
 import { AccountService } from "@app/_services/account.service";
@@ -28,6 +30,7 @@ export class RemoveLofiComponenet{
         private playlistService: PlaylistService,
         private accountService: AccountService,
         private alertService: AlertService,
+        public dialog: MatDialog
     ){
         this.removeForm = this.formBuilder.group(
             {
@@ -35,7 +38,16 @@ export class RemoveLofiComponenet{
                 note: ['', Validators.required]
             });
         
-        this.playlistService.getPlaylistById(this.data.playlistId).subscribe(playlist => this.selectedPlaylist = playlist);
+        this.playlistService.getPlaylistById(this.data.playlistId).subscribe(playlist => 
+            {
+                this.selectedPlaylist = playlist;
+                if(this.selectedPlaylist.playlistGenre){
+                    this.selectedPlaylist.playlistGenre = MGenresPlaylist.get(this.selectedPlaylist.playlistGenre);
+                }
+                if(this.selectedPlaylist.playlistStatus){
+                    this.selectedPlaylist.playlistStatus = MStatusPlaylist.get(this.selectedPlaylist.playlistStatus);
+                }
+            });
         this.lofi = this.data.lofi;
     }
 
@@ -45,13 +57,21 @@ export class RemoveLofiComponenet{
 
         this.alertService.clear();
         
-        if(this.removeForm.invalid){
+        if (this.removeForm.invalid){
+            this.dialog.open(ValidationComponent,
+                {
+                    width: '25%',
+                    data: {message: "Please fill out all the mandatory fields"}
+                });
             return ;
         }
 
         if(this.lofi && this.selectedPlaylist?.playlistId){
             this.playlistService.removeLofiFromPlaylist(this.lofi, this.selectedPlaylist.playlistId).subscribe(
-                () => {this.dialogRef.close()}
+                () => {
+                    this.alertService.info("The lofi " + this.lofi?.lofiName +" has been removed from the playlist " + this.selectedPlaylist?.playlistName);
+                    this.dialogRef.close()
+                }
             )
         } else {
             this.alertService.error("Unexpected error occurs while removing the lofi " + this.lofi?.lofiName +"from the playlist " + this.selectedPlaylist?.playlistName);

@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { MplaylistGenres, MplaylistStatus } from "@app/_constants/playlist.constants";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MGenresPlaylist, MplaylistGenres, MplaylistStatus, MStatusPlaylist } from "@app/_constants/playlist.constants";
 import { Playlist } from "@app/_models/playlist";
 import { AlertService } from "@app/_services/alert.service";
 import { PlaylistService } from "@app/_services/playlist.service";
@@ -10,6 +10,8 @@ import { Lofi } from "@app/_models/lofi";
 import { User } from "@app/_models/user";
 import { LofiPool } from "@app/_models/pool";
 import { LofiPoolService } from "@app/_services/pool.service";
+import { MGenresLofiPool } from "@app/_constants/pool.constants";
+import { ValidationComponent } from "@app/_components/validation/validation.component";
 
 @Component({ templateUrl: 'assign.component.html', styleUrls:['assign.component.css'] })
 export class AssignLofiComponent{
@@ -59,7 +61,8 @@ export class AssignLofiComponent{
         private playlistService: PlaylistService,
         private accountService: AccountService,
         private alertService: AlertService,
-        private lofiPoolService: LofiPoolService
+        private lofiPoolService: LofiPoolService,
+        public dialog: MatDialog
     ){
         this.assignToMeForm = this.formBuilder.group({
             reason: ['', Validators.required],
@@ -88,7 +91,18 @@ export class AssignLofiComponent{
         this.playlists = undefined;
         this.selectedPlaylist = undefined;
         if(this.user && this.user.userId){
-            this.playlistService.getAllPlaylistByUserId(this.user?.userId).subscribe(playlists => this.playlists = playlists);
+            this.playlistService.getAllPlaylistByUserId(this.user?.userId).subscribe(playlists =>
+                {
+                    this.playlists = playlists;
+                    for(let p of this.playlists){
+                        if(p.playlistGenre){
+                            p.playlistGenre = MGenresPlaylist.get(p.playlistGenre);
+                        }
+                        if(p.playlistStatus){
+                            p.playlistStatus = MStatusPlaylist.get(p.playlistStatus);
+                        }
+                    }
+                });
             
             this.isAssignToMe = !this.isAssignToMe;
             this.isAssignToLofiPool = false;
@@ -106,7 +120,14 @@ export class AssignLofiComponent{
 
     selectAssignToLofiPool(){
         this.lofiPoolService.getAllLofiPools().subscribe(
-            lofiPools => this.lofiPools = lofiPools
+            lofiPools => {
+                this.lofiPools = lofiPools;
+                for(let l of this.lofiPools){
+                    if(l.lofiPoolGenre){
+                        l.lofiPoolGenre = MGenresLofiPool.get(l.lofiPoolGenre);
+                    }
+                }
+            }
         );
         
         this.playlists = undefined;
@@ -166,8 +187,17 @@ export class AssignLofiComponent{
                 user => {
                     if(user && user.userId){
                         this.playlistService.getAllPlaylistByUserId(user.userId).subscribe(
-                            playlists => this.playlists = playlists
-                        );
+                            playlists => {
+                                this.playlists = playlists;
+                                for(let p of this.playlists){
+                                    if(p.playlistGenre){
+                                        p.playlistGenre = MGenresPlaylist.get(p.playlistGenre);
+                                    }
+                                    if(p.playlistStatus){
+                                        p.playlistStatus = MStatusPlaylist.get(p.playlistStatus);
+                                    }
+                                }
+                            });
                     } else {
                         this.isWrongUserName = true;
                     }
@@ -179,7 +209,9 @@ export class AssignLofiComponent{
     }
 
     submitChange(){
+        this.alertService.clear();
         this.submitted = true;
+
         if(this.isAssignToMe){
             this.assignToMe();
         } else if(this.isAssignToUser){
@@ -190,9 +222,12 @@ export class AssignLofiComponent{
     }
 
     assignToMe(){
-        this.alertService.clear();
-
-        if(this.assignToMeForm.invalid){
+        if (this.assignToMeForm.invalid){
+            this.dialog.open(ValidationComponent,
+                {
+                    width: '25%',
+                    data: {message: "Please fill out all the mandatory fields"}
+                });
             return ;
         }
 
@@ -207,9 +242,12 @@ export class AssignLofiComponent{
     }
 
     assignToUser(){
-        this.alertService.clear();
-
-        if(this.assignToUserForm.invalid){
+        if (this.assignToUserForm.invalid){
+            this.dialog.open(ValidationComponent,
+                {
+                    width: '25%',
+                    data: {message: "Please fill out all the mandatory fields"}
+                });
             return ;
         }
 
@@ -224,9 +262,12 @@ export class AssignLofiComponent{
     }
 
     assignToLofiPool(){
-        this.alertService.clear();
-
-        if(this.assignToLofiPoolForm.invalid){
+        if (this.assignToLofiPoolForm.invalid){
+            this.dialog.open(ValidationComponent,
+                {
+                    width: '25%',
+                    data: {message: "Please fill out all the mandatory fields"}
+                });
             return ;
         }
 

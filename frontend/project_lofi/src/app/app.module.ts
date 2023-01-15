@@ -35,6 +35,7 @@ import { SearchComponent } from './search/search.component';
 import { LofiComponent } from './lofi/lofi.component';
 import { RemoveLofiComponenet } from './lofi/remove-dialog/remove.component';
 import { AssignLofiComponent } from './lofi/assign-dialog/assign.component';
+import { ValidationComponent } from './_components/validation/validation.component';
 
 @NgModule({
     imports: [
@@ -71,7 +72,8 @@ import { AssignLofiComponent } from './lofi/assign-dialog/assign.component';
         SearchComponent,
         LofiComponent,
         RemoveLofiComponenet,
-        AssignLofiComponent
+        AssignLofiComponent,
+        ValidationComponent,
     ],
     providers: [
         // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

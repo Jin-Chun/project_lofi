@@ -1,6 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MLofiType, MTypeLofi } from "@app/_constants/lofi.constants";
 import { MplaylistGenres, MplaylistStatus } from "@app/_constants/playlist.constants";
 import { Lofi } from "@app/_models/lofi";
 import { Playlist } from "@app/_models/playlist";
@@ -75,7 +76,16 @@ export class PullDialogComponent {
     selectLofiPool(lofiPool: LofiPool){
         this.selectedLofiPool = lofiPool;
         if(this.selectedLofiPool.lofiPoolId){
-            this.lofiService.getAllLofiesByLofiPoolId(this.selectedLofiPool.lofiPoolId).subscribe(lofies => this.selectedLofies = lofies);
+            this.lofiService.getAllLofiesByLofiPoolId(this.selectedLofiPool.lofiPoolId)
+                .subscribe(lofies => {
+                    this.selectedLofies = lofies;
+                    
+                    for (let l of this.selectedLofies){
+                        if(l.lofiType){
+                            l.lofiType = MTypeLofi.get(l.lofiType);
+                        }
+                    }
+                });
         }
     }
 

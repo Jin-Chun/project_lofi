@@ -57,28 +57,31 @@
 
 	<mat-sidenav-content>
 		<div class="lofi-table" *ngIf="selectedPlaylist && lofies">
+			
 			<p class="lofi-table-title">{{selectedPlaylist.playlistName}}</p>
-			<table mat-table class="table table-striped">
+			<input class="searchTerm" [(ngModel)]="searchTerm" placeholder="Filter by Lofi Name" (ngModelChange)="onSearchTermChange($event)"><br>
+			
+			<table mat-table class="table table-hover">
 				<thead>
-					<tr>
-						<th mat-header-cell style="width: 10%">
+					<tr class="table-active">
+						<th mat-header-cell style="width: 13%" (click)="sortData('lofiName')">
 							Lofi Name
 						</th>
-						<th mat-header-cell style="width: 10%">
+						<th mat-header-cell style="width: 9%" (click)="sortData('lofiAuthor')">
 							Lofi Author
 						</th>
-						<th mat-header-cell style="width: 10%">
+						<th mat-header-cell style="width: 7%" (click)="sortData('lofiType')">
 							Lofi Type
 						</th>
-						<th mat-header-cell style="width: 10%">
+						<th mat-header-cell style="width: 20%" (click)="sortData('lofiLocation')">
 							Lofi Location
 						</th>
-						<th mat-header-cell style="width: 10%">
+						<th mat-header-cell style="width: 7%" (click)="sortData('lofiPlaytime')">
 							Lofi Playtime
 						</th>
 					</tr>
 				</thead>
-				<tbody *ngFor="let lofi of lofies">
+				<tbody *ngFor="let lofi of lofiesToDisplay">
 					<tr [class.highlight]="lofi.isSelected" mat-row (click)="clickLofiRow(lofi)" (dblclick)="dbClickLofiRow(lofi)">
 						<td mat-cell>{{lofi.lofiName}}</td>
 						<td mat-cell>{{lofi.lofiAuthor}}</td>

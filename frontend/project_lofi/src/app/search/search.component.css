@@ -1,3 +1,9 @@
 .highlight{
     background-color: lightskyblue;
 }
+
+table, th, td {
+    margin: auto;
+    border-collapse: collapse;
+    border-style: inset;
+}

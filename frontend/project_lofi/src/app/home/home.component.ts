@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit{
     selectedPlaylist: Playlist | null;
     playlists?: any[];
     lofies?: any[];
+    lofiesToDisplay?: any[];
     selectedLofi?: Lofi;
     audio = new Audio();
     
@@ -31,6 +32,8 @@ export class HomeComponent implements OnInit{
     showSubSubMenu_2: boolean = false;
     showOption: boolean = false;
     isPlaying: boolean = false;
+
+    searchTerm: string = "";
 
     constructor(
         private accountService: AccountService,
@@ -48,7 +51,10 @@ export class HomeComponent implements OnInit{
         this.playlists = [];
         this.playlistService.getAllPlaylistByUserId(this.user!.userId!)
             .pipe(first())
-            .subscribe(playlists => this.playlists = playlists);        
+            .subscribe(playlists => {
+                this.playlists = playlists;
+                this.showSubmenu = !this.showSubmenu;
+            });        
     }
 
     mouseenter() {
@@ -74,7 +80,10 @@ export class HomeComponent implements OnInit{
     selectPlaylist(playlistId: number){
         this.selectedPlaylist = this.playlists!.find(p => p.playlistId === playlistId);
         this.lofiService.getAllLofiesByPlaylistId(playlistId)
-            .pipe(first()).subscribe(lofies => this.lofies = lofies);
+            .pipe(first()).subscribe(lofies =>{
+                this.lofies = lofies;
+                this.lofiesToDisplay = lofies;
+            });
     }
 
     selectIntegratedPlaylists(){
@@ -89,7 +98,10 @@ export class HomeComponent implements OnInit{
         if (this.user && this.user.userId){
             this.lofiService.getAllLofiesByUserId(this.user.userId)
                 .pipe(first())
-                .subscribe(lofies => this.lofies = lofies);
+                .subscribe(lofies => {
+                    this.lofies = lofies;
+                    this.lofiesToDisplay = lofies;
+                });
         }
     }
 
@@ -98,7 +110,10 @@ export class HomeComponent implements OnInit{
         reference.playlistName = "Reference";
         this.selectedPlaylist = reference;
 
-        this.lofiService.getAllLofies().pipe(first()).subscribe(lofies=> this.lofies = lofies);
+        this.lofiService.getAllLofies().pipe(first()).subscribe(lofies=> {
+            this.lofies = lofies;
+            this.lofiesToDisplay = lofies;
+        });
     }
 
     dbClickLofiRow(lofi: Lofi){
@@ -178,5 +193,35 @@ export class HomeComponent implements OnInit{
     keyboardShortcutPull(event: KeyboardEvent){
         event.preventDefault();
         this.startPullDialog();
+    }
+
+    sortData(key: string){
+        this.lofiesToDisplay?.sort((a, b) =>{
+        if (a[key] < b[key]) {
+            return -1;
+            }
+            if (a[key] > b[key]) {
+            return 1;
+            }
+            return 0;
+        });
+    }
+
+    onSearchTermChange(searchTerm: string){
+        this.lofiesToDisplay = this.lofies;
+        
+        if (this.lofiesToDisplay){
+
+            
+            let temp: Lofi[] = [];
+
+            this.lofiesToDisplay.forEach(lofi => {
+                if(lofi.lofiName.toLowerCase().includes(searchTerm.toLowerCase())){
+                    temp.push(lofi);
+                }
+            })
+
+            this.lofiesToDisplay = temp;
+        }
     }
 }

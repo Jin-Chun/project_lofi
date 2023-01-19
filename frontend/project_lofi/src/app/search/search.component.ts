@@ -29,7 +29,7 @@ export class SearchComponent{
                 lofies => {
                     this.lofiResults = lofies
                 },
-                error => this.alertService.info("No lofies found!"));
+                error => this.alertService.info("No lofies found!", {autoClose: true}));
         }
     }
 

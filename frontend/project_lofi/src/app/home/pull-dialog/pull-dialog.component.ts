@@ -107,7 +107,7 @@ export class PullDialogComponent {
             this.playlistService.pullLofiesFromLofiPool(lofiPoolId, numOfL, playlistId)
                 .subscribe(
                     next=>{
-                        this.alertService.info(numOfL +" lofies from " + this.selectedLofiPool?.lofiPoolName + " have been added to " + this.selectedPlaylist?.playlistName);
+                        this.alertService.info(numOfL +" lofies from " + this.selectedLofiPool?.lofiPoolName + " have been added to " + this.selectedPlaylist?.playlistName, {autoClose: true});
                         this.dialogRef.close()
                     }, 
                     error => {

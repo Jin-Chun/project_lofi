@@ -97,7 +97,7 @@ export class PlaylistDialogComponent {
         let playlistToDelete = this.deleteF['playlist'].value;
 
         this.accountService.removePlaylistFromUser(playlistToDelete.playlistId, this.data.user.userId).pipe().subscribe(() => {
-            this.alertService.info("The playlist: "+playlistToDelete.playlistName+" has been deleted!");
+            this.alertService.info("The playlist: "+playlistToDelete.playlistName+" has been deleted!", {autoClose: true});
             this.dialogRef.close()});
     }
 
@@ -127,7 +127,7 @@ export class PlaylistDialogComponent {
         newPlaylist.playlistStatus = playlistStatus;
        
         this.accountService.createPlaylistForUser(newPlaylist, this.data.user.userId).pipe().subscribe(()=>{
-            this.alertService.info("The new playlist: "+newPlaylist.playlistName+" has been created!");
+            this.alertService.info("The new playlist: "+newPlaylist.playlistName+" has been created!", {autoClose: true});
             this.dialogRef.close()})
     }
 

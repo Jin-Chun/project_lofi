@@ -5,7 +5,6 @@ import { ValidationComponent } from "@app/_components/validation/validation.comp
 import { MGenresPlaylist, MStatusPlaylist } from "@app/_constants/playlist.constants";
 import { Lofi } from "@app/_models/lofi";
 import { Playlist } from "@app/_models/playlist";
-import { AccountService } from "@app/_services/account.service";
 import { AlertService } from "@app/_services/alert.service";
 import { PlaylistService } from "@app/_services/playlist.service";
 
@@ -28,7 +27,6 @@ export class RemoveLofiComponenet{
         @Inject(MAT_DIALOG_DATA) public data: any,
         private formBuilder: FormBuilder,
         private playlistService: PlaylistService,
-        private accountService: AccountService,
         private alertService: AlertService,
         public dialog: MatDialog
     ){
@@ -69,7 +67,7 @@ export class RemoveLofiComponenet{
         if(this.lofi && this.selectedPlaylist?.playlistId){
             this.playlistService.removeLofiFromPlaylist(this.lofi, this.selectedPlaylist.playlistId).subscribe(
                 () => {
-                    this.alertService.info("The lofi " + this.lofi?.lofiName +" has been removed from the playlist " + this.selectedPlaylist?.playlistName);
+                    this.alertService.info("The lofi " + this.lofi?.lofiName +" has been removed from the playlist " + this.selectedPlaylist?.playlistName, {autoClose: true});
                     this.dialogRef.close()
                 }
             )

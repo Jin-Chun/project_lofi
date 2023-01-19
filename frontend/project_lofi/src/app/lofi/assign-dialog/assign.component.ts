@@ -234,7 +234,7 @@ export class AssignLofiComponent{
         if (this.lofi && this.lofi.lofiId && this.selectedPlaylist && this.selectedPlaylist.playlistId){
             this.playlistService.assignLofiToPlaylist(this.lofi.lofiId, this.selectedPlaylist.playlistId).subscribe(
                 next => {
-                    this.alertService.info("The lofi: " + this.lofi?.lofiName +" has been assigned to the playlist: " + this.selectedPlaylist?.playlistName);
+                    this.alertService.info("The lofi: " + this.lofi?.lofiName +" has been assigned to the playlist: " + this.selectedPlaylist?.playlistName, {autoClose: true});
                     this.dialogRef.close()},
                 error => this.alertService.error("Unexpected error occurs while assigning lofi: " + this.lofi?.lofiName +" to the playlist: " + this.selectedPlaylist?.playlistName)
             )
@@ -254,7 +254,7 @@ export class AssignLofiComponent{
         if (this.lofi && this.lofi.lofiId && this.selectedPlaylist && this.selectedPlaylist.playlistId){
             this.playlistService.assignLofiToPlaylist(this.lofi.lofiId, this.selectedPlaylist.playlistId).subscribe(
                 next => {
-                    this.alertService.info("The lofi: " + this.lofi?.lofiName +" has been assigned to the playlist: " + this.selectedPlaylist?.playlistName);
+                    this.alertService.info("The lofi: " + this.lofi?.lofiName +" has been assigned to the playlist: " + this.selectedPlaylist?.playlistName, {autoClose: true});
                     this.dialogRef.close()},
                 error => this.alertService.error("Unexpected error occurs while assigning lofi: " + this.lofi?.lofiName +" to the playlist: " + this.selectedPlaylist?.playlistName)
             )
@@ -274,7 +274,7 @@ export class AssignLofiComponent{
         if (this.lofi && this.lofi.lofiId && this.selectedLofiPool && this.selectedLofiPool.lofiPoolId){
             this.lofiPoolService.assignLofiToLofiPool(this.lofi.lofiId, this.selectedLofiPool.lofiPoolId).subscribe(
                 next => {
-                    this.alertService.info("The lofi: " + this.lofi?.lofiName +" has been assigned to the lofi pool: " + this.selectedLofiPool?.lofiPoolName);
+                    this.alertService.info("The lofi: " + this.lofi?.lofiName +" has been assigned to the lofi pool: " + this.selectedLofiPool?.lofiPoolName, {autoClose: true});
                     this.dialogRef.close()},
                 error => this.alertService.error("Unexpected error occurs while assigning lofi: " + this.lofi?.lofiName +" to the lofi pool: " + this.selectedLofiPool?.lofiPoolName)
             )

@@ -1,6 +1,14 @@
 package com.example.project_lofi.constants;
 
+/**
+ * Defines available genres of a Lofi Pool
+ * 
+ * @author Gwanjin Chun
+ */
 public class PL_LofiPoolGenre {
+
+    private PL_LofiPoolGenre(){}
+
     public static final String ALL = "01";
     public static final String JAZZ = "02";
     public static final String HIPHOP = "03";

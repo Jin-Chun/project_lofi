@@ -4,9 +4,23 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Defines utilizable methods for all serverside classes.
+ * 
+ * @author Gwanjin
+ */
 public class GeneralUtils {
     
-    // Generate unique random numbers as many as the given number for a given range
+    private GeneralUtils(){}
+
+    /**
+     * Generate unique random numbers as many as the given number for a given range
+     * 
+     * @param numOfRandoms a number of random numbers to get
+     * @param fromNum a begin number of the random number range
+     * @param toNum a end number of the random number range
+     * @return a set of numbers that are picked up randomly in a given range
+     */
     public static Set<Integer> generateUniqueRandomNumbers(int numOfRandoms, int fromNum, int toNum){
 
         int totalNumOfGivenRange = toNum - fromNum + 1;

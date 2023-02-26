@@ -18,6 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Defines available APIs for Lofi data
+ * 
+ * @author Gwanjin
+ */
 @RestController @Slf4j
 @RequestMapping(path = "api/lofi")
 public class LofiController {
@@ -29,6 +34,11 @@ public class LofiController {
         this.lofiService = lofiService;
     }
 
+    /**
+     * Retrieves all stored lofies
+     * 
+     * @return a http response with a list of all lofies or {@link HttpStatus#NOT_FOUND} if no lofies are found
+     */
     @GetMapping(path = "/all")
     @ResponseBody
     public ResponseEntity<List<Lofi>> getAllLofies(){
@@ -40,6 +50,12 @@ public class LofiController {
         }
     }
 
+    /**
+     * Retrieves a lofi by a given lofi Identifier
+     * 
+     * @param lofiId a given lofi identifier
+     * @return a http response with a matched lofi or {@link HttpStatus#NOT_FOUND} if no matched lofi is found
+     */
     @GetMapping(path = "/id/{lofiId}")
     @ResponseBody
     public ResponseEntity<Lofi> getLofiById(@PathVariable long lofiId){
@@ -51,6 +67,12 @@ public class LofiController {
         }
     }
 
+    /**
+     * Retreives a lofi by a given lofi name
+     * 
+     * @param lofiName a given lofi name
+     * @return a http response with a matched lofi or {@link HttpStatus#NOT_FOUND} if no matched lofi is found
+     */
     @GetMapping(path = "/name/{lofiName}")
     @ResponseBody
     public ResponseEntity<Lofi> getLofiByName(@PathVariable String lofiName){
@@ -62,6 +84,12 @@ public class LofiController {
         }
     }
 
+    /**
+     * Retrieves all matched lofies with a given lofi type
+     * 
+     * @param lofiType a given lofi type
+     * @return a http respones with a list of matched lofies or {@link HttpStatus#NOT_FOUND} if no matched lofies are found
+     */
     @GetMapping(path = "/type/{lofiType}")
     @ResponseBody
     public ResponseEntity<List<Lofi>> getLofiesByType(@PathVariable String lofiType){
@@ -74,6 +102,12 @@ public class LofiController {
         }
     }
 
+    /**
+     * Retrieves lofies by a given keyword of lofi names
+     * 
+     * @param lofiKeyword a given keyword
+     * @return a http response with a list of all matched lofies that have the keyword in their names or {@link HttpStatus#NOT_FOUND} if no matched lofies are found
+     */
     @GetMapping(path = "/keyword/{lofiKeyword}")
     @ResponseBody
     public ResponseEntity<List<Lofi>> getLofiesByKeyword(@PathVariable String lofiKeyword){
@@ -86,6 +120,12 @@ public class LofiController {
         }
     }
 
+    /**
+     * Retrieves all lofies that have been assigned to a playlist which id matches a given playlist id
+     * 
+     * @param playlistId a given playlist identifier
+     * @return a http response with a list of all lofies assigned to a playlist which id matches a given playlist Id or {@link HttpStatus#NOT_FOUND} if a playlist has no lofies
+     */
     @GetMapping(path = "/playlistid/{playlistId}")
     @ResponseBody
     public ResponseEntity<List<Lofi>> getAllLofiesAssignedToPlaylist(@PathVariable long playlistId){
@@ -97,6 +137,12 @@ public class LofiController {
         }
     }
 
+    /**
+     * Retrieves all lofies that a user has by a given user Id
+     * 
+     * @param userId a given user id
+     * @return a http response with a list of all lofies that a user has or {@link HttpStatus#NOT_FOUND} if a user has no lofies
+     */
     @GetMapping(path = "/userid/{userId}")
     @ResponseBody
     public ResponseEntity<List<Lofi>> getAllLofiesByUserId(@PathVariable long userId){
@@ -108,6 +154,12 @@ public class LofiController {
         }
     }
 
+    /**
+     * Retrieves all lofies that have been assigned to a lofi pool which id matches a given lofi pool id
+     * 
+     * @param lofiPoolId a given lofi pool id
+     * @return a http response with a list of all lofies that a lofi pool has
+     */
     @GetMapping(path = "/lofipoolid/{lofiPoolId}")
     @ResponseBody
     public ResponseEntity<List<Lofi>> getAllLofiesAssignedToLofiPool(@PathVariable long lofiPoolId){
@@ -119,6 +171,13 @@ public class LofiController {
         }
     }
 
+    /**
+     * Saves a given lofi data
+     * 
+     * @param lofi a given lofi data
+     * @return saved lofi data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while saving the lofi data
+     * @throws ServerException
+     */
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -134,6 +193,13 @@ public class LofiController {
         }
     }
     
+    /**
+     * Updates a given lofi data
+     * 
+     * @param lofi a given lofi data
+     * @return updated lofi data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while updating the lofi data
+     * @throws ServerException
+     */
     @PostMapping(
         path = "/update",
         consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -149,6 +215,12 @@ public class LofiController {
         }
     }
 
+    /**
+     * Deletes a given lofi data
+     * 
+     * @param lofi a given lofi data
+     * @return {@link HttpStatus#OK} or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while deleting the lofi data
+     */
     @PostMapping(
         path = "/delete",
         consumes = MediaType.APPLICATION_JSON_VALUE,

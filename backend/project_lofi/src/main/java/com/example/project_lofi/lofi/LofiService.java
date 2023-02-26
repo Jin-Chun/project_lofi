@@ -16,6 +16,11 @@ import com.example.project_lofi.playlistassignment.PlaylistAssignmentService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Defines logics of the lofi data process 
+ * 
+ * @author Gwanjin
+ */
 @Service @Slf4j
 public class LofiService extends AbstractService{
     
@@ -28,10 +33,21 @@ public class LofiService extends AbstractService{
     @Autowired
     private LofiPoolService lofiPoolService;
 
+    /**
+     * Retrieves all lofies
+     * 
+     * @return a list of all lofies or empty list
+     */
     public List<Lofi> getAllLofies(){
         return this.lofiRepository.findAll();
     }
 
+    /**
+     * Retrieves a lofi by a given lofi id
+     * 
+     * @param lofiId a given lofi id
+     * @return a matched lofi or {@link IllegalAccessException} if no matched lofi is found
+     */
     public Lofi getLofiById(long lofiId){
         checkId(lofiId, "lofiId");
 
@@ -45,6 +61,12 @@ public class LofiService extends AbstractService{
         }
     }
 
+    /**
+     * Retrieves a lofi by a given lofi name
+     * 
+     * @param lofiName a given lofi name
+     * @return a matched lofi or null if any lofies do not match the given name
+     */
     public Lofi getLofiByName(String lofiName){
         checkNull(lofiName, "lofiName");
 
@@ -58,6 +80,12 @@ public class LofiService extends AbstractService{
         }
     }
 
+    /**
+     * Retrieves all lofies by a given lofi type
+     * 
+     * @param lofiType a given lofi type
+     * @return a list of matched lofies or empty list
+     */
     public List<Lofi> getLofiesByType(String lofiType){
         checkNull(lofiType, "lofiType");
 
@@ -70,6 +98,12 @@ public class LofiService extends AbstractService{
         return retrievedLofi;
     }
 
+    /**
+     * Retrieves all lofies that names match a given keyword
+     * 
+     * @param keyword a given keyword
+     * @return a list of matched lofies or empty list
+     */
     public List<Lofi> getLofiesByKeyword(String keyword){
         checkNull(keyword, "keyword");
 
@@ -82,6 +116,12 @@ public class LofiService extends AbstractService{
         return retrievedLofi;
     }
 
+    /**
+     * Retrieves all lofies that have been assigned to a playlist by a given playlist id
+     * 
+     * @param playlistId a given playlist id
+     * @return a list of matched lofies that have been assigned to a playlist or empty list
+     */
     public List<Lofi> getAllLofiesAssignedToPlaylist(long playlistId){
         checkId(playlistId, "playlistId");
 
@@ -92,6 +132,12 @@ public class LofiService extends AbstractService{
         return lofies;
     }
 
+    /**
+     * Retrieves all lofies that a user has in one's playlists by a given user id
+     * 
+     * @param userId a given user id
+     * @return a list of matched lofies or empty list
+     */
     public List<Lofi> getAllLofiesByUserId(long userId){
         checkId(userId, "userId");
 
@@ -109,6 +155,12 @@ public class LofiService extends AbstractService{
         return lofies;
     }
 
+    /**
+     * Retrieves all lofies that have been assigned to a lofi pool by a given lofi pool id
+     * 
+     * @param lofiPoolId a given lofi pool id
+     * @return a list of matched lofies or empty list
+     */
     public List<Lofi> getAllLofiesAssignedToLofiPool(long lofiPoolId){
         checkId(lofiPoolId, "lofiPoolId");
 
@@ -116,12 +168,21 @@ public class LofiService extends AbstractService{
         return lofiPool.getPoolLofies();
     }
 
+    /**
+     * Saves a given lofi data
+     * 
+     * @param lofi a given lofi data
+     * @return a saved lofi data or {@link IllegalArgumentException} if there is a matched lofi with the given lofi data
+     */
     public Lofi saveLofi(Lofi lofi){
+        // Retrieve a lofi by a given lofi's name
         Optional<Lofi> existingLofi = this.lofiRepository.findLofiByName(lofi.getLofiName());
 
+        // If the existing lofi is not present, save the given lofi. Otherwise, throw IllegalArgumentException
         if(!existingLofi.isPresent()){
             lofi.setLofiId(null);
             return this.lofiRepository.save(lofi);
+
         } else {   
             String message = String.format("Cannot save the same Lofi name %s", lofi.getLofiName());
             log.error(message, lofi);
@@ -129,9 +190,17 @@ public class LofiService extends AbstractService{
         }
     }
 
+    /**
+     * Updates a given lofi data
+     * 
+     * @param lofi a given lofi data
+     * @return a updated lofi data or {@link IllegalArgumentException} if there is no lofies with the given lofi data
+     */
     public Lofi updateLofi(Lofi lofi){
+        // Retrieve a lofi by a given lofi's Id
         Optional<Lofi> existingLofi = this.lofiRepository.findById(lofi.getLofiId());
 
+        // If the existing lofi is present, update the existing lofi with the given lofi. Otherwise, throw IllegalArgumentException
         if(existingLofi.isPresent()){
             return this.lofiRepository.save(lofi);
         } else {
@@ -142,9 +211,17 @@ public class LofiService extends AbstractService{
         }
     }
 
+    /**
+     * Deletes a lofi with a given lofi Id
+     * 
+     * @param lofiId a given lofi id
+     * @return a deleted lofi or {@link IllegalArgumentException} if there is no matched lofi with a given lof id
+     */
     public Lofi deleteLofiById(long lofiId){
+        // Retrieve a lofi by a given lofi id
         Optional<Lofi> existingLofi = this.lofiRepository.findById(lofiId);
 
+        // If the existing lofi is present, delete the lofi. Otherwise, throw IllegalArgumentException
         if(existingLofi.isPresent()){
             Lofi lofiToBeDeleted = existingLofi.get();
             this.lofiRepository.delete(existingLofi.get());

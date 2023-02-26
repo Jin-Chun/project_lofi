@@ -18,6 +18,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
+/**
+ * Defines Lofi DTO
+ * 
+ * @author Gwanjin
+ */
 @Entity @Data
 public class Lofi implements Serializable{
     

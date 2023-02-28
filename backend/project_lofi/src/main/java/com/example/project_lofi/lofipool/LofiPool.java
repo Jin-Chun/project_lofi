@@ -18,6 +18,11 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
 
+/**
+ * Defines Lofi Pool DTO
+ * 
+ * @author Gwanjin
+ */
 @Entity @Data
 @JsonIgnoreProperties(value = {"poolLofies"})
 public class LofiPool implements Serializable {

@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Defines available APIs for lofi pool processes
+ * 
+ * @author Gwanjin
+ */
 @RestController @Slf4j
 @RequestMapping(path = "/api/lofipool")
 public class LofiPoolController {
@@ -29,6 +34,11 @@ public class LofiPoolController {
         this.lofiPoolAssignmentService = lofiPoolAssignmentService;
     }
 
+    /**
+     * Retrieve all lofi pools
+     * 
+     * @return a http response with a list of all lofi pools or {@link HttpStatus#NOT_FOUND} if no lofi pools are found
+     */
     @GetMapping(path = "/all")
     @ResponseBody
     public ResponseEntity<List<LofiPool>> getAllLofiPools(){
@@ -41,6 +51,12 @@ public class LofiPoolController {
         }
     }
 
+    /**
+     * Retrieve a lofi pool by a given lofi pool identifier
+     * 
+     * @param lofiPoolId a given lofi pool identifier
+     * @return a http response with a lofi pool or {@link HttpStatus#NOT_FOUND} if no matched lofi pool is found
+     */
     @GetMapping(path = "/id/{lofiPoolId}")
     @ResponseBody
     public ResponseEntity<LofiPool> getLofiPoolById(@PathVariable long lofiPoolId){
@@ -53,6 +69,12 @@ public class LofiPoolController {
         }
     }
 
+    /**
+     * Retrieve a lofi pool by a given lofi pool name
+     * 
+     * @param lofiPoolName a given lofi pool name
+     * @return a http response with a lofi pool or {@link HttpStatus#NOT_FOUND} if no matched lofi pool is found
+     */
     @GetMapping(path = "/name/{lofiPoolName}")
     @ResponseBody
     public ResponseEntity<LofiPool> getLofiPoolByName(@PathVariable String lofiPoolName){
@@ -65,6 +87,13 @@ public class LofiPoolController {
         }
     }
 
+    /**
+     * Save a given lofi pool data
+     * 
+     * @param lofiPool a given lofi pool data
+     * @return a saved lofi pool data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while saving the lofi pool data
+     * @throws ServerException
+     */
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -80,6 +109,13 @@ public class LofiPoolController {
         }
     }
 
+    /**
+     * Update a lofi pool with a given lofi pool data
+     * 
+     * @param lofiPool a given lofi pool
+     * @return an updated lofi pool data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while updating the lofi pool data
+     * @throws ServerException
+     */
     @PostMapping(
         path = "/update",
         consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -96,6 +132,12 @@ public class LofiPoolController {
         }
     }
 
+    /**
+     * Delete a lofi pool that matches to a given lofi data
+     * 
+     * @param lofiPool a given lofi pool data
+     * @return a deleted lofi pool data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while deleting the lofi pool data
+     */
     @PostMapping(
         path = "/delete",
         consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -112,6 +154,13 @@ public class LofiPoolController {
         }
     }
 
+    /**
+     * Assign a lofi to a lofi pool by using given lofi id and lofi pool id
+     * 
+     * @param lofiId a given lofi id
+     * @param lofiPoolId a given lofi pool id
+     * @return a updated lofi pool data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while assigning a lofi to a lofi pool
+     */
     @PostMapping(
         path = "/assign/{lofiId}/to/{lofiPoolId}",
         produces = MediaType.APPLICATION_JSON_VALUE
@@ -127,6 +176,13 @@ public class LofiPoolController {
         }        
     }
 
+    /**
+     * Remove a lofi from a lofi pool by using given lofi id and lofi pool id
+     * 
+     * @param lofiId a given lofi id
+     * @param lofiPoolId a given lofi pool id
+     * @return a updated lofi pool data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while removing a lofi from a lofi pool
+     */
     @PostMapping(
         path = "/remove/{lofiId}/from/{lofiPoolId}",
         produces = MediaType.APPLICATION_JSON_VALUE

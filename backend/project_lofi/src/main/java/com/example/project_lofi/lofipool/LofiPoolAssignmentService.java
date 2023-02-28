@@ -9,14 +9,25 @@ import com.example.project_lofi.lofi.LofiService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Defines logics for lofi pool assignment processes
+ * 
+ * @author Gwanjin
+ */
 @Service @Slf4j
 public class LofiPoolAssignmentService extends AbstractService {
     @Autowired
     private LofiPoolService lofiPoolService;
     @Autowired
     private LofiService lofiService;
-    
 
+    /**
+     * Assign a lofi to a lofi pool by using given lofi id and lofi pool id
+     * 
+     * @param lofiId a given lofi id
+     * @param lofiPoolId a given lofi pool id
+     * @return a updated lofi pool
+     */
     public LofiPool assignLofiToLofiPool(long lofiId, long lofiPoolId){
         
         // #1. verify a given lofi id and lofiPool id exist
@@ -37,6 +48,13 @@ public class LofiPoolAssignmentService extends AbstractService {
         return updatedLofiPool;
     }
 
+    /**
+     * Remove a lofi from a lofi pool by using given lofi id and lofi pool id
+     * 
+     * @param lofiId a given lofi id
+     * @param lofiPoolId a given lofi pool id
+     * @return a updated lofi pool
+     */
     public LofiPool removeLofiFromLofiPool(long lofiId, long lofiPoolId){
         // #1. verify a given lofi id and lofi pool id exist
         Lofi lofi = this.lofiService.getLofiById(lofiId);

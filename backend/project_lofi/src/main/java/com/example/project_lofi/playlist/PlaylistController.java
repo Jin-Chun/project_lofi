@@ -1,6 +1,5 @@
 package com.example.project_lofi.playlist;
 
-import java.rmi.ServerException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,11 @@ import com.example.project_lofi.playlistassignment.PlaylistLofiAssignment;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Defines available APIs for processes related playlist data
+ * 
+ * @author Gwanjin
+ */
 @RestController @Slf4j
 @RequestMapping(path = "/api/playlist")
 public class PlaylistController {
@@ -33,6 +37,11 @@ public class PlaylistController {
         this.playlistAssignmentService = playlistAssignmentService;
     }
 
+    /**
+     * Retrieve all playlists
+     * 
+     * @return a http response with a list of all playlists or {@link HttpStatus#NOT_FOUND} if no playlists are found
+     */
     @GetMapping(path = "/all")
     @ResponseBody
     public ResponseEntity<List<Playlist>> getAllPlaylists(){
@@ -44,6 +53,12 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Retrieve a list of playlist assignments for a given playlist Id
+     * 
+     * @param playlistId a given playlist Id
+     * @return a http response with a list of playlist assignments or {@link HttpStatus#NOT_FOUND} if no playlist assignments are found
+     */
     @GetMapping(path = "/id/{playlistId}/assignments")
     @ResponseBody
     public ResponseEntity<List<PlaylistLofiAssignment>> getAllPlaylistLofiAssignments(@PathVariable long playlistId){
@@ -55,6 +70,12 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Retrieve a playlist by a given playlist Id
+     * 
+     * @param playlistId a given playlist id
+     * @return a http response with a matched playlist or {@link HttpStatus#NOT_FOUND} if no matched playlists are found
+     */
     @GetMapping(path = "/id/{playlistId}")
     @ResponseBody
     public ResponseEntity<Playlist> getPlaylistById(@PathVariable long playlistId){
@@ -66,6 +87,12 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Retrieve a playlist has the same name as a given playlist name
+     * 
+     * @param playlistName a given playlist name
+     * @return a http response with a matched playlist or {@link HttpStatus#NOT_FOUND} if no matched playlists are found
+     */
     @GetMapping(path = "/name/{playlistName}")
     @ResponseBody
     public ResponseEntity<Playlist> getPlaylistByName(@PathVariable String playlistName){
@@ -77,6 +104,12 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Retrieve a list of playlists that have assigned to a given user id
+     * 
+     * @param userId a given user id
+     * @return a http response with a list of all playlists or {@link HttpStatus#NOT_FOUND} if no playlists are found
+     */
     @GetMapping(path = "/userid/{userId}")
     @ResponseBody
     public ResponseEntity<List<Playlist>> getAllPlaylistsByUserId(@PathVariable long userId){
@@ -88,6 +121,11 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Retrieve a list of playlists which status is released
+     * 
+     * @return a http response with a list of all releated playlists or {@link HttpStatus#NOT_FOUND} if no releated playlists are found
+     */
     @GetMapping(path = "/released")
     @ResponseBody
     public ResponseEntity<List<Playlist>> getReleasedPlaylist(){
@@ -100,6 +138,12 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Retrieve a list of playlist lofi assignments by a given playlist id
+     * 
+     * @param playlistId a given playlist id
+     * @return a http response with a list of all playlist lofi assignment or {@link HttpStatus#NOT_FOUND} if no playlist lofi assignments are found
+     */
     @GetMapping(path = "/assignment/{playlistId}")
     @ResponseBody
     public ResponseEntity<List<PlaylistLofiAssignment>> getAllPlaylistLofiAssignmentByPlaylistId(@PathVariable long playlistId){
@@ -111,12 +155,18 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Save a given playlist data
+     * 
+     * @param playlist a given playlist
+     * @return a saved playlist data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while saving the playlist data
+     */
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Playlist> savePlaylist(@RequestBody Playlist playlist) throws ServerException{
+    public ResponseEntity<Playlist> savePlaylist(@RequestBody Playlist playlist){
         try {
             Playlist savedPlaylist = this.playlistService.savePlaylist(playlist);
             return new ResponseEntity<>(savedPlaylist, HttpStatus.CREATED);
@@ -126,12 +176,18 @@ public class PlaylistController {
         }
     }
     
+    /**
+     * Update a playlist with a given playlist data
+     * 
+     * @param playlist a given playlist data
+     * @return an updated playlist data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while updating the playlist data
+     */
     @PostMapping(
         path = "/update",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Playlist> updatePlaylist(@RequestBody Playlist playlist) throws ServerException{
+    public ResponseEntity<Playlist> updatePlaylist(@RequestBody Playlist playlist){
         try {
             Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
             return new ResponseEntity<>(updatedPlaylist, HttpStatus.OK);
@@ -141,12 +197,19 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Update a playlist with a given playlist data
+     * 
+     * @param playlist a given playlist data
+     * @param userId a given user id
+     * @return an updated playlist data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while updating the playlist data
+     */
     @PostMapping(
         path = "/update/for/{userId}",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Playlist> updatePlaylistForUser(@RequestBody Playlist playlist, @PathVariable long userId) throws ServerException{
+    public ResponseEntity<Playlist> updatePlaylistForUser(@RequestBody Playlist playlist, @PathVariable long userId){
         try {
             Playlist updatedPlaylist = this.playlistService.updatePlaylist(playlist);
             return new ResponseEntity<>(updatedPlaylist, HttpStatus.OK);
@@ -156,6 +219,12 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Delete a playlist matches to a given playlist data
+     * 
+     * @param playlist a given playlist
+     * @return a deleted playlist data or {@link HttpStatus#INTERNAL_SERVER_ERROR} if error occurs while deleting the playlist data
+     */
     @PostMapping(
         path = "/delete",
         consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -171,6 +240,13 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Assign a lofi to a playlist by a given lofi id and playlist id
+     * 
+     * @param lofiId a given lofi id
+     * @param playlistId a given playlist id
+     * @return a created playlist lofi assignment data or {@link HttpStatus#INTERNAL_SERVER_ERROR} if error occurs while assigning the lofi to the playlist
+     */
     @PostMapping(
         path = "/assign/{lofiId}/to/{playlistId}",
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -185,6 +261,13 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Remove a lofi from a playlist by using a given lofi data and playlist id
+     * 
+     * @param lofi a given lofi data
+     * @param playlistId a given playlist id
+     * @return an updated playlist data or {@link HttpStatus#INTERNAL_SERVER_ERROR} if error occurs while removing the lofi from the playlist
+     */
     @PostMapping(
         path = "/remove/lofi/from/{playlistId}",
         produces = MediaType.APPLICATION_JSON_VALUE,
@@ -201,6 +284,12 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Remove a lofi from a playlist by using a given playlist lofi assignment data
+     * 
+     * @param assignment a given playlist lofi assignment
+     * @return an updated playlist data or {@link HttpStatus#INTERNAL_SERVER_ERROR} if error occurs while removing the lofi from the playlist
+     */
     @PostMapping(
         path = "/remove/lofi",
         produces = MediaType.APPLICATION_JSON_VALUE,
@@ -217,6 +306,12 @@ public class PlaylistController {
         }
     }
 
+    /**
+     * Release a playlist by a given playlist id
+     * 
+     * @param playlistId a given playlist id
+     * @return a released playlist or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while releasing the playlist
+     */
     @PostMapping(
         path = "/release/{playlistId}",
         produces = MediaType.APPLICATION_JSON_VALUE
@@ -228,10 +323,18 @@ public class PlaylistController {
             return new ResponseEntity<>(playlist, HttpStatus.OK);
         } catch(Exception e){
             log.error("While releasing a given playlist("+playlistId+"), unexpected error occurs", e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
+    /**
+     * Pull a given number of lofies from a pool and assign the lofies to a playlist
+     * 
+     * @param numOfLofies a given number of lofies to pull
+     * @param lofiPoolId a given pool id
+     * @param playlistId a given playlist id
+     * @return a list of created playlist lofi assignment or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while pulling the lofies
+     */
     @PostMapping(
         path = "/pull/{numOfLofies}/from/{lofiPoolId}/for/{playlistId}",
         produces = MediaType.APPLICATION_JSON_VALUE

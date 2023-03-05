@@ -1,6 +1,5 @@
 package com.example.project_lofi.lofipool;
 
-import java.rmi.ServerException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Defines available APIs for lofi pool processes
+ * Defines available APIs for processes related lofi pool data
  * 
  * @author Gwanjin
  */
@@ -92,14 +91,13 @@ public class LofiPoolController {
      * 
      * @param lofiPool a given lofi pool data
      * @return a saved lofi pool data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while saving the lofi pool data
-     * @throws ServerException
      */
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<LofiPool> saveLofiPool(@RequestBody LofiPool lofiPool) throws ServerException{
+    public ResponseEntity<LofiPool> saveLofiPool(@RequestBody LofiPool lofiPool) {
         try {
             LofiPool savedLofiPool = this.lofiPoolService.saveLofiPool(lofiPool);
             return new ResponseEntity<>(savedLofiPool, HttpStatus.CREATED);
@@ -114,7 +112,6 @@ public class LofiPoolController {
      * 
      * @param lofiPool a given lofi pool
      * @return an updated lofi pool data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while updating the lofi pool data
-     * @throws ServerException
      */
     @PostMapping(
         path = "/update",
@@ -122,7 +119,7 @@ public class LofiPoolController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public ResponseEntity<LofiPool> updateLofiPool(@RequestBody LofiPool lofiPool) throws ServerException{
+    public ResponseEntity<LofiPool> updateLofiPool(@RequestBody LofiPool lofiPool){
         try {
             LofiPool updatedLofiPool = this.lofiPoolService.updateLofiPool(lofiPool);
             return new ResponseEntity<>(updatedLofiPool, HttpStatus.OK);

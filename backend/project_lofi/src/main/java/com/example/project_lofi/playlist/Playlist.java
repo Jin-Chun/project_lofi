@@ -20,6 +20,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Version;
 import lombok.Data;
 
+/**
+ * Defines a playlist DTO
+ * 
+ * @author Gwanjin
+ * 
+ */
 @Entity @Data
 public class Playlist implements Serializable {
     

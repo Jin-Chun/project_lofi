@@ -1,6 +1,5 @@
 package com.example.project_lofi.lofi;
 
-import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Defines available APIs for Lofi data
+ * Defines available APIs for processes related lofi data
  * 
  * @author Gwanjin
  */
@@ -176,14 +175,13 @@ public class LofiController {
      * 
      * @param lofi a given lofi data
      * @return saved lofi data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while saving the lofi data
-     * @throws ServerException
      */
     @PostMapping(
         path = "/add",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Lofi> saveLofi(@RequestBody Lofi lofi) throws ServerException{
+    public ResponseEntity<Lofi> saveLofi(@RequestBody Lofi lofi) {
         try{
             Lofi savedLofi = this.lofiService.saveLofi(lofi);
             return new ResponseEntity<>(savedLofi, HttpStatus.CREATED);
@@ -198,14 +196,13 @@ public class LofiController {
      * 
      * @param lofi a given lofi data
      * @return updated lofi data or {@link HttpStatus#NOT_ACCEPTABLE} if error occurs while updating the lofi data
-     * @throws ServerException
      */
     @PostMapping(
         path = "/update",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Lofi> updateLofi(@RequestBody Lofi lofi) throws ServerException{
+    public ResponseEntity<Lofi> updateLofi(@RequestBody Lofi lofi){
         try{
             Lofi updatedLofi = this.lofiService.updateLofi(lofi);
             return new ResponseEntity<>(updatedLofi, HttpStatus.OK);

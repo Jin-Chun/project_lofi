@@ -16,6 +16,11 @@ import com.example.project_lofi.user.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Defines available service APIs related to playlist data
+ * 
+ * @author Gwanjin
+ */
 @Service @Slf4j
 public class PlaylistService extends AbstractService{
     @Autowired
@@ -24,6 +29,11 @@ public class PlaylistService extends AbstractService{
     @Autowired
     private UserService userService;
 
+    /**
+     * Retrieve all playlists if a user has an admin role.
+     * 
+     * @return a list of all playlists
+     */
     public List<Playlist> getAllPlaylists(){
         return this.playlistRepository.findAll();
     }

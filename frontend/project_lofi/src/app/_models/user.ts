@@ -6,4 +6,5 @@ export class User {
     userType?: string;
     userCreated?: string;
     userUpdated?: string;
+    token?: string;
 }

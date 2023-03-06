@@ -7,10 +7,12 @@ import { map } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { User } from '../_models/user';
 import { Playlist } from '@app/_models/playlist';
+import { JWTRequest } from '@app/_models/jwt_request';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     private userSubject: BehaviorSubject<User | null>;
+    private userTokenSubject: BehaviorSubject<string | null>;
     public user: Observable<User | null>;
 
     constructor(
@@ -18,6 +20,7 @@ export class AccountService {
         private http: HttpClient
     ) {
         this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
+        this.userTokenSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('token')!));
         this.user = this.userSubject.asObservable();
     }
 
@@ -25,13 +28,22 @@ export class AccountService {
         return this.userSubject.value;
     }
 
+    public get userToken(){
+        return this.userTokenSubject.value;
+    }
+
     login(userName: string, userPassword: string) {
-        return this.http.post<User>(`${environment.apiUrl}/user/login/${userName}/${userPassword}`, null)
-            .pipe(map(user => {
+        let jwtRequest = new JWTRequest();
+        jwtRequest.username = userName;
+        jwtRequest.password = userPassword;
+        return this.http.post<any>(`${environment.apiUrl}/authenticate`, jwtRequest)
+            .pipe(map(response => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
-                this.userSubject.next(user);
-                return user;
+                localStorage.setItem('user', JSON.stringify(response.user));
+                localStorage.setItem('token', JSON.stringify(response.token));
+                this.userSubject.next(response.user);
+                this.userTokenSubject.next(response.token);
+                return response.user;
             }));
     }
 

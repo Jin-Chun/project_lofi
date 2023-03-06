@@ -20,11 +20,10 @@ import { MatInputModule } from '@angular/material/input'
 import { MatSelectModule } from '@angular/material/select'
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field'
+import {JwtModule} from '@auth0/angular-jwt';
 
-// used to create fake backend
-// import { fakeBackendProvider } from './_helpers/fake-backend';
 import { AppRoutingModule } from './app-routing.module';
-// import { JwtInterceptor } from './_helpers/jwt.interceptor';
+import { JwtInterceptor } from './_helpers/jwt.interceptor';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { AppComponent } from './app.component';
 import { AlertComponent } from './_components/alert.component';
@@ -36,6 +35,12 @@ import { LofiComponent } from './lofi/lofi.component';
 import { RemoveLofiComponenet } from './lofi/remove-dialog/remove.component';
 import { AssignLofiComponent } from './lofi/assign-dialog/assign.component';
 import { ValidationComponent } from './_components/validation/validation.component';
+import { AuthGuard } from './_helpers/auth.guard';
+import { AccountService } from './_services/account.service';
+
+export function tokenGetter(){
+    return localStorage.getItem('token');
+}
 
 @NgModule({
     imports: [
@@ -61,7 +66,14 @@ import { ValidationComponent } from './_components/validation/validation.compone
         MatMenuModule,
         MatSelectModule,
         MatDialogModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: tokenGetter,
+                allowedDomains: ['localhost:4200'],
+                disallowedRoutes: ['localhost:4200/account/login']
+            }
+        })
     ],
     declarations: [
         AppComponent,
@@ -76,11 +88,9 @@ import { ValidationComponent } from './_components/validation/validation.compone
         ValidationComponent,
     ],
     providers: [
-        // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        AuthGuard, AccountService,
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
-        // provider used to create fake backend
-        // fakeBackendProvider
     ],
     bootstrap: [AppComponent]
 })

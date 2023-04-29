@@ -36,7 +36,7 @@ public abstract class AbstractService {
         checkNull(object, tag);
 
         if (object instanceof Collection){
-            Collection aList =  (Collection) object;
+            Collection<?> aList =  (Collection<?>) object;
             if (aList.isEmpty()){
                 String message = String.format("A given %s cannot be empty", tag);
                 log.error(message);

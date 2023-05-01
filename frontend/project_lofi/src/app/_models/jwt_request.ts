@@ -1,4 +1,4 @@
 export class JWTRequest{
-    username?:String;
-    password?:String;
+    username?:string;
+    password?:string;
 }

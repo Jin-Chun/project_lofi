@@ -86,3 +86,39 @@
        add constraint FK8yc9na81sg2rvft1f24go5l1m 
        foreign key (playlist_id) 
        references playlist (playlist_id);
+
+    alter table user 
+       add column user_email varchar(255) not null;
+
+    alter table user 
+       drop index UK_j09k2v8lxofv2vecxu2hde9so;
+
+    alter table user 
+       add constraint UK_j09k2v8lxofv2vecxu2hde9so unique (user_email);
+
+    alter table user 
+       add column user_email varchar(255) not null;
+
+    alter table user 
+       drop index UK_j09k2v8lxofv2vecxu2hde9so;
+
+    alter table user 
+       add constraint UK_j09k2v8lxofv2vecxu2hde9so unique (user_email);
+
+    alter table user 
+       add column user_email varchar(255) not null;
+
+    alter table user 
+       drop index UK_j09k2v8lxofv2vecxu2hde9so;
+
+    alter table user 
+       add constraint UK_j09k2v8lxofv2vecxu2hde9so unique (user_email);
+
+    alter table user 
+       add column user_email varchar(255) not null;
+
+    alter table user 
+       drop index UK_j09k2v8lxofv2vecxu2hde9so;
+
+    alter table user 
+       add constraint UK_j09k2v8lxofv2vecxu2hde9so unique (user_email);

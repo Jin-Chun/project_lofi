@@ -3,6 +3,7 @@ export class User {
     userVersion?: number;
     userPassword?: string;
     userName?: string;
+    userEmail?: string;
     userType?: string;
     userCreated?: string;
     userUpdated?: string;

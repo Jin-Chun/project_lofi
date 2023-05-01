@@ -1,17 +1,23 @@
 <h1>{{title}}</h1>
 <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="row">
-        <div class="mb-3 col">
+        <div class="mb-3">
             <label class="form-label">User name</label>
-            <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['username'].errors }" />
+            <input type="text" formControlName="username" [placeholder]="userName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['username'].errors }" />
             <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
                 <div *ngIf="f['username'].errors['required']">user name is required</div>
             </div>
         </div>
-        <div class="mb-3 col">
+        <div class="mb-3">
+            <label class="form-label">User email</label>
+            <input type="text" formControlName="email" [placeholder]="userEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
+            <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                <div *ngIf="f['email'].errors['required']">user email is required</div>
+            </div>
+        </div>
+        <div class="mb-3">
             <label class="form-label">
                 User password
-                <!-- <em *ngIf="id">(Leave blank to keep the same password)</em> -->
             </label>
             <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
             <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">

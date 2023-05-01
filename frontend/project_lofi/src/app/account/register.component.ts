@@ -27,6 +27,7 @@ export class RegisterComponent implements OnInit {
     ngOnInit() {
         this.form = this.formBuilder.group({
             username: ['', Validators.required],
+            email: ['', Validators.required],
             password: ['', [Validators.required, Validators.minLength(6)]],
             isAdmin: [false]
         });
@@ -49,13 +50,14 @@ export class RegisterComponent implements OnInit {
         let user = new User();
         user.userName = String(this.f['username'].value);
         user.userPassword = String(this.f['password'].value);
+        user.userEmail = String(this.f['email'].value);
         user.userType = this.f['isAdmin'].value? UserType.ADMIN: UserType.GUEST;
         this.loading = true;
         this.accountService.register(user)
             .pipe(first())
             .subscribe({
                 next: () => {
-                    this.alertService.success('Registration successful', { keepAfterRouteChange: true });
+                    this.alertService.success('Please check your email to complete registering', { keepAfterRouteChange: true });
                     this.router.navigate(['../login'], { relativeTo: this.route });
                 },
                 error: error => {

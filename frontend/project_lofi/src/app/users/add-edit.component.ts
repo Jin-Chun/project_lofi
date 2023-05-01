@@ -18,6 +18,8 @@ export class AddEditComponent implements OnInit {
     submitting = false;
     submitted = false;
     isAdmin = false;
+    userEmail?: string;
+    userName?: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -31,6 +33,7 @@ export class AddEditComponent implements OnInit {
         // form with validation rules
         this.form = this.formBuilder.group({
             username: ['', Validators.required],
+            email: ['', Validators.required],
             // password only required in add mode
             password: ['', [Validators.minLength(6), ...(!this.id ? [Validators.required] : [])]],
             isAdmin: [false]
@@ -38,6 +41,9 @@ export class AddEditComponent implements OnInit {
         
         this.id = this.route.snapshot.params['userid'];
         this.title = 'Add User';
+        this.userEmail = '';
+        this.userName = '';
+
         if (this.id) {
             // edit mode
             this.title = 'Edit User';
@@ -46,6 +52,8 @@ export class AddEditComponent implements OnInit {
                 .pipe(first())
                 .subscribe(x => {
                     this.form.patchValue(x);
+                    this.userName = x.userName;
+                    this.userEmail = x.userEmail;
                     this.loading = false;
                 });
         }
@@ -68,6 +76,7 @@ export class AddEditComponent implements OnInit {
         let user = new User();
         user.userId = Number(this.id);
         user.userName = String(this.f['username'].value);
+        user.userEmail = String(this.f['email'].value);
         user.userPassword = String(this.f['password'].value);
         user.userType = this.f['isAdmin'].value? UserType.ADMIN: UserType.GUEST;
         
@@ -77,7 +86,7 @@ export class AddEditComponent implements OnInit {
             .pipe(first())
             .subscribe({
                 next: () => {
-                    this.alertService.success('User saved', { keepAfterRouteChange: true });
+                    this.alertService.success('Please check user email to complete saving the user', { keepAfterRouteChange: true });
                     this.router.navigateByUrl('/users');
                 },
                 error: error => {

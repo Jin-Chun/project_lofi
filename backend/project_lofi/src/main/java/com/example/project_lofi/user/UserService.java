@@ -85,6 +85,7 @@ public class UserService extends AbstractService {
         Optional<User> existingUser = this.userRepository.findById(user.getUserId());
 
         if(existingUser.isPresent()){
+            user.setUserCreated(existingUser.get().getUserCreated());
             user.setUserUpdated(LocalDateTime.now());
             return this.userRepository.save(user);
         } else {
